@@ -3,6 +3,7 @@ import styles from '../styles/Home.module.css'
 import {Card, Typography, Image, Divider, DatePicker, Button, Radio, InputNumber, Col, Row, Form} from 'antd';
 import type {DatePickerProps, RadioChangeEvent} from 'antd';
 import React from 'react';
+import moment from "moment";
 
 const {Title} = Typography;
 
@@ -23,11 +24,11 @@ export default function Home() {
         console.log(`radio checked:${e.target.value}`);
     };
     const onAdultChange = (value: number) => {
-        setAdultAmount( value * 100)
+        setAdultAmount(value * 100)
     };
 
     const onChildChange = (value: number) => {
-        setChildAmount( value * 50)
+        setChildAmount(value * 50)
     };
 
     return (
@@ -39,196 +40,288 @@ export default function Home() {
                 <link rel="icon" href="/favicon.ico"/>
             </Head>
             <main className={styles.main}>
-                <div className={styles.description}>
-                    <div>
-                        <a
-                            href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            HOME by Tales Of Paws
-                        </a>
-                    </div>
-                </div>
+                {/*<div className={styles.description}>*/}
+                {/*    <div>*/}
+                {/*        <a*/}
+                {/*            href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"*/}
+                {/*            target="_blank"*/}
+                {/*            rel="noopener noreferrer"*/}
+                {/*        >*/}
+                {/*            HOME by Tales Of Paws*/}
+                {/*        </a>*/}
+                {/*    </div>*/}
+                {/*</div>*/}
 
                 <Title style={{textAlign: 'left', margin: '0', paddingTop: '20px', paddingBottom: '20px'}}>HOME by Tales
                     Of Paws Admission Ticket</Title>
 
-                <Image alt={'banner'} style={{borderRadius: '25px'}}
-                       src="banner.jpg" preview={false}
-                />
+                <Row>
+                    <Col xl={2}></Col>
+                    <Col xs={24} xl={20}>
+                        <Image alt={'banner'} style={{borderRadius: '25px'}}
+                               src="banner.jpg" preview={false}
+                        />
+                    </Col>
+                </Row>
 
-                <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    padding: '15px'
-                }}>
-                    <Card title="Highlights" size={'small'} bordered={false}
-                          style={{width: '100%', backgroundColor: '#fff0ce', borderRadius: '15px', padding: '10px'}}
-                          headStyle={{border: '0px', fontSize: '25px', paddingTop: '10px'}}>
-                        <p>Southeast Asia&apos;s first and only Universal Studios theme park!</p>
-                        <p>Delight your little ones as they catch their favorite characters like Elmo and see the
-                            Minions at their despicable best!</p>
-                        <p>Make it a holiday to remember as you meet your favorite Universal Stars, enjoy musical
-                            meet-and-greets, the thrilling rides, and more</p>
-                    </Card>
-                </div>
-                <Divider orientation="left" style={{paddingTop: '10px', fontSize: '20px'}}><h2>Ticket Options</h2></Divider>
-                <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    padding: '15px'
-                }}>
-                    <Card bordered={false} style={{width: '90%', boxShadow: '0px 0px 0px 0px'}}
-                          bodyStyle={{backgroundColor: '#fffaf3'}}>
-                        <DatePicker style={{marginLeft: '30px'}} onChange={onDateChange}/>
-                        <Divider orientation="left" style={{paddingTop: '10px', fontSize: '15px'}}>Time Slots</Divider>
-                        <Radio.Group onChange={onTimeSlotChange} defaultValue="a" style={{marginLeft: '30px'}}>
-                            <Radio.Button value="a">10am - 12pm</Radio.Button>
-                            <Radio.Button value="b">12pm - 2pm</Radio.Button>
-                            <Radio.Button value="c">2pm - 4pm</Radio.Button>
-                            <Radio.Button value="d">4pm - 6pm</Radio.Button>
-                            <Radio.Button value="e">6pm - 8pm</Radio.Button>
-                        </Radio.Group>
-                        <Divider orientation="left" style={{paddingTop: '10px', fontSize: '15px'}}>Quantity</Divider>
-                        <Card size={'small'} bordered={false} style={{
-                            width: '80%',
-                            marginTop: '10px',
-                            marginLeft: '30px',
-                            borderRadius: '15px',
-                            boxShadow: '0px 0px 0px 0px'
-                        }}
-                              bodyStyle={{backgroundColor: '#fffaf3'}}>
-                            <Row>
-                                <Col span={16}>
-                                    <h2 style={{marginLeft: '10px'}}>Adult</h2>
-                                </Col>
-                                <Col span={8}>
-                                    <Row>
-                                        <h2 style={{marginLeft: 'auto'}}>MYR 100.00</h2>
-                                        <Form
-                                            name="adult_tix"
-                                            {...formItemLayout}
-                                            initialValues={{'adult_tix_count': 0}}
-                                            style={{width: "auto", marginLeft: 'auto', paddingRight: '20px'}}
-                                        >
-                                            <Form.Item label="" colon={false}>
-                                                <Form.Item name="adult_tix_count" labelAlign={"right"}>
-                                                    <InputNumber onChange={onAdultChange} style={{width: '60px',borderRadius:'10px'}} min={0} max={10}/>
-                                                </Form.Item>
-                                            </Form.Item>
-                                        </Form>
-                                    </Row>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col span={16}>
-                                    <h2 style={{marginLeft: '10px'}}>Child</h2>
-                                </Col>
-                                <Col span={8}>
-                                    <Row>
-                                        <h2 style={{marginLeft: 'auto'}}>MYR 50.00</h2>
-                                        <Form
-                                            name="child_tix"
-                                            {...formItemLayout}
-                                            initialValues={{'child_tix_count': 0}}
-                                            style={{width: "auto", marginLeft: 'auto', paddingRight: '20px'}}
-                                        >
-                                            <Form.Item label="" colon={false}>
-                                                <Form.Item name="child_tix_count" labelAlign={"right"}>
-                                                    <InputNumber onChange={onChildChange} style={{width: '60px',borderRadius:'10px'}} min={0} max={10}/>
-                                                </Form.Item>
-                                            </Form.Item>
-                                        </Form>
-                                    </Row>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col span={19}>
-                                    <h2 style={{marginLeft: '20px'}}>MYR {childAmount+adultAmount}.00</h2>
-                                </Col>
-                                <Col span={5}>
-                                    <Button type="primary" shape="round" size={'large'} style={{background: "#fa8547"}}>
-                                        Book Now
-                                    </Button>
-                                </Col>
-                            </Row>
+                <Row>
+                    <Col xl={2}></Col>
+                    <Col style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        padding: '15px'
+                    }} xs={24} xl={20}>
+                        <Card title="Highlights" size={'small'} bordered={false}
+                              style={{width: '100%', backgroundColor: '#fff0ce', borderRadius: '15px', padding: '10px'}}
+                              headStyle={{border: '0px', fontSize: '25px', paddingTop: '10px'}}>
+                            <p>Southeast Asia&apos;s first and only Universal Studios theme park!</p>
+                            <p>Delight your little ones as they catch their favorite characters like Elmo and see the
+                                Minions at their despicable best!</p>
+                            <p>Make it a holiday to remember as you meet your favorite Universal Stars, enjoy musical
+                                meet-and-greets, the thrilling rides, and more</p>
                         </Card>
-                    </Card>
-                </div>
+                    </Col>
+                </Row>
 
-                <Divider orientation="left" style={{paddingTop: '10px', fontSize: '20px'}}><h2>What To Expect</h2></Divider>
-                <div style={{
+                <Row>
+                    <Col xl={2}></Col>
+                    <Col xs={24} xl={20}>
+                        <Divider orientation="left" style={{paddingTop: '10px', fontSize: '20px'}}><h2>Ticket
+                            Options</h2>
+                        </Divider>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col xl={2}></Col>
+                    <Col xs={24} xl={20}>
+                        <Card bordered={false} style={{width: '100%', boxShadow: '0px 0px 0px 0px'}}
+                              bodyStyle={{backgroundColor: '#fffaf3'}}>
+                            <DatePicker disabledDate={(current) => {
+                                return moment().add(-1, 'days') >= current ||
+                                    moment().add(1, 'month') <= current;
+                            }} style={{marginLeft: '30px'}} onChange={onDateChange}/>
+
+                            <Divider orientation="left" style={{paddingTop: '10px', fontSize: '15px'}}>Time
+                                Slots</Divider>
+                            <Row>
+                                <Col xs={24} xl={20}>
+                                    <Radio.Group onChange={onTimeSlotChange} defaultValue=""
+                                                 style={{marginLeft: '30px'}}>
+                                        <Radio.Button value="a">10am - 12pm</Radio.Button>
+                                        <Radio.Button value="b">12pm - 2pm</Radio.Button>
+                                        <Radio.Button value="c">2pm - 4pm</Radio.Button>
+                                        <Radio.Button value="d">4pm - 6pm</Radio.Button>
+                                        <Radio.Button value="e">6pm - 8pm</Radio.Button>
+                                    </Radio.Group>
+                                </Col>
+                            </Row>
+
+                            <Divider orientation="left"
+                                     style={{paddingTop: '10px', fontSize: '15px'}}>Quantity</Divider>
+                            <Card size={'small'} bordered={false} style={{
+                                width: '100%',
+                                marginTop: '10px',
+                                borderRadius: '15px',
+                                boxShadow: '0px 0px 0px 0px'
+                            }}
+                                  bodyStyle={{backgroundColor: '#fffaf3'}}>
+                                <Row>
+                                    <Col span={5}>
+                                        <h2 style={{marginLeft: '10px'}}>Adult</h2>
+                                    </Col>
+                                    <Col span={19}>
+                                        <Row>
+                                            <h2 style={{marginLeft: 'auto'}}>MYR 100.00</h2>
+                                            <Form
+                                                name="adult_tix"
+                                                {...formItemLayout}
+                                                initialValues={{'adult_tix_count': 0}}
+                                                style={{width: "auto", marginLeft: 'auto', paddingRight: '20px'}}
+                                            >
+                                                <Form.Item label="" colon={false}>
+                                                    <Form.Item name="adult_tix_count" labelAlign={"right"}>
+                                                        <InputNumber onChange={onAdultChange}
+                                                                     style={{width: '60px', borderRadius: '10px'}}
+                                                                     min={0}
+                                                                     max={10}/>
+                                                    </Form.Item>
+                                                </Form.Item>
+                                            </Form>
+                                        </Row>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col span={5}>
+                                        <h2 style={{marginLeft: '10px'}}>Child</h2>
+                                    </Col>
+                                    <Col span={19}>
+                                        <Row>
+                                            <h2 style={{marginLeft: 'auto'}}>MYR 50.00</h2>
+                                            <Form
+                                                name="child_tix"
+                                                {...formItemLayout}
+                                                initialValues={{'child_tix_count': 0}}
+                                                style={{width: "auto", marginLeft: 'auto', paddingRight: '20px'}}
+                                            >
+                                                <Form.Item label="" colon={false}>
+                                                    <Form.Item name="child_tix_count" labelAlign={"right"}>
+                                                        <InputNumber onChange={onChildChange}
+                                                                     style={{width: '60px', borderRadius: '10px'}}
+                                                                     min={0}
+                                                                     max={10}/>
+                                                    </Form.Item>
+                                                </Form.Item>
+                                            </Form>
+                                        </Row>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col span={18}>
+                                        <h2 style={{marginLeft: '20px'}}>MYR {childAmount + adultAmount}.00</h2>
+                                    </Col>
+                                    <Col span={6}>
+                                        <Button type="primary" shape="round" size={'large'}
+                                                style={{background: "#fa8547"}}>
+                                            Book Now
+                                        </Button>
+                                    </Col>
+                                </Row>
+                            </Card>
+                        </Card>
+                    </Col>
+                </Row>
+
+                <Row>
+                    <Col xl={2}></Col>
+                    <Col xs={24} xl={20}>
+                        <Divider orientation="left" style={{paddingTop: '10px', fontSize: '20px'}}><h2>What To
+                            Expect</h2>
+                        </Divider>
+                    </Col>
+                </Row>
+                <Row>
+                    <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                    }}>
+                        <Col xs={24} xl={18}>
+                            <div style={{width: 'auto', textAlign: 'center'}}>
+                                <p>Purchase Universal Studios Singapore tickets and enter a world in Resorts World
+                                    Sentosa
+                                    where the worlds of blockbuster films and their iconic characters come to life! In
+                                    this
+                                    wonderful theme park, you and your companions can experience the thrills of
+                                    cutting-edge
+                                    rides, shows, and attractions based on movies and television shows like Puss In
+                                    Boots’
+                                    Giant Journey, Battlestar Galactica: HUMAN vs. CYLON™, TRANSFORMERS The Ride: The
+                                    Ultimate 3D Battle, Jurassic Park Rapids Adventure™, Sesame Street Spaghetti Space
+                                    Chase
+                                    and more! Whichever attractions you visit, Universal Studios Singapore will surely
+                                    indulge the interests of thrill-seekers, movie buffs, and every imaginative
+                                    child!</p>
+                            </div>
+                        </Col>
+                    </div>
+                </Row>
+                <Row style={{
                     display: 'flex',
                     flexDirection: 'column',
-                    justifyContent: 'center',
                     alignItems: 'center',
-                    padding: '15px'
+                    marginTop: '15px'
                 }}>
-                    <Card bordered={false} style={{width: '90%', boxShadow: '0px 0px 0px 0px'}}
-                          bodyStyle={{backgroundColor: '#fffaf3'}}>
-                        <div style={{width: 'auto', textAlign: 'center'}}>
-                            <p>Purchase Universal Studios Singapore tickets and enter a world in Resorts World Sentosa
-                                where the worlds of blockbuster films and their iconic characters come to life! In this
-                                wonderful theme park, you and your companions can experience the thrills of cutting-edge
-                                rides, shows, and attractions based on movies and television shows like Puss In Boots’
-                                Giant Journey, Battlestar Galactica: HUMAN vs. CYLON™, TRANSFORMERS The Ride: The
-                                Ultimate 3D Battle, Jurassic Park Rapids Adventure™, Sesame Street Spaghetti Space Chase
-                                and more! Whichever attractions you visit, Universal Studios Singapore will surely
-                                indulge the interests of thrill-seekers, movie buffs, and every imaginative child!</p>
-                        </div>
-                        <div style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            padding: '15px'
-                        }}>
-                            <Image alt={'banner'} style={{borderRadius: '10px', margin: '10px'}}
-                                   src="img6.webp" preview={false} width={'75%'}
-                            />
-                            Minions Minions Minions Minions
-                            <Image alt={'banner'} style={{borderRadius: '10px', margin: '10px'}}
-                                   src="img7.webp" preview={false} width={'75%'}
-                            />
-                            Minions Minions Minions Minions
-                            <Image alt={'banner'} style={{borderRadius: '10px', margin: '10px'}}
-                                   src="img1.webp" preview={false} width={'75%'}
-                            />
-                            Minions Minions Minions Minions
-                            <Image alt={'banner'} style={{borderRadius: '10px', margin: '10px'}}
-                                   src="img2.webp" preview={false} width={'75%'}
-                            />
-                            Minions Minions Minions Minions
-                            <Image alt={'banner'} style={{borderRadius: '10px', margin: '10px'}}
-                                   src="img3.webp" preview={false} width={'75%'}
-                            />
-                            Minions Minions Minions Minions
-                            <Image alt={'banner'} style={{borderRadius: '10px', margin: '10px'}}
-                                   src="img4.webp" preview={false} width={'75%'}
-                            />
-                            Minions Minions Minions Minions
-                            <Image alt={'banner'} style={{borderRadius: '10px', margin: '10px'}}
-                                   src="img5.webp" preview={false} width={'75%'}
-                            />
-                            Minions Minions Minions Minions
-                        </div>
-                    </Card>
-                </div>
-                <Divider orientation="left" style={{paddingTop: '10px', fontSize: '20px'}}><h2>Things To Note</h2></Divider>
-                <div style={{
+                    <Col xl={4}></Col>
+                    <Col xs={24} xl={16}>
+                        <Image alt={'banner'} style={{borderRadius: '10px'}}
+                               src="img6.webp" preview={false}/>
+                    </Col>
+                    Minions Minions Minions Minions
+                    <Col xl={4}></Col>
+                </Row>
+                <Row style={{
                     display: 'flex',
                     flexDirection: 'column',
-                    justifyContent: 'center',
                     alignItems: 'center',
-                    padding: '15px'
+                    marginTop: '15px'
                 }}>
-                    <Card bordered={false} style={{width: '90%', boxShadow: '0px 0px 0px 0px'}}
-                          bodyStyle={{backgroundColor: '#fffaf3'}}>
+                    <Col xl={4}></Col>
+                    <Col xs={24} xl={16}>
+                        <Image alt={'banner'} style={{borderRadius: '10px'}}
+                               src="img7.webp" preview={false}/>
+                    </Col>
+                    Minions Minions Minions Minions
+                </Row>
+                <Row style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    marginTop: '15px'
+                }}>
+                    <Col xl={4}></Col>
+                    <Col xs={24} xl={16}>
+                        <Image alt={'banner'} style={{borderRadius: '10px'}}
+                               src="img1.webp" preview={false}/>
+                    </Col>
+                    Minions Minions Minions Minions
+                </Row>
+                <Row style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    marginTop: '15px'
+                }}>
+                    <Col xl={4}></Col>
+                    <Col xs={24} xl={16}>
+                        <Image alt={'banner'} style={{borderRadius: '10px'}}
+                               src="img2.webp" preview={false}/>
+                    </Col>
+                    Minions Minions Minions Minions
+                </Row>
+                <Row style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    marginTop: '15px'
+                }}>
+                    <Col xl={4}></Col>
+                    <Col xs={24} xl={16}>
+                        <Image alt={'banner'} style={{borderRadius: '10px'}}
+                               src="img3.webp" preview={false}/>
+                    </Col>
+                    Minions Minions Minions Minions
+                </Row>
+                <Row style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    marginTop: '15px'
+                }}>
+                    <Col xl={4}></Col>
+                    <Col xs={24} xl={16}>
+                        <Image alt={'banner'} style={{borderRadius: '10px'}}
+                               src="img4.webp" preview={false}/>
+                    </Col>
+                    Minions Minions Minions Minions
+                </Row>
+
+                <Row>
+                    <Col xl={2}></Col>
+                    <Col xs={24} xl={20}>
+                        <Divider orientation="left" style={{paddingTop: '10px', fontSize: '20px'}}><h2>Things To
+                            Note</h2>
+                        </Divider>
+                    </Col>
+                </Row>
+                <Row style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                }}>
+                    <Col xl={4}></Col>
+                    <Col xs={24} xl={16}>
                         <p>1. All packages are fixed dated, direct entry tickets, unless otherwise stated that
                             reservation
                             is required. Fixed dated vouchers are valid only on the selected date (and time if
@@ -243,35 +336,52 @@ export default function Home() {
                             RWS owned dining establishments. Guests will be able to make contactless payments with their
                             cards or digital wallets. The above does not apply to tenant businesses operating within the
                             Integrated Resort</p>
-                    </Card>
-                </div>
-                <Divider orientation="left" style={{paddingTop: '10px', fontSize: '20px'}}><h2>Location</h2></Divider>
-                <div style={{
+                    </Col>
+                    <Col xl={4}></Col>
+                </Row>
+
+
+                <Row>
+                    <Col xl={2}></Col>
+                    <Col xs={24} xl={20}>
+                        <Divider orientation="left" style={{paddingTop: '10px', fontSize: '20px'}}><h2>Location</h2>
+                        </Divider>
+                    </Col>
+                </Row>
+                <Row style={{
                     display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
+                    flexDirection: 'row',
                     alignItems: 'center',
-                    padding: '15px',
                 }}>
-                    <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4157.852022974436!2d103.77384573716512!3d1.4849890983509988!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da6deef77cf3bd%3A0x331d0f0a4faa2cd1!2sHOME%20by%20Tales%20Of%20Paws!5e0!3m2!1sen!2ssg!4v1675526918371!5m2!1sen!2ssg"
-                        width="80%" height="450" loading="lazy" frameBorder={0}
-                        referrerPolicy="no-referrer-when-downgrade"></iframe>
-                </div>
-                <Divider orientation="left" style={{paddingTop: '10px', fontSize: '20px'}}><h2>FAQ</h2></Divider>
-                <div style={{
+                    <Col xl={4}></Col>
+                    <Col xs={24} xl={16}>
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4157.852022974436!2d103.77384573716512!3d1.4849890983509988!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da6deef77cf3bd%3A0x331d0f0a4faa2cd1!2sHOME%20by%20Tales%20Of%20Paws!5e0!3m2!1sen!2ssg!4v1675526918371!5m2!1sen!2ssg"
+                            width="100%" height="450" loading="lazy" frameBorder={0}
+                            referrerPolicy="no-referrer-when-downgrade"></iframe>
+                    </Col>
+                    <Col xl={4}></Col>
+                </Row>
+
+                <Row>
+                    <Col xl={2}></Col>
+                    <Col xs={24} xl={20}>
+                        <Divider orientation="left" style={{paddingTop: '10px', fontSize: '20px'}}><h2>FAQ</h2>
+                        </Divider>
+                    </Col>
+                </Row>
+                <Row style={{
                     display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
+                    flexDirection: 'row',
                     alignItems: 'center',
-                    padding: '15px'
                 }}>
-                    <Card bordered={false} style={{width: '90%', boxShadow: '0px 0px 0px 0px'}}
-                          bodyStyle={{backgroundColor: '#fffaf3'}}>
+                    <Col xl={4}></Col>
+                    <Col xs={24} xl={16}>
                         <p>No cancellations or refunds will be provided for this activity.</p>
                         <p>For more information on Klook&apos;s cancellation policies, please refer to !</p>
-                    </Card>
-                </div>
+                    </Col>
+                    <Col xl={4}></Col>
+                </Row>
             </main>
         </>
     )
