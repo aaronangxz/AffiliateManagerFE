@@ -2,7 +2,7 @@ import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import {Card, Typography, Image, Divider, DatePicker, Button, Radio, InputNumber, Col, Row, Form} from 'antd';
 import type {DatePickerProps, RadioChangeEvent} from 'antd';
-import React from 'react';
+import React, {useEffect} from 'react';
 import moment from "moment";
 
 const {Title} = Typography;
@@ -11,24 +11,96 @@ const formItemLayout = {
     labelCol: {span: 6},
     wrapperCol: {span: 14},
 };
+let slots = [];
 
 export default function Home() {
     const [childAmount, setChildAmount] = React.useState(0);
+    const [childCount, setChildCount] = React.useState(0);
     const [adultAmount, setAdultAmount] = React.useState(0);
+    const [adultCount, setAdultCount] = React.useState(0);
+    const [totalAmount, setTotalAmount] = React.useState(0);
+    const [disableSlot0, setDisableSlot0] = React.useState(true);
+    const [disableSlot1, setDisableSlot1] = React.useState(true);
+    const [disableSlot2, setDisableSlot2] = React.useState(true);
+    const [disableSlot3, setDisableSlot3] = React.useState(true);
+    const [disableSlot4, setDisableSlot4] = React.useState(true);
+    const [slotData, setSlotData] = React.useState([]);
+    const [childMax, setChildMax] = React.useState(0);
+    const [adultMax, setAdultMax] = React.useState(0);
+    const [childDisable, setChildDisable] = React.useState(true);
+    const [adultDisable, setAdultDisable] = React.useState(true);
+    const [selectedSlot, setSelectedSlot] = React.useState(null);
 
     const onDateChange: DatePickerProps['onChange'] = (date, dateString) => {
-        console.log(date, dateString);
+        console.log(dateString);
+
+        fetch(`http://127.0.0.1:8888/api/v1/booking/slots/available?date=${dateString}`, {
+            method: 'GET',
+            redirect: 'follow'
+        })
+            .then(response => response.json())
+            .then(result => {
+                console.log(result)
+                if (result.booking_slots === undefined){
+                    setDisableSlot0(true)
+                    setDisableSlot1(true)
+                    setDisableSlot2(true)
+                    setDisableSlot3(true)
+                    setDisableSlot4(true)
+                    setAdultDisable(true)
+                    setChildDisable(true)
+                    setSelectedSlot(null)
+                    return
+                }
+                for ( let i = 0; i < result.booking_slots.length; i++){
+                    slotData.push(result.booking_slots[i])
+                }
+                setDisableSlot0(result.booking_slots.length < 1 ?true: (result.booking_slots[0].adult_slot == 0 && result.booking_slots[0].child_slot == 0))
+                setDisableSlot1(result.booking_slots.length < 2 ?true: (result.booking_slots[1].adult_slot == 0 && result.booking_slots[1].child_slot == 0))
+                setDisableSlot2(result.booking_slots.length < 3 ?true: (result.booking_slots[2].adult_slot == 0 && result.booking_slots[2].child_slot == 0))
+                setDisableSlot3(result.booking_slots.length < 4 ?true: (result.booking_slots[3].adult_slot == 0 && result.booking_slots[3].child_slot == 0))
+                setDisableSlot4(result.booking_slots.length < 5 ?true: (result.booking_slots[4].adult_slot == 0 && result.booking_slots[4].child_slot == 0))
+            })
+            .catch(error => {
+                console.log('error', error)
+            });
     };
 
     const onTimeSlotChange = (e: RadioChangeEvent) => {
+        setSelectedSlot(e.target.value)
         console.log(`radio checked:${e.target.value}`);
+        if (slotData.length >= e.target.value){
+            setAdultDisable(slotData[e.target.value].adult_slot == 0)
+            setAdultMax(slotData[e.target.value].adult_slot)
+            setChildDisable(slotData[e.target.value].child_slot == 0)
+            setChildMax(slotData[e.target.value].child_slot)
+        }
     };
+
+    useEffect(()=>{
+        if (adultDisable){
+            setAdultAmount(0)
+        }else{
+            setAdultAmount(adultCount * 100)
+        }
+
+        if (childDisable){
+            setChildAmount(0)
+        }else{
+            setChildAmount(childCount * 100)
+        }
+        setTotalAmount(adultAmount+childAmount)
+        console.log(totalAmount)
+    }, [adultDisable, childDisable, adultAmount, childAmount, totalAmount, adultCount, childCount])
+
     const onAdultChange = (value: number) => {
         setAdultAmount(value * 100)
+        setAdultCount(value)
     };
 
     const onChildChange = (value: number) => {
         setChildAmount(value * 50)
+        setChildCount(value)
     };
 
     return (
@@ -108,12 +180,12 @@ export default function Home() {
                             <Row>
                                 <Col xs={24} xl={20}>
                                     <Radio.Group onChange={onTimeSlotChange} defaultValue=""
-                                                 style={{marginLeft: '30px'}}>
-                                        <Radio.Button value="a">10am - 12pm</Radio.Button>
-                                        <Radio.Button value="b">12pm - 2pm</Radio.Button>
-                                        <Radio.Button value="c">2pm - 4pm</Radio.Button>
-                                        <Radio.Button value="d">4pm - 6pm</Radio.Button>
-                                        <Radio.Button value="e">6pm - 8pm</Radio.Button>
+                                                 style={{marginLeft: '30px'}} value={selectedSlot}>
+                                        <Radio.Button value='0' disabled={disableSlot0}>10am - 12pm</Radio.Button>
+                                        <Radio.Button value='1' disabled={disableSlot1}>12pm - 2pm</Radio.Button>
+                                        <Radio.Button value='2' disabled={disableSlot2}>2pm - 4pm</Radio.Button>
+                                        <Radio.Button value='3' disabled={disableSlot3}>4pm - 6pm</Radio.Button>
+                                        <Radio.Button value='4' disabled={disableSlot4}>6pm - 8pm</Radio.Button>
                                     </Radio.Group>
                                 </Col>
                             </Row>
@@ -143,9 +215,10 @@ export default function Home() {
                                                 <Form.Item label="" colon={false}>
                                                     <Form.Item name="adult_tix_count" labelAlign={"right"}>
                                                         <InputNumber onChange={onAdultChange}
+                                                                     disabled={adultDisable}
                                                                      style={{width: '60px', borderRadius: '10px'}}
                                                                      min={0}
-                                                                     max={10}/>
+                                                                     max={adultMax}/>
                                                     </Form.Item>
                                                 </Form.Item>
                                             </Form>
@@ -168,9 +241,10 @@ export default function Home() {
                                                 <Form.Item label="" colon={false}>
                                                     <Form.Item name="child_tix_count" labelAlign={"right"}>
                                                         <InputNumber onChange={onChildChange}
+                                                                     disabled={childDisable}
                                                                      style={{width: '60px', borderRadius: '10px'}}
                                                                      min={0}
-                                                                     max={10}/>
+                                                                     max={childMax}/>
                                                     </Form.Item>
                                                 </Form.Item>
                                             </Form>
@@ -179,11 +253,11 @@ export default function Home() {
                                 </Row>
                                 <Row>
                                     <Col span={18}>
-                                        <h2 style={{marginLeft: '20px'}}>MYR {childAmount + adultAmount}.00</h2>
+                                        <h2 style={{marginLeft: '20px'}}>MYR {totalAmount}.00</h2>
                                     </Col>
                                     <Col span={6}>
                                         <Button type="primary" shape="round" size={'large'}
-                                                style={{background: "#fa8547"}}>
+                                                style={{background: "#fa8547"}} disabled={true}>
                                             Book Now
                                         </Button>
                                     </Col>
