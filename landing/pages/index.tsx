@@ -7,12 +7,6 @@ import moment from "moment";
 
 const {Title} = Typography;
 
-const formItemLayout = {
-    labelCol: {span: 6},
-    wrapperCol: {span: 14},
-};
-let slots = [];
-
 export default function Home() {
     const [childAmount, setChildAmount] = React.useState(0);
     const [childCount, setChildCount] = React.useState(0);
@@ -30,18 +24,20 @@ export default function Home() {
     const [childDisable, setChildDisable] = React.useState(true);
     const [adultDisable, setAdultDisable] = React.useState(true);
     const [selectedSlot, setSelectedSlot] = React.useState(null);
+    const [hasMounted, setHasMounted] = React.useState(false);
+
 
     const onDateChange: DatePickerProps['onChange'] = (date, dateString) => {
         console.log(dateString);
 
-        fetch(`http://127.0.0.1:8888/api/v1/booking/slots/available?date=${dateString}`, {
+        fetch(`http://192.168.86.228:8888/api/v1/booking/slots/available?date=${dateString}`, {
             method: 'GET',
             redirect: 'follow'
         })
             .then(response => response.json())
             .then(result => {
                 console.log(result)
-                if (result.booking_slots === undefined){
+                if (result.booking_slots === undefined) {
                     setDisableSlot0(true)
                     setDisableSlot1(true)
                     setDisableSlot2(true)
@@ -52,14 +48,14 @@ export default function Home() {
                     setSelectedSlot(null)
                     return
                 }
-                for ( let i = 0; i < result.booking_slots.length; i++){
+                for (let i = 0; i < result.booking_slots.length; i++) {
                     slotData.push(result.booking_slots[i])
                 }
-                setDisableSlot0(result.booking_slots.length < 1 ?true: (result.booking_slots[0].adult_slot == 0 && result.booking_slots[0].child_slot == 0))
-                setDisableSlot1(result.booking_slots.length < 2 ?true: (result.booking_slots[1].adult_slot == 0 && result.booking_slots[1].child_slot == 0))
-                setDisableSlot2(result.booking_slots.length < 3 ?true: (result.booking_slots[2].adult_slot == 0 && result.booking_slots[2].child_slot == 0))
-                setDisableSlot3(result.booking_slots.length < 4 ?true: (result.booking_slots[3].adult_slot == 0 && result.booking_slots[3].child_slot == 0))
-                setDisableSlot4(result.booking_slots.length < 5 ?true: (result.booking_slots[4].adult_slot == 0 && result.booking_slots[4].child_slot == 0))
+                setDisableSlot0(result.booking_slots.length < 1 ? true : (result.booking_slots[0].adult_slot == 0 && result.booking_slots[0].child_slot == 0))
+                setDisableSlot1(result.booking_slots.length < 2 ? true : (result.booking_slots[1].adult_slot == 0 && result.booking_slots[1].child_slot == 0))
+                setDisableSlot2(result.booking_slots.length < 3 ? true : (result.booking_slots[2].adult_slot == 0 && result.booking_slots[2].child_slot == 0))
+                setDisableSlot3(result.booking_slots.length < 4 ? true : (result.booking_slots[3].adult_slot == 0 && result.booking_slots[3].child_slot == 0))
+                setDisableSlot4(result.booking_slots.length < 5 ? true : (result.booking_slots[4].adult_slot == 0 && result.booking_slots[4].child_slot == 0))
             })
             .catch(error => {
                 console.log('error', error)
@@ -69,7 +65,7 @@ export default function Home() {
     const onTimeSlotChange = (e: RadioChangeEvent) => {
         setSelectedSlot(e.target.value)
         console.log(`radio checked:${e.target.value}`);
-        if (slotData.length >= e.target.value){
+        if (slotData.length >= e.target.value) {
             setAdultDisable(slotData[e.target.value].adult_slot == 0)
             setAdultMax(slotData[e.target.value].adult_slot)
             setChildDisable(slotData[e.target.value].child_slot == 0)
@@ -77,30 +73,38 @@ export default function Home() {
         }
     };
 
-    useEffect(()=>{
-        if (adultDisable){
+    useEffect(() => {
+        setHasMounted(true);
+        if (adultDisable) {
             setAdultAmount(0)
-        }else{
-            setAdultAmount(adultCount * 100)
+        } else {
+            setAdultAmount(adultCount * 99)
         }
 
-        if (childDisable){
+        if (childDisable) {
             setChildAmount(0)
-        }else{
-            setChildAmount(childCount * 100)
+        } else {
+            setChildAmount(childCount * 50)
         }
-        setTotalAmount(adultAmount+childAmount)
+        setTotalAmount(adultAmount + childAmount)
         console.log(totalAmount)
     }, [adultDisable, childDisable, adultAmount, childAmount, totalAmount, adultCount, childCount])
-
+    //To fix Hydration issue
+    if (!hasMounted) {
+        return null;
+    }
     const onAdultChange = (value: number) => {
-        setAdultAmount(value * 100)
+        setAdultAmount(value * 99)
         setAdultCount(value)
     };
 
     const onChildChange = (value: number) => {
         setChildAmount(value * 50)
         setChildCount(value)
+    };
+
+    const onFinish = (values: any) => {
+        console.log('Success:', values);
     };
 
     return (
@@ -124,9 +128,9 @@ export default function Home() {
                 {/*    </div>*/}
                 {/*</div>*/}
 
-                <Title style={{textAlign: 'left', margin: '0', paddingTop: '20px', paddingBottom: '20px'}}>HOME by Tales
-                    Of Paws Admission Ticket</Title>
-
+                <Title level={2} style={{textAlign: 'left', margin: '0px', padding: '20px'}}>
+                    HOME by Tales Of Paws Admission Ticket
+                </Title>
                 <Row>
                     <Col xl={2}></Col>
                     <Col xs={24} xl={20}>
@@ -168,105 +172,110 @@ export default function Home() {
                 <Row>
                     <Col xl={2}></Col>
                     <Col xs={24} xl={20}>
-                        <Card bordered={false} style={{width: '100%', boxShadow: '0px 0px 0px 0px'}}
-                              bodyStyle={{backgroundColor: '#fffaf3'}}>
-                            <DatePicker disabledDate={(current) => {
-                                return moment().add(-1, 'days') >= current ||
-                                    moment().add(1, 'month') <= current;
-                            }} style={{marginLeft: '30px'}} onChange={onDateChange}/>
+                        <DatePicker size={'large'} disabledDate={(current) => {
+                            return moment().add(-1, 'days') >= current ||
+                                moment().add(1, 'month') <= current;
+                        }} style={{marginLeft: '30px'}} onChange={onDateChange} inputReadOnly={true}/>
 
-                            <Divider orientation="left" style={{paddingTop: '10px', fontSize: '15px'}}>Time
-                                Slots</Divider>
+                        <Divider orientation="left" style={{paddingTop: '10px', fontSize: '15px'}}>Time
+                            Slots</Divider>
+                        <Row>
+                            <Col xs={24} xl={20}>
+                                <Radio.Group size={'large'} onChange={onTimeSlotChange} defaultValue=""
+                                             style={{marginLeft: '30px'}} value={selectedSlot}>
+                                    <Radio.Button value='0' disabled={disableSlot0}>10am - 12pm</Radio.Button>
+                                    <Radio.Button value='1' disabled={disableSlot1}>12pm - 2pm</Radio.Button>
+                                    <Radio.Button value='2' disabled={disableSlot2}>2pm - 4pm</Radio.Button>
+                                    <Radio.Button value='3' disabled={disableSlot3}>4pm - 6pm</Radio.Button>
+                                    <Radio.Button value='4' disabled={disableSlot4}>6pm - 8pm</Radio.Button>
+                                </Radio.Group>
+                            </Col>
+                        </Row>
+                        <Divider orientation="left"
+                                 style={{paddingTop: '10px', fontSize: '15px'}}>Quantity</Divider>
+                        <Form
+                            name="tix"
+                            style={{width: "auto", paddingLeft: '0px'}}
+                            onFinish={onFinish}
+                        >
                             <Row>
-                                <Col xs={24} xl={20}>
-                                    <Radio.Group onChange={onTimeSlotChange} defaultValue=""
-                                                 style={{marginLeft: '30px'}} value={selectedSlot}>
-                                        <Radio.Button value='0' disabled={disableSlot0}>10am - 12pm</Radio.Button>
-                                        <Radio.Button value='1' disabled={disableSlot1}>12pm - 2pm</Radio.Button>
-                                        <Radio.Button value='2' disabled={disableSlot2}>2pm - 4pm</Radio.Button>
-                                        <Radio.Button value='3' disabled={disableSlot3}>4pm - 6pm</Radio.Button>
-                                        <Radio.Button value='4' disabled={disableSlot4}>6pm - 8pm</Radio.Button>
-                                    </Radio.Group>
+                                <Col xl={2} md={4}></Col>
+                                <Col xs={5} xl={1}>
+                                    <h2 style={{marginLeft: '10px'}}>Adult</h2>
+                                </Col>
+                                <Col xs={3} xl={8}></Col>
+                                <Col xl={3}>
+                                    <h2>MYR 99.00</h2>
+                                </Col>
+                                <Col xs={5} xl={2}>
+                                    <Row>
+                                        <Col xs={8}></Col>
+                                        <Col xs={1}>
+                                            <Form.Item name="adult_tix_count" labelAlign={"right"}>
+                                                <InputNumber onChange={onAdultChange} placeholder={'0'}
+                                                             disabled={adultDisable}
+                                                             style={{
+                                                                 width: '60px',
+                                                                 borderRadius: '10px',
+                                                                 fontSize: '16px'
+                                                             }}
+                                                             min={0}
+                                                             max={adultMax}
+                                                             inputMode={'numeric'}/>
+                                            </Form.Item>
+                                        </Col>
+                                    </Row>
                                 </Col>
                             </Row>
-
-                            <Divider orientation="left"
-                                     style={{paddingTop: '10px', fontSize: '15px'}}>Quantity</Divider>
-                            <Card size={'small'} bordered={false} style={{
-                                width: '100%',
-                                marginTop: '10px',
-                                borderRadius: '15px',
-                                boxShadow: '0px 0px 0px 0px'
-                            }}
-                                  bodyStyle={{backgroundColor: '#fffaf3'}}>
-                                <Row>
-                                    <Col span={5}>
-                                        <h2 style={{marginLeft: '10px'}}>Adult</h2>
-                                    </Col>
-                                    <Col span={19}>
-                                        <Row>
-                                            <h2 style={{marginLeft: 'auto'}}>MYR 100.00</h2>
-                                            <Form
-                                                name="adult_tix"
-                                                {...formItemLayout}
-                                                initialValues={{'adult_tix_count': 0}}
-                                                style={{width: "auto", marginLeft: 'auto', paddingRight: '20px'}}
-                                            >
-                                                <Form.Item label="" colon={false}>
-                                                    <Form.Item name="adult_tix_count" labelAlign={"right"}>
-                                                        <InputNumber onChange={onAdultChange}
-                                                                     disabled={adultDisable}
-                                                                     style={{width: '60px', borderRadius: '10px'}}
-                                                                     min={0}
-                                                                     max={adultMax}/>
-                                                    </Form.Item>
-                                                </Form.Item>
-                                            </Form>
-                                        </Row>
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col span={5}>
-                                        <h2 style={{marginLeft: '10px'}}>Child</h2>
-                                    </Col>
-                                    <Col span={19}>
-                                        <Row>
-                                            <h2 style={{marginLeft: 'auto'}}>MYR 50.00</h2>
-                                            <Form
-                                                name="child_tix"
-                                                {...formItemLayout}
-                                                initialValues={{'child_tix_count': 0}}
-                                                style={{width: "auto", marginLeft: 'auto', paddingRight: '20px'}}
-                                            >
-                                                <Form.Item label="" colon={false}>
-                                                    <Form.Item name="child_tix_count" labelAlign={"right"}>
-                                                        <InputNumber onChange={onChildChange}
-                                                                     disabled={childDisable}
-                                                                     style={{width: '60px', borderRadius: '10px'}}
-                                                                     min={0}
-                                                                     max={childMax}/>
-                                                    </Form.Item>
-                                                </Form.Item>
-                                            </Form>
-                                        </Row>
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col span={18}>
-                                        <h2 style={{marginLeft: '20px'}}>MYR {totalAmount}.00</h2>
-                                    </Col>
-                                    <Col span={6}>
+                            <Row>
+                                <Col xl={2} md={4}></Col>
+                                <Col xs={5} xl={1}>
+                                    <h2 style={{marginLeft: '10px'}}>Child</h2>
+                                </Col>
+                                <Col xs={3} xl={8}></Col>
+                                <Col xl={3}>
+                                    <h2>MYR 50.00</h2>
+                                </Col>
+                                <Col xs={5} xl={2}>
+                                    <Row>
+                                        <Col xs={8}></Col>
+                                        <Col xs={1}>
+                                            <Form.Item name="child_tix_count" labelAlign={"right"}>
+                                                <InputNumber
+                                                    onChange={onChildChange} placeholder={'0'}
+                                                    disabled={childDisable}
+                                                    style={{width: '60px', borderRadius: '10px', fontSize: '16px'}}
+                                                    min={0}
+                                                    max={childMax}
+                                                    inputMode={'numeric'}/>
+                                            </Form.Item>
+                                        </Col>
+                                    </Row>
+                                </Col>
+                            </Row>
+                            <Row >
+                                <Col xl={2} md={3} xs={1}></Col>
+                                <Col xl={4} md={5} xs={10}>
+                                    <h2 style={{
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                    }}>MYR {totalAmount}.00</h2>
+                                </Col>
+                                <Col xl={8} md={8} xs={2}></Col>
+                                <Col xl={4}>
+                                    <Form.Item>
                                         <Button type="primary" shape="round" size={'large'}
-                                                style={{background: "#fa8547"}} disabled={true}>
+                                                style={{background: "#fa8547"}} disabled={totalAmount == 0}
+                                                htmlType="submit">
                                             Book Now
                                         </Button>
-                                    </Col>
-                                </Row>
-                            </Card>
-                        </Card>
+                                    </Form.Item>
+                                </Col>
+                            </Row>
+                        </Form>
                     </Col>
                 </Row>
-
                 <Row>
                     <Col xl={2}></Col>
                     <Col xs={24} xl={20}>
@@ -310,7 +319,7 @@ export default function Home() {
                     <Col xl={4}></Col>
                     <Col xs={24} xl={16}>
                         <Image alt={'banner'} style={{borderRadius: '10px'}}
-                               src="img6.webp" preview={false}/>
+                               src="img6.webp" preview={true}/>
                     </Col>
                     Minions Minions Minions Minions
                     <Col xl={4}></Col>
@@ -324,7 +333,7 @@ export default function Home() {
                     <Col xl={4}></Col>
                     <Col xs={24} xl={16}>
                         <Image alt={'banner'} style={{borderRadius: '10px'}}
-                               src="img7.webp" preview={false}/>
+                               src="img7.webp" preview={true}/>
                     </Col>
                     Minions Minions Minions Minions
                 </Row>
@@ -337,7 +346,7 @@ export default function Home() {
                     <Col xl={4}></Col>
                     <Col xs={24} xl={16}>
                         <Image alt={'banner'} style={{borderRadius: '10px'}}
-                               src="img1.webp" preview={false}/>
+                               src="img1.webp" preview={true}/>
                     </Col>
                     Minions Minions Minions Minions
                 </Row>
@@ -350,7 +359,7 @@ export default function Home() {
                     <Col xl={4}></Col>
                     <Col xs={24} xl={16}>
                         <Image alt={'banner'} style={{borderRadius: '10px'}}
-                               src="img2.webp" preview={false}/>
+                               src="img2.webp" preview={true}/>
                     </Col>
                     Minions Minions Minions Minions
                 </Row>
@@ -363,7 +372,7 @@ export default function Home() {
                     <Col xl={4}></Col>
                     <Col xs={24} xl={16}>
                         <Image alt={'banner'} style={{borderRadius: '10px'}}
-                               src="img3.webp" preview={false}/>
+                               src="img3.webp" preview={true}/>
                     </Col>
                     Minions Minions Minions Minions
                 </Row>
@@ -376,7 +385,7 @@ export default function Home() {
                     <Col xl={4}></Col>
                     <Col xs={24} xl={16}>
                         <Image alt={'banner'} style={{borderRadius: '10px'}}
-                               src="img4.webp" preview={false}/>
+                               src="img4.webp" preview={true}/>
                     </Col>
                     Minions Minions Minions Minions
                 </Row>
@@ -413,8 +422,6 @@ export default function Home() {
                     </Col>
                     <Col xl={4}></Col>
                 </Row>
-
-
                 <Row>
                     <Col xl={2}></Col>
                     <Col xs={24} xl={20}>

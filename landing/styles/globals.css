@@ -106,3 +106,50 @@ a {
     color-scheme: dark;
   }
 }
+
+.ant-picker:hover{
+  border-color: #b96c05;
+}
+
+.ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-selected .ant-picker-cell-inner{
+  color: black;
+  background: antiquewhite;
+}
+
+.ant-picker-dropdown .ant-picker-today-btn{
+  color: #deb57f;
+}
+
+.ant-picker-dropdown .ant-picker-today-btn:hover{
+  color: #de922f;
+}
+
+.ant-picker-dropdown .ant-picker-cell-in-view.ant-picker-cell-today .ant-picker-cell-inner::before{
+  border: 1px solid #e8b34b;
+}
+
+.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):first-child {
+  border-color: #b96c05;
+}
+
+.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover{
+  color: #00ee30;
+}
+
+.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):hover{
+  color: #f3ae4f;
+  border-color: #f3ae4f;
+}
+
+.ant-radio-button-wrapper:not(.ant-radio-button-wrapper-disabled):hover{
+  color: #f3ae4f;
+}
+
+.ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled){
+  color: #b96c05;
+  border-color: #b96c05;
+}
+
+.ant-form-item-control-input :hover{
+  border-color: #b96c05;
+}
