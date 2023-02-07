@@ -22,16 +22,16 @@ const result: IRouter[] = [
         Component: lazy(() => import('pages/Detail/Advanced')),
         meta: { title: '多卡片详情页' },
       },
-      {
-        path: 'deploy',
-        Component: lazy(() => import('pages/Detail/Deploy')),
-        meta: { title: '数据详情页' },
-      },
-      {
-        path: 'secondary',
-        Component: lazy(() => import('pages/Detail/Secondary')),
-        meta: { title: '二级详情页' },
-      },
+      // {
+      //   path: 'deploy',
+      //   Component: lazy(() => import('pages/Detail/Deploy')),
+      //   meta: { title: '数据详情页' },
+      // },
+      // {
+      //   path: 'secondary',
+      //   Component: lazy(() => import('pages/Detail/Secondary')),
+      //   meta: { title: '二级详情页' },
+      // },
     ],
   },
 ];

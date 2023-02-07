@@ -34,21 +34,21 @@ const PieChartIcon = memo(() => (
 
 const PANE_LIST: Array<IBoardProps> = [
   {
-    title: '总收入',
-    count: '¥ 28,425.00',
+    title: 'Total Affiliate Revenue',
+    count: 'MYR 9,999.00',
     trend: ETrend.up,
     trendNum: '20.5%',
-    Icon: <PieChartIcon />,
+    // Icon: <BarChartIcon />,
   },
   {
-    title: '总退款',
-    count: '¥ 768.00',
+    title: 'Total Commission',
+    count: 'MYR 768.00',
     trend: ETrend.down,
     trendNum: '20.5%',
-    Icon: <BarChartIcon />,
+    // Icon: <BarChartIcon />,
   },
   {
-    title: '活跃用户（个）',
+    title: 'Active Affiliates',
     count: '1126',
     trend: ETrend.down,
     trendNum: '20.5%',
@@ -59,7 +59,7 @@ const PANE_LIST: Array<IBoardProps> = [
     ),
   },
   {
-    title: '产生订单（个）',
+    title: 'Affiliate Bookings',
     count: '527',
     trend: ETrend.down,
     trendNum: '20.5%',
@@ -82,7 +82,6 @@ const TopPanel = () => (
           count={item.count}
           desc={'自从上周以来'}
           Icon={item.Icon}
-          dark={index === 0}
         />
       </Col>
     ))}

@@ -6,24 +6,24 @@ const dashboard: IRouter[] = [
   {
     path: '/dashboard',
     meta: {
-      title: '统计报表',
+      title: 'Data Compass',
       Icon: DashboardIcon,
     },
     children: [
       {
-        path: 'base',
+        path: 'stats',
         Component: lazy(() => import('pages/Dashboard/Base')),
         meta: {
-          title: '概览仪表盘',
+          title: 'Affiliate Analytics',
         },
       },
-      {
-        path: 'detail',
-        Component: lazy(() => import('pages/Dashboard/Detail')),
-        meta: {
-          title: '统计报表',
-        },
-      },
+      // {
+      //   path: 'detail',
+      //   Component: lazy(() => import('pages/Dashboard/Detail')),
+      //   meta: {
+      //     title: '统计报表',
+      //   },
+      // },
     ],
   },
 ];
