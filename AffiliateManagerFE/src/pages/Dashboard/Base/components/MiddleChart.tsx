@@ -9,7 +9,7 @@ import Style from './MiddleChart.module.less';
 const lineOptions = getLineChartOptions();
 const pieOptions = getPieChartOptions();
 
-const MiddleChart = () => {
+export const MiddleChart = () => {
   const [customOptions, setCustomOptions] = useState(lineOptions);
 
   const onTimeChange = (value: Array<string>) => {
@@ -36,7 +36,7 @@ const MiddleChart = () => {
         </Card>
       </Col>
       <Col xs={12} xl={3}>
-        <Card title='Affiliate Source' subtitle='2021-12' bordered={false}>
+        <Card title='Ticket Type' subtitle='2021-12' bordered={false}>
           <ReactEcharts option={dynamicPieChartOption} notMerge={true} lazyUpdate={true} />
         </Card>
       </Col>

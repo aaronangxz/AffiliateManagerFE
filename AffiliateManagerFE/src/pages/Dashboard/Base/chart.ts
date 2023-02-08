@@ -118,8 +118,8 @@ export const getPieChartOptions = (radius = 42): EChartOption => ({
         show: false,
       },
       data: [
-        { value: 1048, name: 'Grab' },
-        { value: radius * 7, name: 'Airbnb' },
+        { value: 1048, name: 'Citizen' },
+        { value: radius * 7, name: 'Tourist' },
       ],
     },
   ],

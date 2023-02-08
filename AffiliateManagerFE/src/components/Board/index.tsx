@@ -63,7 +63,7 @@ const Board = ({ title, count, desc, trend, trendNum, Icon, dark, border = false
           {desc}
           <TrendIcon trend={trend} trendNum={trendNum} />
         </div>
-        <ChevronRightIcon className={Style.boardItemIcon} />
+        {/*<ChevronRightIcon className={Style.boardItemIcon} />*/}
       </div>
     }
   >
