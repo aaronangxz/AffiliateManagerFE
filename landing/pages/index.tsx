@@ -70,11 +70,11 @@ export default function Home() {
                     slotData.push(result.booking_slots[i])
                 }
 
-                setDisableSlot0(result.booking_slots.length < 1 ? true : (result.booking_slots[0].adult_slot == 0 && result.booking_slots[0].child_slot == 0))
-                setDisableSlot1(result.booking_slots.length < 2 ? true : (result.booking_slots[1].adult_slot == 0 && result.booking_slots[1].child_slot == 0))
-                setDisableSlot2(result.booking_slots.length < 3 ? true : (result.booking_slots[2].adult_slot == 0 && result.booking_slots[2].child_slot == 0))
-                setDisableSlot3(result.booking_slots.length < 4 ? true : (result.booking_slots[3].adult_slot == 0 && result.booking_slots[3].child_slot == 0))
-                setDisableSlot4(result.booking_slots.length < 5 ? true : (result.booking_slots[4].adult_slot == 0 && result.booking_slots[4].child_slot == 0))
+                setDisableSlot0(result.booking_slots.length < 1 ? true : (result.booking_slots[0].citizen_slot == 0 && result.booking_slots[0].tourist_slot == 0))
+                setDisableSlot1(result.booking_slots.length < 2 ? true : (result.booking_slots[1].citizen_slot == 0 && result.booking_slots[1].tourist_slot == 0))
+                setDisableSlot2(result.booking_slots.length < 3 ? true : (result.booking_slots[2].citizen_slot == 0 && result.booking_slots[2].tourist_slot == 0))
+                setDisableSlot3(result.booking_slots.length < 4 ? true : (result.booking_slots[3].citizen_slot == 0 && result.booking_slots[3].tourist_slot == 0))
+                setDisableSlot4(result.booking_slots.length < 5 ? true : (result.booking_slots[4].citizen_slot == 0 && result.booking_slots[4].tourist_slot == 0))
             })
             .catch(error => {
                 messageApi.open({

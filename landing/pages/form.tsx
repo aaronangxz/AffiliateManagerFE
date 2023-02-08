@@ -26,14 +26,12 @@ function InfoForm() {
             // setInputFields([...inputFields, newField]);
             emptyValues.push(newField)
             setInputFields(emptyValues);
-            console.log(i, inputFields);
         }
     }
 
     React.useEffect(() => {
         emptyValues = [];
         getForms();
-        console.log('effect')
     }, [])
 
 
