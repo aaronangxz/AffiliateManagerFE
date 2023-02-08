@@ -1,11 +1,12 @@
 import type { EChartOption } from 'echarts';
+import * as echarts from 'echarts';
 import { getChartDataSet, ONE_WEEK_LIST } from 'utils/chart';
 
 export const getLineChartOptions = (dateTime: Array<string> = []): EChartOption => {
-  const [timeArray, inArray, outArray] = getChartDataSet(dateTime);
+  const [timeArray, revenueArray, commissionArray, bookingsArray] = getChartDataSet(dateTime);
   return {
     tooltip: {
-      trigger: 'item',
+      trigger: 'axis',
     },
     grid: {
       left: '0',
@@ -18,7 +19,7 @@ export const getLineChartOptions = (dateTime: Array<string> = []): EChartOption 
       left: 'center',
       bottom: '0',
       orient: 'horizontal', // legend 横向布局。
-      data: ['本月', '上月'],
+      data: ['Revenue', 'Commission', 'Bookings'],
       textStyle: {
         fontSize: 12,
       },
@@ -39,30 +40,75 @@ export const getLineChartOptions = (dateTime: Array<string> = []): EChartOption 
     },
     series: [
       {
-        name: '本月',
-        data: outArray,
+        name: 'Revenue',
+        data: revenueArray,
         type: 'line',
-        smooth: false,
+        smooth: true,
         showSymbol: true,
         symbol: 'circle',
-        symbolSize: 8,
+        symbolSize: 0,
         itemStyle: {
           borderWidth: 1,
         },
         areaStyle: {
-          color: '#0053D92F',
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            {
+              offset: 0,
+              color: 'rgba(12,108,255,0.3)',
+            },
+            {
+              offset: 1,
+              color: 'rgba(244,253,255,0.18)',
+            },
+          ]),
         },
       },
       {
-        name: '上月',
-        data: inArray,
+        name: 'Commission',
+        data: commissionArray,
         type: 'line',
-        smooth: false,
+        smooth: true,
         showSymbol: true,
         symbol: 'circle',
-        symbolSize: 8,
+        symbolSize: 0,
         itemStyle: {
           borderWidth: 1,
+        },
+        areaStyle: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            {
+              offset: 0,
+              color: 'rgba(115,201,255,0.3)',
+            },
+            {
+              offset: 1,
+              color: 'rgba(244,253,255,0.18)',
+            },
+          ]),
+        },
+      },
+      {
+        name: 'Bookings',
+        data: bookingsArray,
+        type: 'line',
+        smooth: true,
+        showSymbol: true,
+        symbol: 'circle',
+        symbolSize: 0,
+        itemStyle: {
+          borderWidth: 1,
+        },
+        areaStyle: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            {
+              offset: 0,
+              color: 'rgba(128,255,165,0.3)',
+            },
+            {
+              offset: 1,
+              color: 'rgba(244,253,255,0.18)',
+            },
+          ]),
         },
       },
     ],

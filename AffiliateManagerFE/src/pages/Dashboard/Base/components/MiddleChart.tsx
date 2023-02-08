@@ -1,20 +1,28 @@
 import React, { useState } from 'react';
-import { Col, Row, Card } from 'tdesign-react';
+import {Col, Row, Card, DateRangeValue} from 'tdesign-react';
 import ReactEcharts from 'echarts-for-react';
 import useDynamicChart from 'hooks/useDynamicChart';
 import LastWeekDatePicker from 'components/DatePicker';
 import { getLineChartOptions, getPieChartOptions } from '../chart';
 import Style from './MiddleChart.module.less';
+import dayjs from "dayjs";
 
 const lineOptions = getLineChartOptions();
 const pieOptions = getPieChartOptions();
 
+const RECENT_7_DAYS_STRING: Array<string> = [
+  dayjs().subtract(7, 'day').format('YYYY-MM-DD').toString(),
+  dayjs().subtract(1, 'day').format('YYYY-MM-DD').toString(),
+];
+
 export const MiddleChart = () => {
   const [customOptions, setCustomOptions] = useState(lineOptions);
+  const [date, setDate] = useState<Array<string>>(RECENT_7_DAYS_STRING);
 
   const onTimeChange = (value: Array<string>) => {
     const options = getLineChartOptions(value);
     setCustomOptions(options);
+    setDate(value);
   };
 
   const dynamicLineChartOption = useDynamicChart(customOptions, {
@@ -31,12 +39,12 @@ export const MiddleChart = () => {
   return (
     <Row gutter={[16, 16]} className={Style.middleChartPanel}>
       <Col xs={12} xl={9}>
-        <Card title='Core Stats' subtitle='(万元)' actions={LastWeekDatePicker(onTimeChange)} bordered={false}>
-          <ReactEcharts option={dynamicLineChartOption} notMerge={true} lazyUpdate={false} />
+        <Card title='Core Stats' subtitle={`${date[0]} to ${date[1]}`} actions={LastWeekDatePicker(onTimeChange)} bordered={false}>
+          <ReactEcharts option={dynamicLineChartOption} notMerge={true} lazyUpdate={true} />
         </Card>
       </Col>
       <Col xs={12} xl={3}>
-        <Card title='Ticket Type' subtitle='2021-12' bordered={false}>
+        <Card title='Ticket Type' bordered={false}>
           <ReactEcharts option={dynamicPieChartOption} notMerge={true} lazyUpdate={true} />
         </Card>
       </Col>
