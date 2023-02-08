@@ -1,79 +1,78 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import {
-    TreeSelect,
     Typography,
     Select,
     Divider,
-    DatePicker,
     Button,
-    Radio,
-    InputNumber,
     Col,
     Row,
     Form,
     Input,
-    Cascader,
-    Switch,
+    Layout,
     Checkbox,
-    Card
+    Card, Image
 } from 'antd';
 
 import React, {useEffect} from 'react';
-import {adultTix, childTix, selectDate, totalAmt} from "./index";
+import {adultTix, childTix, selectDate, selectSlot, totalAmt} from "./index";
+import InfoForm, {formValues} from "./form";
+import {useRouter} from "next/router";
+import Link from "next/link";
+
+const {Header} = Layout;
 
 const {Title} = Typography;
+const slotMap: {
+    [key: number]: string;
+} = {
+    0: 'Corgi - 10.30am to 12:00pm',
+    1: 'Corgi - 12.30pm to 02:00pm',
+    2: 'Dogs - 02.30pm to 04:00pm',
+    3: 'Dogs - 05.00pm to 06.30pm',
+};
 
 class BoxComponent extends React.Component {
     render() {
         return (
-            <Row style={{paddingBottom: '15px'}}>
-                <Col xl={8}></Col>
-                <Col xl={8}>
-                    <Card title={`Visitor ${this.props.keyProp}`} bordered={false} style={{width: "auto"}}>
-                        <Form
-                            labelCol={{span: 4}}
-                            wrapperCol={{span: 14}}
-                            layout="horizontal"
-                            style={{maxWidth: 600}}
+            <Card title={`Visitor ${
+                // @ts-ignore
+                this.props.keyProp}`} bordered={true} style={{width: "auto"}}>
+                <Form.Item name='name' label="Name">
+                    <Input style={{fontSize: '17px'}}/>
+                </Form.Item>
+                <Form.Item name='email' label="Email">
+                    <Input style={{fontSize: '17px'}}/>
+                </Form.Item>
+                <Form.Item label="Contact">
+                    <Input.Group>
+                        <Form.Item
+                            name={['contact', 'code']}
+                            noStyle
+                            // rules={[{required: true, message: 'Country is required'}]}
                         >
-                            <Form.Item label="Name">
-                                <Input style={{fontSize: '17px'}}/>
-                            </Form.Item>
-                            <Form.Item label="Email">
-                                <Input style={{fontSize: '17px'}}/>
-                            </Form.Item>
-                            <Form.Item label="Contact">
-                                <Input.Group>
-                                    <Form.Item
-                                        name={['contact', 'code']}
-                                        noStyle
-                                        rules={[{required: true, message: 'Country is required'}]}
-                                    >
-                                        <Select bordered={false} placeholder="Country">
-                                            <Select.Option value="+60">(+60)</Select.Option>
-                                            <Select.Option value="+65">(+65)</Select.Option>
-                                        </Select>
-                                    </Form.Item>
-                                    <Form.Item
-                                        name={['contact', 'number']}
-                                        noStyle
-                                        rules={[{required: true, message: 'Number is required'}]}
-                                    >
-                                        <Input style={{width: '50%', fontSize: '17px'}} placeholder="Input number"/>
-                                    </Form.Item>
-                                </Input.Group>
-                            </Form.Item>
-                        </Form>
-                    </Card>
-                </Col>
-            </Row>
+                            <Select bordered={false} placeholder="Country">
+                                <Select.Option value="+60">(+60)</Select.Option>
+                                <Select.Option value="+65">(+65)</Select.Option>
+                            </Select>
+                        </Form.Item>
+                        <Form.Item
+                            name={['contact', 'number']}
+                            noStyle
+                            // rules={[{required: true, message: 'Number is required'}]}
+                        >
+                            <Input style={{width: '50%', fontSize: '17px'}} placeholder="Input number"/>
+                        </Form.Item>
+                    </Input.Group>
+                </Form.Item>
+            </Card>
         );
     }
 }
 
 export default function Booking() {
     const [hasMounted, setHasMounted] = React.useState(false);
+    const router = useRouter();
 
     useEffect(() => {
         setHasMounted(true);
@@ -84,10 +83,16 @@ export default function Booking() {
     const getForms = () => {
         let rows = [];
         for (let i = 0; i < adultTix + childTix; i++) {
-            rows.push(<BoxComponent key={i + 1} keyProp={i + 1}/>);
+            // rows.push(<BoxComponent key={i + 1}// @ts-ignore
+            //                         keyProp={i + 1}/>);
         }
-        return rows;
     }
+
+
+    const onFinish = (values: any) => {
+        console.log('Success:', values);
+        console.log(formValues)
+    };
 
     return (
         <>
@@ -98,128 +103,175 @@ export default function Booking() {
                 <link rel="icon" href="/favicon.ico"/>
             </Head>
             <main className={styles.main}>
-                <Title level={2} style={{textAlign: 'left', margin: '0px', padding: '20px'}}>
-                    HOME by Tales Of Paws Admission Ticket
-                </Title>
                 <Row>
-                    <Col xl={8}></Col>
-                    <Col xs={24} xl={8}>
-                        <Card title="You are booking" bordered={false} style={{width: "auto"}}>
+                    <Col xl={6}></Col>
+                    <Col xl={12}>
+                        <Link href='/'>
+                            <Header>
+                                <Title level={2} style={{textAlign: 'center', margin: '0px', padding: '20px'}}>
+                                    HOME by Tales Of Paws Admission Ticket
+                                </Title>
+                            </Header>
+                        </Link>
+                    </Col>
+                    <Col xl={6}></Col>
+                </Row>
+                <Row>
+                    <Col xl={9}></Col>
+                    <Col xs={24} xl={6}>
+                        <Card title="Your Selections" bordered={false} style={{width: "auto"}}>
                             <Row>
-                                <Col>
-                                    <p>Date: </p>
-                                </Col>
-                                <Col xs={10} xl={16}></Col>
-                                <Col>
-                                    <p>{selectDate}</p>
-                                </Col>
+                                <Image alt={'banner'} style={{borderRadius: '10px',marginBottom:'15px'}}
+                                       src="banner.jpg" preview={false}
+                                />
                             </Row>
                             <Row>
-                                <Col>
-                                    <p>Quantity: </p>
+                                <Col span={24}>
+                                    <h4>Date: {selectDate}</h4>
                                 </Col>
-                                <Col xs={8} xl={14}></Col>
-                                <Col>
-                                    <p>{adultTix == 0 ? '' : ` ${adultTix} x Adult`}{childTix == 0 ? '' : `, ${childTix} x Child`}</p>
+                                {/*<Col span={8}>*/}
+                                {/*    <p>{selectDate}</p>*/}
+                                {/*</Col>*/}
+                            </Row>
+                            <Row>
+                                <Col span={24}>
+                                    <h4>Slot: {slotMap[selectSlot]}</h4>
                                 </Col>
+                                {/*<Col span={12}>*/}
+                                {/*    <p>{slotMap[selectSlot]}</p>*/}
+                                {/*</Col>*/}
+                            </Row>
+                            <Row>
+                                <Col span={24}>
+                                    <h4>Quantity: {adultTix == 0 ? '' : ` ${adultTix} x Citizen `}{adultTix==0 || childTix == 0?'':','}{childTix == 0 ? '' : ` ${childTix} x Tourist`}</h4>
+                                </Col>
+                                {/*<Col span={11}>*/}
+                                {/*    <p>{adultTix == 0 ? ' 0 Adult,' : ` ${adultTix} Adult,`}{childTix == 0 ? ' 0 Child' : `, ${childTix} Child`}</p>*/}
+                                {/*</Col>*/}
                             </Row>
                             <Divider/>
                             <Row>
-                                <Col>
-                                    <p>Total: </p>
+                                <Col span={14}>
+                                    <h3>Total: </h3>
                                 </Col>
-                                <Col xs={10} xl={16}></Col>
-                                <Col>
-                                    <p>MYR {totalAmt}.00</p>
+                                <Col span={10}>
+                                    <h3>MYR {totalAmt}.00</h3>
                                 </Col>
                             </Row>
                         </Card>
                     </Col>
+                    <Col xl={9}></Col>
                 </Row>
                 <Row>
                     <Col xl={6}></Col>
                     <Col xs={24} xl={12}>
-                        <Divider orientation="left" style={{paddingTop: '10px', fontSize: '20px'}}><h2>Enter Info</h2>
+                        <Divider orientation="left" style={{paddingTop: '10px', fontSize: '20px'}}><h2>Visitor Info</h2>
                         </Divider>
                     </Col>
                 </Row>
-                {getForms()}
-                <Row>
-                    <Col xl={6}></Col>
-                    <Col xs={24} xl={12}>
-                        <Divider orientation="left" style={{paddingTop: '10px', fontSize: '20px'}}><h2>Disclaimer</h2>
-                        </Divider>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col xs={3} xl={8}></Col>
-                    <Col xl={8}>
-                        <Checkbox>By checking this box, I hereby acknowledge and confirm that I have read the Covid-19
-                            Terms, Covid-19 Privacy Policy & Health Acknowledgement before booking my cruise.</Checkbox>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col xs={3} xl={8}></Col>
-                    <Col xl={8}>
-                        <Checkbox>Please note that the "First Name" and "Last Name" input above should not consist of
-                            any special characters (e.g. , - ? / @ ~ . etc). I acknowledge that if special characters
-                            are included in the fields, the booking will be invalid and cancelled automatically upon
-                            booking.</Checkbox>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col xl={6}></Col>
-                    <Col xs={24} xl={12}>
-                        <Divider orientation="left" style={{paddingTop: '10px', fontSize: '20px'}}><h2>Discounts</h2>
-                        </Divider>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col xs={2} xl={8}></Col>
-                    <Col xs={22} xl={12}>
-                        <Input.Group compact>
-                            <Input style={{width: '200px'}} defaultValue="Promo Code"/>
-                            <Button type="primary">Submit</Button>
-                        </Input.Group>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col xl={2}></Col>
-                    <Col xs={24} xl={20}>
-                        <Divider/>
-                    </Col>
-                </Row>
-                <Row style={{paddingBottom: '10px'}}>
-                    <Col xl={8}></Col>
-                    <Col>
-                        By continuing, you acknowledge and agree to our Terms of Use.
-                    </Col>
-                </Row>
-                <Row style={{paddingBottom: '40px'}}>
-                    <Col xl={8}></Col>
-                    <Col xl={8}>
-                        Your booking will be submitted once you click &quot;Payment&quot;. You can choose your payment
-                        method in the next step.
-                    </Col>
-                </Row>
-                <Row>
-                    <Col xl={6} md={3} xs={0}></Col>
-                    <Col xl={4} md={5} xs={14}>
-                        <h1 style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                        }}>MYR {totalAmt}.00</h1>
-                    </Col>
-                    <Col xl={6} md={8} xs={2}></Col>
-                    <Col xl={4}>
-                        <Button type="primary" shape="round" size={'large'}
-                                style={{background: "#fa8547"}} disabled={false}
-                                htmlType="submit">
-                            Payment
-                        </Button>
-                    </Col>
-                </Row>
+                <Form
+                    name="form"
+                    layout="horizontal"
+                    onFinish={onFinish}
+                >
+                    <Row style={{paddingBottom: '15px'}}>
+                        <Col xl={8}></Col>
+                        <Col xl={8}>
+                            {adultTix + childTix === 0 ? null : <InfoForm/>}
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col xl={6}></Col>
+                        <Col xs={24} xl={12}>
+                            <Divider orientation="left" style={{paddingTop: '10px', fontSize: '20px'}}>
+                                <h2>Disclaimer</h2>
+                            </Divider>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col xs={3} xl={8}></Col>
+                        <Col xl={8}>
+                            <Form.Item name="disclaimer1" valuePropName="checked">
+                                <Checkbox>By checking this box, I hereby acknowledge and confirm that I have read the
+                                    Covid-19
+                                    Terms, Covid-19 Privacy Policy & Health Acknowledgement before booking my
+                                    cruise.</Checkbox>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col xs={3} xl={8}></Col>
+                        <Col xl={8}>
+                            <Form.Item name="disclaimer2" valuePropName="checked">
+                                <Checkbox>Please note that the &quot;First Name&quot; and &quot;Last Name&quot; input
+                                    above
+                                    should not consist of
+                                    any special characters (e.g. , - ? / @ ~ . etc). I acknowledge that if special
+                                    characters
+                                    are included in the fields, the booking will be invalid and cancelled automatically
+                                    upon
+                                    booking.</Checkbox>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col xl={6}></Col>
+                        <Col xs={24} xl={12}>
+                            <Divider orientation="left" style={{paddingTop: '10px', fontSize: '20px'}}>
+                                <h2>Discounts</h2>
+                            </Divider>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col xs={2} xl={8}></Col>
+                        <Col xs={22} xl={12}>
+                            <Form.Item name="discount">
+                                <Input.Group compact>
+                                    <Input style={{width: '200px'}} placeholder="Promo Code"/>
+                                    <Button type="primary" style={{background: "#ffbe77"}}>Redeem</Button>
+                                </Input.Group>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col xl={2}></Col>
+                        <Col xs={24} xl={20}>
+                            <Divider/>
+                        </Col>
+                    </Row>
+                    <Row style={{paddingBottom: '10px'}}>
+                        <Col xl={8}></Col>
+                        <Col>
+                            By continuing, you acknowledge and agree to our Terms of Use.
+                        </Col>
+                    </Row>
+                    <Row style={{paddingBottom: '40px'}}>
+                        <Col xl={8}></Col>
+                        <Col xl={8}>
+                            Your booking will be submitted once you click &quot;Payment&quot;. You can choose your
+                            payment
+                            method in the next step.
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col xl={6} md={3} xs={0}></Col>
+                        <Col xl={4} md={5} xs={14}>
+                            <h1 style={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                            }}>MYR {totalAmt}.00</h1>
+                        </Col>
+                        <Col xl={6} md={8} xs={2}></Col>
+                        <Col xl={4}>
+                            <Button type="primary" shape="round" size={'large'}
+                                    style={{background: "#fa8547"}} disabled={false}
+                                    htmlType="submit">
+                                Payment
+                            </Button>
+                        </Col>
+                    </Row>
+                </Form>
             </main>
         </>
     )
