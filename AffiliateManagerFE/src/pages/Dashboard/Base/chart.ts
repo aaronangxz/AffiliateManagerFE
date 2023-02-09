@@ -4,6 +4,7 @@ import { getChartDataSet, ONE_WEEK_LIST } from 'utils/chart';
 
 export const getLineChartOptions = (dateTime: Array<string> = []): EChartOption => {
   const [timeArray, revenueArray, commissionArray, bookingsArray] = getChartDataSet(dateTime);
+  console.log(timeArray)
   return {
     tooltip: {
       trigger: 'axis',

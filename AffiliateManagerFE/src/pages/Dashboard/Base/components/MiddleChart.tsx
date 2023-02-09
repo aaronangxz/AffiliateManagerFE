@@ -7,10 +7,10 @@ import { getLineChartOptions, getPieChartOptions } from '../chart';
 import Style from './MiddleChart.module.less';
 import dayjs from "dayjs";
 
-const lineOptions = getLineChartOptions();
-const pieOptions = getPieChartOptions();
+export const lineOptions = getLineChartOptions();
+export const pieOptions = getPieChartOptions();
 
-const RECENT_7_DAYS_STRING: Array<string> = [
+export const RECENT_7_DAYS_STRING: Array<string> = [
   dayjs().subtract(7, 'day').format('YYYY-MM-DD').toString(),
   dayjs().subtract(1, 'day').format('YYYY-MM-DD').toString(),
 ];
@@ -23,6 +23,7 @@ export const MiddleChart = () => {
     const options = getLineChartOptions(value);
     setCustomOptions(options);
     setDate(value);
+    console.log('d',date)
   };
 
   const dynamicLineChartOption = useDynamicChart(customOptions, {
