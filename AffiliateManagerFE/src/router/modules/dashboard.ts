@@ -11,19 +11,19 @@ const dashboard: IRouter[] = [
     },
     children: [
       {
-        path: 'stats',
-        Component: lazy(() => import('pages/Dashboard/Base')),
+        path: 'affiliate/stats',
+        Component: lazy(() => import('pages/AffiliateAnalytics/Base')),
         meta: {
           title: 'Affiliate Analytics',
         },
       },
-      // {
-      //   path: 'detail',
-      //   Component: lazy(() => import('pages/Dashboard/Detail')),
-      //   meta: {
-      //     title: '统计报表',
-      //   },
-      // },
+      {
+        path: 'referral/stats',
+        Component: lazy(() => import('pages/ReferralAnalytics/Base')),
+        meta: {
+          title: 'Referral Analytics',
+        },
+      },
     ],
   },
 ];

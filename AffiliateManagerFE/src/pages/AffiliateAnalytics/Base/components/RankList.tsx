@@ -6,6 +6,8 @@ import { TrendIcon, ETrend } from 'components/Board';
 import { PURCHASE_TREND_LIST, SALE_TREND_LIST } from '../constant';
 import Style from './RankList.module.less';
 import moment from 'moment/moment';
+import { isInfinity } from 'tdesign-react/es/_common/js/input-number/large-number';
+import { calculateDiff } from './TopPanel';
 
 const affiliateTypeMap: {
   [key: number]: string;
@@ -170,20 +172,24 @@ export const RankList = () => {
       align: 'center',
       colKey: 'increase',
       width: 100,
-      title: 'Increase',
+      title: '% Change',
       cell: ({ row }) => (
         <TrendIcon
           trend={
             row.total_referrals === ''
+              ? ETrend.undefined
+              : isInfinity(calculateDiff(row.total_referrals, row.previous_cycle_referrals))
               ? ETrend.none
-              : row.total_referrals < row.previous_cycle_referrals
+              : calculateDiff(row.total_referrals, row.previous_cycle_referrals) < 0
               ? ETrend.down
               : ETrend.up
           }
           trendNum={
             row.total_referrals === ''
               ? ''
-              : `${((row.total_referrals - row.previous_cycle_referrals) / row.total_referrals) * 100}%`
+              : `${Math.round(
+                  ((row.total_referrals - row.previous_cycle_referrals) / row.previous_cycle_referrals) * 100,
+                )}%`
           }
         />
       ),
@@ -254,15 +260,19 @@ export const RankList = () => {
         <TrendIcon
           trend={
             row.total_commission === ''
+              ? ETrend.undefined
+              : isInfinity(calculateDiff(row.total_commission, row.previous_cycle_commission))
               ? ETrend.none
-              : row.total_commission < row.previous_cycle_commission
+              : calculateDiff(row.total_commission, row.previous_cycle_commission) < 0
               ? ETrend.down
               : ETrend.up
           }
           trendNum={
             row.total_commission === ''
               ? ''
-              : `${((row.total_commission - row.previous_cycle_commission) / row.total_commission) * 100}%`
+              : `${Math.round(
+                  ((row.total_commission - row.previous_cycle_commission) / row.previous_cycle_commission) * 100,
+                )}%`
           }
         />
       ),
@@ -304,6 +314,8 @@ export const RankList = () => {
             .format('MMM DD, yyyy')}`}
           actions={AffiliateRadioGroup}
           bordered={false}
+          hoverShadow={true}
+          style={{ borderRadius: '15px' }}
         >
           <Table
             style={{ height: '350px' }}
@@ -322,6 +334,8 @@ export const RankList = () => {
             .format('MMM DD, yyyy')}`}
           actions={CommissionRadioGroup}
           bordered={false}
+          hoverShadow={true}
+          style={{ borderRadius: '15px'}}
         >
           <Table
             style={{ height: '350px' }}

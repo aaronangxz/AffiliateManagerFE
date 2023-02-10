@@ -24,13 +24,23 @@ enum TimeSelectorPeriod {
   PERIOD_LAST_7_DAYS = 5,
   PERIOD_LAST_28_DAYS = 6,
 }
+moment.locale('en-gb');
+
+export const calculateDiff = (curr: number | null, prev: number | null) => {
+  const newStats = (curr == null ? 0 : curr) / 100;
+  const oldStats = (prev == null ? 0 : prev) / 100;
+  if (newStats === 0 && oldStats === 0) {
+    return 0;
+  }
+  return ((newStats - oldStats) / oldStats) * 100;
+};
 
 export const TopPanel = () => {
   let coreStats = null;
   let coreStatsPrev = null;
   const DEFAULT_DAY = dayjs().subtract(0, 'day');
 
-  const [coreStatsState, setCoreStatsState] = useState({
+  const [coreStatsState, setCoreStatsState] = useState<any>({
     citizen_ticket_total: 0,
     tourist_ticket_total: 0,
     total_commission: 0,
@@ -38,7 +48,7 @@ export const TopPanel = () => {
     total_affiliate_bookings: 0,
   });
 
-  const [coreStatsPrevState, setCoreStatsPrevState] = useState({
+  const [coreStatsPrevState, setCoreStatsPrevState] = useState<any>({
     citizen_ticket_total: 0,
     tourist_ticket_total: 0,
     total_commission: 0,
@@ -58,6 +68,7 @@ export const TopPanel = () => {
   const [timeSlot, setTimeSlot] = useState('5');
   const [activeTimeSlot, setActiveTimeSlot] = useState('5');
   const [rangeSelected, setRangeSelected] = useState<any>(null);
+  const [rangeCount, setRangeCount] = useState<any>(0);
 
   const [daySelected, setDaySelected] = useState<any>(DEFAULT_DAY);
   const [weekSelected, setWeekSelected] = useState<any>(DEFAULT_DAY);
@@ -67,113 +78,152 @@ export const TopPanel = () => {
 
   const [pieOptions, setPieOptions] = useState<EChartOption>({});
 
-  console.log(L7DSelected, L28DSelected);
-  const calculateRevenueDiff = () => {
-    const curr =
-      ((coreStatsState.citizen_ticket_total == null ? 0 : coreStatsState.citizen_ticket_total) +
-        (coreStatsState.tourist_ticket_total == null ? 0 : coreStatsState.tourist_ticket_total)) /
-      100;
-
-    const prev =
-      ((coreStatsPrevState.citizen_ticket_total == null ? 0 : coreStatsPrevState.citizen_ticket_total) +
-        (coreStatsPrevState.tourist_ticket_total == null ? 0 : coreStatsPrevState.tourist_ticket_total)) /
-      100;
-
-    if (curr === 0 && prev === 0) {
-      return 0;
-    }
-    return ((curr - prev) / prev) * 100;
-  };
-
-  const calculateCommissionDiff = () => {
-    const curr = (coreStatsState.total_commission == null ? 0 : coreStatsState.total_commission) / 100;
-    const prev = (coreStatsPrevState.total_commission == null ? 0 : coreStatsPrevState.total_commission) / 100;
-    if (curr === 0 && prev === 0) {
-      return 0;
-    }
-    return ((curr - prev) / prev) * 100;
-  };
-
-  const calculateActiveAffiliatesDiff = () => {
-    const curr = (coreStatsState.total_active_affiliates == null ? 0 : coreStatsState.total_active_affiliates) / 100;
-    const prev =
-      (coreStatsPrevState.total_active_affiliates == null ? 0 : coreStatsPrevState.total_active_affiliates) / 100;
-    if (curr === 0 && prev === 0) {
-      return 0;
-    }
-    return ((curr - prev) / prev) * 100;
-  };
-
-  const calculateAffiliateBookingsDiff = () => {
-    const curr = (coreStatsState.total_affiliate_bookings == null ? 0 : coreStatsState.total_affiliate_bookings) / 100;
-    const prev =
-      (coreStatsPrevState.total_affiliate_bookings == null ? 0 : coreStatsPrevState.total_affiliate_bookings) / 100;
-    if (curr === 0 && prev === 0) {
-      return 0;
-    }
-    return ((curr - prev) / prev) * 100;
-  };
-
   const PANE_LIST: Array<IBoardProps> = [
     {
       title: 'Total Affiliate Revenue',
-      count: `MYR ${((coreStatsState.citizen_ticket_total + coreStatsState.tourist_ticket_total) / 100).toFixed(2)}`,
-      trend: isInfinity(calculateRevenueDiff()) ? ETrend.none : calculateRevenueDiff() < 0 ? ETrend.down : ETrend.up,
-      trendNum: isInfinity(calculateRevenueDiff()) ? '(No Data)' : `${calculateRevenueDiff().toFixed(2)}%`,
-      Icon: (
-        <div className={Style.iconWrap}>
-          <DiscountFilledIcon className={Style.svgIcon} />
-        </div>
-      ),
+      subtitle: 'The grand total of all ticket sales made through affiliate referrals in the selected time period.',
+      count: `${((coreStatsState.citizen_ticket_total + coreStatsState.tourist_ticket_total) / 100).toFixed(2)}`,
+      trend:
+        isInfinity(
+          calculateDiff(
+            coreStatsState.citizen_ticket_total + coreStatsState.tourist_ticket_total,
+            coreStatsPrevState.citizen_ticket_total + coreStatsPrevState.tourist_ticket_total,
+          ),
+        ) ||
+        Number.isNaN(
+          calculateDiff(
+            coreStatsState.citizen_ticket_total + coreStatsState.tourist_ticket_total,
+            coreStatsPrevState.citizen_ticket_total + coreStatsPrevState.tourist_ticket_total,
+          ),
+        ) ||
+        calculateDiff(
+          coreStatsState.citizen_ticket_total + coreStatsState.tourist_ticket_total,
+          coreStatsPrevState.citizen_ticket_total + coreStatsPrevState.tourist_ticket_total,
+        ) === 0
+          ? ETrend.none
+          : calculateDiff(
+              coreStatsState.citizen_ticket_total + coreStatsState.tourist_ticket_total,
+              coreStatsPrevState.citizen_ticket_total + coreStatsPrevState.tourist_ticket_total,
+            ) < 0
+          ? ETrend.down
+          : ETrend.up,
+      trendNum:
+        isInfinity(
+          calculateDiff(
+            coreStatsState.citizen_ticket_total + coreStatsState.tourist_ticket_total,
+            coreStatsPrevState.citizen_ticket_total + coreStatsPrevState.tourist_ticket_total,
+          ),
+        ) ||
+        Number.isNaN(
+          calculateDiff(
+            coreStatsState.citizen_ticket_total + coreStatsState.tourist_ticket_total,
+            coreStatsPrevState.citizen_ticket_total + coreStatsPrevState.tourist_ticket_total,
+          ),
+        ) ||
+        calculateDiff(
+          coreStatsState.citizen_ticket_total + coreStatsState.tourist_ticket_total,
+          coreStatsPrevState.citizen_ticket_total + coreStatsPrevState.tourist_ticket_total,
+        ) === 0
+          ? '(No Data)'
+          : `${calculateDiff(
+              coreStatsState.citizen_ticket_total + coreStatsState.tourist_ticket_total,
+              coreStatsPrevState.citizen_ticket_total + coreStatsPrevState.tourist_ticket_total,
+            ).toFixed(2)}%`,
+      // Icon: (
+      //   <div className={Style.iconWrap}>
+      //     <DiscountFilledIcon className={Style.svgIcon} />
+      //   </div>
+      // ),
     },
     {
       title: 'Total Commission',
-      count: `MYR ${(coreStatsState.total_commission / 100).toFixed(2)}`,
-      trend: isInfinity(calculateCommissionDiff())
-        ? ETrend.none
-        : calculateCommissionDiff() < 0
-        ? ETrend.down
-        : ETrend.up,
-      trendNum: isInfinity(calculateCommissionDiff()) ? '(No Data)' : `${calculateCommissionDiff().toFixed(2)}%`,
-      Icon: (
-        <div className={Style.iconWrap}>
-          <WalletIcon className={Style.svgIcon} />
-        </div>
-      ),
+      subtitle: 'The grand total of affiliate earned commission in the selected time period.',
+      count: `${(coreStatsState.total_commission / 100).toFixed(2)}`,
+      trend:
+        isInfinity(calculateDiff(coreStatsState.total_commission, coreStatsPrevState.total_commission)) ||
+        Number.isNaN(calculateDiff(coreStatsState.total_commission, coreStatsPrevState.total_commission)) ||
+        calculateDiff(coreStatsState.total_commission, coreStatsPrevState.total_commission) === 0
+          ? ETrend.none
+          : calculateDiff(coreStatsState.total_commission, coreStatsPrevState.total_commission) < 0
+          ? ETrend.down
+          : ETrend.up,
+      trendNum:
+        isInfinity(calculateDiff(coreStatsState.total_commission, coreStatsPrevState.total_commission)) ||
+        Number.isNaN(calculateDiff(coreStatsState.total_commission, coreStatsPrevState.total_commission)) ||
+        calculateDiff(coreStatsState.total_commission, coreStatsPrevState.total_commission) === 0
+          ? '(No Data)'
+          : `${calculateDiff(coreStatsState.total_commission, coreStatsPrevState.total_commission).toFixed(2)}%`,
+      // Icon: (
+      //   <div className={Style.iconWrap}>
+      //     <WalletIcon className={Style.svgIcon} />
+      //   </div>
+      // ),
     },
     {
       title: 'Active Affiliates',
+      subtitle: 'The total number of affiliates that has at least one referral in the selected time period.',
       count: `${coreStatsState.total_active_affiliates} Affiliates`,
-      trend: isInfinity(calculateActiveAffiliatesDiff())
-        ? ETrend.none
-        : calculateActiveAffiliatesDiff() < 0
-        ? ETrend.down
-        : ETrend.up,
-      trendNum: isInfinity(calculateActiveAffiliatesDiff())
-        ? '(No Data)'
-        : `${calculateActiveAffiliatesDiff().toFixed(2)}%`,
-      Icon: (
-        <div className={Style.iconWrap}>
-          <UsergroupIcon className={Style.svgIcon} />
-        </div>
-      ),
+      trend:
+        isInfinity(calculateDiff(coreStatsState.total_active_affiliates, coreStatsPrevState.total_active_affiliates)) ||
+        Number.isNaN(
+          calculateDiff(coreStatsState.total_active_affiliates, coreStatsPrevState.total_active_affiliates),
+        ) ||
+        calculateDiff(coreStatsState.total_active_affiliates, coreStatsPrevState.total_active_affiliates) === 0
+          ? ETrend.none
+          : calculateDiff(coreStatsState.total_active_affiliates, coreStatsPrevState.total_active_affiliates) < 0
+          ? ETrend.down
+          : ETrend.up,
+      trendNum:
+        isInfinity(calculateDiff(coreStatsState.total_active_affiliates, coreStatsPrevState.total_active_affiliates)) ||
+        Number.isNaN(
+          calculateDiff(coreStatsState.total_active_affiliates, coreStatsPrevState.total_active_affiliates),
+        ) ||
+        calculateDiff(coreStatsState.total_active_affiliates, coreStatsPrevState.total_active_affiliates) === 0
+          ? '(No Data)'
+          : `${calculateDiff(
+              coreStatsState.total_active_affiliates,
+              coreStatsPrevState.total_active_affiliates,
+            ).toFixed(2)}%`,
+      // Icon: (
+      //   <div className={Style.iconWrap}>
+      //     <UsergroupIcon className={Style.svgIcon} />
+      //   </div>
+      // ),
     },
     {
       title: 'Affiliate Bookings',
+      subtitle: 'The total number of bookings made through affiliates in the selected time period.',
       count: `${coreStatsState.total_affiliate_bookings} Bookings`,
-      trend: isInfinity(calculateAffiliateBookingsDiff())
-        ? ETrend.none
-        : calculateAffiliateBookingsDiff() < 0
-        ? ETrend.down
-        : ETrend.up,
-      trendNum: isInfinity(calculateAffiliateBookingsDiff())
-        ? '(No Data)'
-        : `${calculateAffiliateBookingsDiff().toFixed(2)}%`,
-      Icon: (
-        <div className={Style.iconWrap}>
-          <CalendarIcon className={Style.svgIcon} />
-        </div>
-      ),
+      trend:
+        isInfinity(
+          calculateDiff(coreStatsState.total_affiliate_bookings, coreStatsPrevState.total_affiliate_bookings),
+        ) ||
+        Number.isNaN(
+          calculateDiff(coreStatsState.total_affiliate_bookings, coreStatsPrevState.total_affiliate_bookings),
+        ) ||
+        calculateDiff(coreStatsState.total_affiliate_bookings, coreStatsPrevState.total_affiliate_bookings) === 0
+          ? ETrend.none
+          : calculateDiff(coreStatsState.total_affiliate_bookings, coreStatsPrevState.total_affiliate_bookings) < 0
+          ? ETrend.down
+          : ETrend.up,
+      trendNum:
+        isInfinity(
+          calculateDiff(coreStatsState.total_affiliate_bookings, coreStatsPrevState.total_affiliate_bookings),
+        ) ||
+        Number.isNaN(
+          calculateDiff(coreStatsState.total_affiliate_bookings, coreStatsPrevState.total_affiliate_bookings),
+        ) ||
+        calculateDiff(coreStatsState.total_affiliate_bookings, coreStatsPrevState.total_affiliate_bookings) === 0
+          ? '(No Data)'
+          : `${calculateDiff(
+              coreStatsState.total_affiliate_bookings,
+              coreStatsPrevState.total_affiliate_bookings,
+            ).toFixed(2)}%`,
+      // Icon: (
+      //   <div className={Style.iconWrap}>
+      //     <CalendarIcon className={Style.svgIcon} />
+      //   </div>
+      // ),
     },
   ];
 
@@ -419,6 +469,10 @@ export const TopPanel = () => {
     })
       .then((response) => response.json())
       .then((result) => {
+        if (result.response_meta.error_code !== 0) {
+          MessagePlugin.error(result.response_meta.error_msg);
+          return;
+        }
         for (let i = 0; i < result.times_stats.length; i++) {
           revenue.push(
             ((result.times_stats[i].citizen_ticket_total + result.times_stats[i].tourist_ticket_total) / 100).toFixed(
@@ -430,9 +484,21 @@ export const TopPanel = () => {
           bookings.push(result.times_stats[i].total_affiliate_bookings);
           activeAffiliate.push(result.times_stats[i].total_active_affiliates);
         }
+
+        let chartType = 'line';
+        if (timeSlot === '1' || result.times_stats.length === 1) {
+          chartType = 'bar';
+        }
+
         setCustomOptions({
           tooltip: {
+            borderWidth: 0,
             trigger: 'axis',
+            backgroundColor: 'rgba(50,50,50,0.7)',
+            extraCssText: 'border-radius:10px; box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);',
+            textStyle: {
+              color: '#ffffff',
+            },
           },
           grid: {
             left: '0',
@@ -445,7 +511,7 @@ export const TopPanel = () => {
             left: 'center',
             bottom: '0',
             orient: 'horizontal', // legend 横向布局。
-            data: ['Revenue (MYR)', 'Commission (MYR)', 'Bookings', 'Affiliates'],
+            data: ['Revenue (MYR)', 'Commission (MYR)', 'Active Affiliates', 'Bookings'],
             textStyle: {
               fontSize: 12,
             },
@@ -461,26 +527,36 @@ export const TopPanel = () => {
               },
             },
           },
-          yAxis: {
-            type: 'value',
-          },
+          yAxis: [
+            {
+              type: 'value',
+              position: 'left',
+            },
+            {
+              type: 'value',
+              position: 'right',
+            },
+          ],
           series: [
             {
               name: 'Revenue (MYR)',
               data: revenue,
-              type: 'line',
+              type: chartType,
+              barMaxWidth: '5%',
               smooth: true,
               showSymbol: true,
               symbol: 'circle',
               symbolSize: 0,
               itemStyle: {
-                borderWidth: 5,
+                borderWidth: 1,
+                opacity: 0.8,
+                barBorderRadius: 5,
               },
               areaStyle: {
                 color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
                   {
                     offset: 0,
-                    color: 'rgba(12,108,255,0.3)',
+                    color: 'rgba(0,64,164,0.3)',
                   },
                   {
                     offset: 1,
@@ -492,19 +568,49 @@ export const TopPanel = () => {
             {
               name: 'Commission (MYR)',
               data: commission,
-              type: 'line',
+              type: chartType,
+              barMaxWidth: '5%',
               smooth: true,
               showSymbol: true,
               symbol: 'circle',
               symbolSize: 0,
               itemStyle: {
                 borderWidth: 1,
+                opacity: 0.8,
+                barBorderRadius: 5,
               },
               areaStyle: {
                 color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
                   {
                     offset: 0,
-                    color: 'rgba(115,201,255,0.3)',
+                    color: 'rgba(173,223,255,0.3)',
+                  },
+                  {
+                    offset: 1,
+                    color: 'rgba(244,253,255,0.18)',
+                  },
+                ]),
+              },
+            },
+            {
+              name: 'Active Affiliates',
+              data: activeAffiliate,
+              type: chartType,
+              barMaxWidth: '5%',
+              smooth: true,
+              showSymbol: true,
+              symbol: 'circle',
+              symbolSize: 0,
+              itemStyle: {
+                borderWidth: 1,
+                opacity: 0.8,
+                barBorderRadius: 5,
+              },
+              areaStyle: {
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                  {
+                    offset: 0,
+                    color: 'rgba(255,232,83,0.3)',
                   },
                   {
                     offset: 1,
@@ -516,37 +622,16 @@ export const TopPanel = () => {
             {
               name: 'Bookings',
               data: bookings,
-              type: 'line',
+              type: chartType,
+              barMaxWidth: '5%',
               smooth: true,
               showSymbol: true,
               symbol: 'circle',
               symbolSize: 0,
               itemStyle: {
                 borderWidth: 1,
-              },
-              areaStyle: {
-                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                  {
-                    offset: 0,
-                    color: 'rgba(128,255,165,0.3)',
-                  },
-                  {
-                    offset: 1,
-                    color: 'rgba(244,253,255,0.18)',
-                  },
-                ]),
-              },
-            },
-            {
-              name: 'Affiliates',
-              data: activeAffiliate,
-              type: 'line',
-              smooth: true,
-              showSymbol: true,
-              symbol: 'circle',
-              symbolSize: 0,
-              itemStyle: {
-                borderWidth: 1,
+                opacity: 0.8,
+                barBorderRadius: 5,
               },
               areaStyle: {
                 color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
@@ -580,31 +665,8 @@ export const TopPanel = () => {
     textColor: ['label.color', 'label.color'],
   });
 
-  // useEffect(() => {
-  //   getAffiliateCoreStats();
-  //   getAffiliateTrend().then();
-  //   setActiveTimeSlot('1');
-  // }, [daySelected && daySelected !== DEFAULT_DAY]);
-  //
-  // useEffect(() => {
-  //   getAffiliateCoreStats();
-  //   getAffiliateTrend().then();
-  //   setActiveTimeSlot('2');
-  // }, [weekSelected && weekSelected !== DEFAULT_DAY]);
-  //
-  // useEffect(() => {
-  //   getAffiliateCoreStats();
-  //   getAffiliateTrend().then();
-  //   setActiveTimeSlot('3');
-  // }, [monthSelected && monthSelected !== DEFAULT_DAY]);
-  //
-  // useEffect(() => {
-  //   getAffiliateCoreStats();
-  //   getAffiliateTrend().then();
-  //   setActiveTimeSlot('4');
-  // }, [rangeSelected && rangeSelected!==null]);
-
   useEffect(() => {
+    setRangeCount(0);
     getAffiliateCoreStats().then();
     getAffiliateTrend().then();
   }, [daySelected, weekSelected, monthSelected, rangeSelected, L7DSelected, L28DSelected]);
@@ -623,7 +685,7 @@ export const TopPanel = () => {
           alignItems: 'center',
         }}
       >
-        <Col xl={2}>
+        <Col xl={3}>
           <Row>
             <Col>
               <h1>Affiliate Analytics</h1>
@@ -631,7 +693,7 @@ export const TopPanel = () => {
             <Col></Col>
           </Row>
         </Col>
-        <Col xl={10}>
+        <Col xl={9}>
           <Row
             style={{
               display: 'flex',
@@ -662,14 +724,17 @@ export const TopPanel = () => {
                   console.log('slot', value);
                 }}
                 value={timeSlot}
-                style={{ width: 'auto', marginLeft: '10px' }}
+                style={{
+                  width: 'auto',
+                  marginLeft: '10px',
+                  borderRadius: '10px',
+                }}
               >
                 <Radio.Button value='5'>Last 7 Days</Radio.Button>
                 <Radio.Button value='6'>Last 28 Days</Radio.Button>
                 <Radio.Button onClick={() => setDayPickerOpen(true)} value='1'>
                   Day
                   <DatePicker
-                    // value={daySelected === null ? DEFAULT_DAY : daySelected}
                     disabledDate={(current) =>
                       moment().add(1, 'seconds') <= current || current < moment('2023-01-01', 'YYYY-MM-DD')
                     }
@@ -690,7 +755,6 @@ export const TopPanel = () => {
                 >
                   Week
                   <DatePicker
-                    // value={weekSelected === null ? DEFAULT_DAY : weekSelected}
                     disabledDate={(current) =>
                       moment().add(0, 'days') <= current || current < moment('2023-01-01', 'YYYY-MM-DD')
                     }
@@ -711,7 +775,6 @@ export const TopPanel = () => {
                 >
                   Month
                   <DatePicker
-                    // value={monthSelected === null ? DEFAULT_DAY : monthSelected}
                     disabledDate={(current) =>
                       moment().add(0, 'days') <= current || current < moment('2023-01-01', 'YYYY-MM-DD')
                     }
@@ -750,24 +813,32 @@ export const TopPanel = () => {
           <Col key={item.title} xs={6} xl={3}>
             <Board
               title={item.title}
+              subtitle={item.subtitle}
               trend={activeTimeSlot === '4' ? undefined : item.trend}
               trendNum={item.trendNum}
               count={item.count}
               desc={activeTimeSlot === '4' ? '' : `${subText}`}
               Icon={item.Icon}
-              loading={cardLoading}
+              // loading={cardLoading}
             />
           </Col>
         ))}
       </Row>
-      <Row gutter={[16, 16]} className={Style.middleChartPanel} style={{ paddingTop: '20px' }}>
+      <Row gutter={[16, 16]} className={Style.middleChartPanel} style={{ paddingTop: '15px' }}>
         <Col xs={12} xl={9}>
-          <Card title='Trend' actions={onRangeChange} bordered={false}>
-            <ReactEcharts option={dynamicLineChartOption} notMerge={true} lazyUpdate={true} />
+          <Card
+            title='Trend'
+            subtitle='Click on the legends to select metrics'
+            actions={onRangeChange}
+            bordered={false}
+            hoverShadow={true}
+            style={{ borderRadius: '15px' }}
+          >
+            <ReactEcharts option={dynamicLineChartOption} notMerge={true} lazyUpdate={false} />
           </Card>
         </Col>
         <Col xs={12} xl={3}>
-          <Card title='Ticket Sales Type' bordered={false}>
+          <Card title='Ticket Sales Type' bordered={false} hoverShadow={true} style={{ borderRadius: '15px' }}>
             <ReactEcharts option={dynamicPieChartOption} notMerge={true} lazyUpdate={true} />
           </Card>
         </Col>

@@ -1,17 +1,21 @@
 import React from 'react';
-import {ChevronRightIcon, TipsIcon} from 'tdesign-icons-react';
-import { Card } from 'tdesign-react';
+import { ChevronRightIcon, HelpCircleFilledIcon, HelpCircleIcon, TipsIcon } from 'tdesign-icons-react';
+import { Card, Col, Row, Tooltip } from 'tdesign-react';
 import classnames from 'classnames';
 import Style from './index.module.less';
+import { QuestionCircleOutlined } from '@ant-design/icons';
+import CountUp from 'react-countup';
 
 export enum ETrend {
   up,
   down,
   none,
+  undefined,
 }
 
 export interface IBoardProps extends React.HTMLAttributes<HTMLElement> {
   title?: string;
+  subtitle?: string;
   count?: string;
   Icon?: React.ReactElement;
   desc?: string;
@@ -21,18 +25,44 @@ export interface IBoardProps extends React.HTMLAttributes<HTMLElement> {
   border?: boolean;
   loading?: boolean;
 }
+const calculateFigures = (amount: number) => {
+  if (amount > 1000) {
+    return (
+      <div className={Style.boardItemLeft}>
+        MYR <CountUp start={0.0} decimals={2} end={amount / 1000} duration={0.8}></CountUp>K
+      </div>
+    );
+  }
+  return (
+    <div className={Style.boardItemLeft}>
+      MYR <CountUp start={0.0} decimals={2} end={amount} duration={0.8}></CountUp>
+    </div>
+  );
+};
 
 export const TrendIcon = ({ trend, trendNum }: { trend?: ETrend; trendNum?: string | number }) => {
   if (trend === undefined) {
-    return null;
+    return (
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginLeft: 'auto' }}>
+        <Tooltip content='We are unable to calculate % change for custom period' theme='light'>
+          <HelpCircleIcon size={'medium'} />
+        </Tooltip>
+      </div>
+    );
   }
 
   if (trend === ETrend.none) {
     return (
-      <div style={{marginLeft:'10px'}}>
-        {trendNum}
+      <div style={{ marginLeft: '5px' }}>
+        <Tooltip content='The previous period has no data, hence we are unable to calculate the % change' theme='light'>
+          <HelpCircleIcon size={'medium'} />
+        </Tooltip>
       </div>
     );
+  }
+
+  if (trend === ETrend.undefined) {
+    return null;
   }
 
   return (
@@ -67,10 +97,19 @@ export const TrendIcon = ({ trend, trendNum }: { trend?: ETrend; trendNum?: stri
   );
 };
 
-const Board = ({ title, count, desc, trend, trendNum, Icon, dark, border = false, loading }: IBoardProps) => (
+const Board = ({ title, subtitle, count, desc, trend, trendNum, Icon, dark, border = false, loading }: IBoardProps) => (
   <Card
+    hoverShadow={true}
+    style={{ borderRadius: '15px'}}
     loading={loading}
-    title={<span className={Style.boardTitle}>{title}</span>}
+    title={
+      <span className={Style.boardTitle}>
+        {title}{' '}
+        <Tooltip content={subtitle} theme='light'>
+          <HelpCircleIcon size={'medium'} />
+        </Tooltip>
+      </span>
+    }
     className={classnames({
       [Style.boardPanelDark]: dark,
       [Style.boardPanel]: true,
@@ -87,7 +126,14 @@ const Board = ({ title, count, desc, trend, trendNum, Icon, dark, border = false
     }
   >
     <div className={Style.boardItem}>
-      <div className={Style.boardItemLeft}>{count}</div>
+      {title === 'Total Affiliate Revenue' || title === 'Total Commission' ? (
+        calculateFigures(count)
+      ) : (
+        <div className={Style.boardItemLeft}>
+          {title === 'Total Affiliate Revenue' || title === 'Total Commission' ? 'MYR ' : ''}
+          <CountUp start={0.0} end={parseInt(count, 10)} duration={0.8}></CountUp>
+        </div>
+      )}
       <div className={Style.boardItemRight}>{Icon}</div>
     </div>
   </Card>

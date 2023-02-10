@@ -7,7 +7,7 @@ import Overview from './components/Overview';
 const DashBoard = () => (
   <div style={{ overflowX: 'hidden' }}>
     <TopPanel />
-    <Overview />
+    {/*<Overview />*/}
   </div>
 );
 
