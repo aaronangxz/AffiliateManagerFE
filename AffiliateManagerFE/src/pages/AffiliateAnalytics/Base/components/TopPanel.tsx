@@ -11,7 +11,7 @@ import * as echarts from 'echarts';
 import { EChartOption } from 'echarts';
 import { isInfinity } from 'tdesign-react/es/_common/js/input-number/large-number';
 import { RankList } from './RankList';
-import {TimeSelectorPeriod} from "../../../../components/CustomDatePicker";
+import { TimeSelectorPeriod } from '../../../../components/CustomDatePicker';
 
 const { RangePicker }: any = DatePicker;
 export const RECENT_7_DAYS_STRING: Array<string> = [
@@ -298,10 +298,16 @@ export const TopPanel = () => {
           MessagePlugin.error(result.response_meta.error_msg);
           return;
         }
-        coreStats = result.affiliate_stats.core_stats;
-        coreStatsPrev = result.affiliate_stats_previous_cycle.core_stats;
-        setCoreStatsState(coreStats);
-        setCoreStatsPrevState(coreStatsPrev);
+        if (result.affiliate_stats.core_stats === undefined) {
+          setCoreStatsState(null);
+          setCoreStatsPrevState(null);
+        } else {
+          coreStats = result.affiliate_stats.core_stats;
+          coreStatsPrev = result.affiliate_stats_previous_cycle.core_stats;
+          setCoreStatsState(coreStats);
+          setCoreStatsPrevState(coreStatsPrev);
+        }
+
         setStartTime(result.affiliate_stats.start_time);
         setEndTime(result.affiliate_stats.end_time);
         setCardLoading(false);

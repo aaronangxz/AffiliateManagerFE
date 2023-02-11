@@ -139,7 +139,7 @@ export const RecentList = () => {
       ellipsis: true,
       colKey: 'referral_status',
       title: 'Status',
-      width: 'auto',
+      width: '120px',
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       cell: (record: { row: { referral_status: any } }) => (
@@ -167,7 +167,7 @@ export const RecentList = () => {
       colKey: 'operation',
       fixed: 'right',
       title: 'Details',
-      width: 'auto',
+      width: '100px',
       cell: ({ row }) =>
         row.referral_id === undefined ? null : (
           <Button variant='text' theme='primary' onClick={() => console.log(row)}>
@@ -213,7 +213,7 @@ export const RecentList = () => {
       colKey: 'operation',
       title: 'Details',
       fixed: 'right',
-      width: 'auto',
+      width: '100px',
       cell: ({ row }) =>
         row.referral_id === undefined ? null : (
           <Button variant='text' theme='primary' onClick={() => console.log(row)}>
@@ -258,7 +258,7 @@ export const RecentList = () => {
       <Col xs={12} xl={6} span={12}>
         <Card
           title='Recent 10 Clicks'
-          subtitle={`As at ${clicksRefreshTime.format('MMM DD, yyyy h:mm:ss a')} (GMT+8)`}
+          subtitle={`As at ${clicksRefreshTime.format('MMM DD, yyyy h:mm:ss a')}`}
           actions={onClicksRefresh}
           bordered={false}
           hoverShadow={true}
@@ -277,7 +277,7 @@ export const RecentList = () => {
       <Col xs={12} xl={6} span={12}>
         <Card
           title='Recent 10 Earnings'
-          subtitle={`As at ${earningsRefreshTime.format('MMM DD, yyyy h:mm:ss a')} (GMT+8)`}
+          subtitle={`As at ${earningsRefreshTime.format('MMM DD, yyyy h:mm:ss a')}`}
           actions={onEarningsRefresh}
           bordered={false}
           hoverShadow={true}

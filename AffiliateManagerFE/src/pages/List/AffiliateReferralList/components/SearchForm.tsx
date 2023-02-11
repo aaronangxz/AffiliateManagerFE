@@ -39,19 +39,9 @@ const SearchForm: React.FC<SearchFormProps> = (props) => {
         <Row>
           <Col flex='1'>
             <Row gutter={[16, 16]}>
-              <Col span={4} xs={12} sm={6} xl={4}>
-                <FormItem label='Name' name='name'>
-                  <Input clearable={true} placeholder='请输入合同名称' />
-                </FormItem>
-              </Col>
-              <Col span={4} xs={12} sm={6} xl={4}>
-                <FormItem label='Code' name='number'>
-                  <Input clearable={true} placeholder='请输入合同编号' />
-                </FormItem>
-              </Col>
-              <Col span={4} xs={12} sm={6} xl={4}>
-                <FormItem label='Type' name='type'>
-                  <Select options={CONTRACT_TYPE_OPTIONS} placeholder='请选择合同类型' />
+              <Col span={4} xs={12} sm={6} xl={12}>
+                <FormItem label='Status' name='type'>
+                  <Select options={CONTRACT_TYPE_OPTIONS} placeholder='Select Status' />
                 </FormItem>
               </Col>
             </Row>

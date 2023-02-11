@@ -39,34 +39,31 @@ const SearchForm: React.FC<SearchFormProps> = (props) => {
         <Row>
           <Col flex='1'>
             <Row gutter={[16, 16]}>
-              <Col span={3} xs={12} sm={6} xl={3}>
-                <FormItem label='合同名称' name='name'>
-                  <Input placeholder='请输入合同名称' />
+              <Col span={4} xs={12} sm={6} xl={3}>
+                <FormItem label='Day' name='name'>
+                  <Input clearable={true} placeholder='Enter Day' />
                 </FormItem>
               </Col>
-              <Col span={3} xs={12} sm={6} xl={3}>
-                <FormItem label='合同状态' name='status'>
-                  <Select options={CONTRACT_STATUS_OPTIONS} placeholder='请选择合同状态' />
+              <Col span={4} xs={12} sm={6} xl={3}>
+                <FormItem label='Slot' name='type'>
+                  <Select options={CONTRACT_TYPE_OPTIONS} placeholder='Select Slot' />
                 </FormItem>
               </Col>
-              <Col span={3} xs={12} sm={6} xl={3}>
-                <FormItem label='合同编号' name='number'>
-                  <Input placeholder='请输入合同编号' />
+              <Col span={4} xs={12} sm={6} xl={3}>
+                <FormItem label='Status' name='type'>
+                  <Select options={CONTRACT_TYPE_OPTIONS} placeholder='Select Status' />
                 </FormItem>
               </Col>
-              <Col span={3} xs={12} sm={6} xl={3}>
-                <FormItem label='合同类型' name='type'>
-                  <Select options={CONTRACT_TYPE_OPTIONS} placeholder='请选择合同类型' />
+              <Col span={4} xs={12} sm={6} xl={3}>
+                <FormItem label='Payment' name='type'>
+                  <Select options={CONTRACT_TYPE_OPTIONS} placeholder='Select Payment' />
                 </FormItem>
               </Col>
             </Row>
           </Col>
           <Col flex='160px'>
             <Button theme='primary' type='submit' style={{ margin: '0px 20px' }}>
-              查询
-            </Button>
-            <Button type='reset' variant='base' theme='default'>
-              重置
+              Filter
             </Button>
           </Col>
         </Row>

@@ -1,4 +1,4 @@
-import React, { useRef, memo } from 'react';
+import React, { useRef, memo, useState, useEffect } from 'react';
 import { Row, Col, Form, Input, Button, MessagePlugin, Select } from 'tdesign-react';
 import { CONTRACT_STATUS_OPTIONS, CONTRACT_TYPE_OPTIONS } from '../consts';
 import { FormInstanceFunctions, SubmitContext } from 'tdesign-react/es/form/type';
@@ -18,7 +18,9 @@ export type SearchFormProps = {
   onSubmit: (values: FormValueType) => Promise<void>;
 };
 
-const SearchForm: React.FC<SearchFormProps> = (props) => {
+const SearchForm = ({ handleStringCallBack }:any,props:any ) => {
+  const [searchString, setSearchString] = useState('');
+
   const formRef = useRef<FormInstanceFunctions>();
   const onSubmit = (e: SubmitContext) => {
     if (e.validateResult === true) {
@@ -33,40 +35,36 @@ const SearchForm: React.FC<SearchFormProps> = (props) => {
     MessagePlugin.info('重置成功');
   };
 
+  useEffect(() => {
+    handleStringCallBack(searchString);
+  }, [searchString]);
+
   return (
     <div className='list-common-table-query'>
       <Form ref={formRef} onSubmit={onSubmit} onReset={onReset} labelWidth={80} colon>
         <Row>
           <Col flex='1'>
             <Row gutter={[16, 16]}>
-              <Col span={3} xs={12} sm={6} xl={3}>
-                <FormItem label='合同名称' name='name'>
-                  <Input placeholder='请输入合同名称' />
+              <Col span={4} xs={12} sm={6} xl={4}>
+                <FormItem label='Affiliate' name='name'>
+                  <Input clearable={true} placeholder='Enter Affiliate Name' onChange={setSearchString} />
                 </FormItem>
               </Col>
-              <Col span={3} xs={12} sm={6} xl={3}>
-                <FormItem label='合同状态' name='status'>
-                  <Select options={CONTRACT_STATUS_OPTIONS} placeholder='请选择合同状态' />
+              <Col span={4} xs={12} sm={6} xl={4}>
+                <FormItem label='Booking' name='number'>
+                  <Input clearable={true} placeholder='Enter Booking ID' />
                 </FormItem>
               </Col>
-              <Col span={3} xs={12} sm={6} xl={3}>
-                <FormItem label='合同编号' name='number'>
-                  <Input placeholder='请输入合同编号' />
-                </FormItem>
-              </Col>
-              <Col span={3} xs={12} sm={6} xl={3}>
-                <FormItem label='合同类型' name='type'>
-                  <Select options={CONTRACT_TYPE_OPTIONS} placeholder='请选择合同类型' />
+              <Col span={4} xs={12} sm={6} xl={4}>
+                <FormItem label='Status' name='type'>
+                  <Select options={CONTRACT_TYPE_OPTIONS} placeholder='Select Status' />
                 </FormItem>
               </Col>
             </Row>
           </Col>
           <Col flex='160px'>
             <Button theme='primary' type='submit' style={{ margin: '0px 20px' }}>
-              查询
-            </Button>
-            <Button type='reset' variant='base' theme='default'>
-              重置
+              Filter
             </Button>
           </Col>
         </Row>

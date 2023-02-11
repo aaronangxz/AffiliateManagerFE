@@ -35,7 +35,6 @@ export const selectPage: React.FC = () => {
   const [timeSlot, setTimeSlot] = useState('5');
   const [timeSelected, setTimeSelected] = useState<any>(DEFAULT_DAY);
   const [rangeSelected, setRangeSelected] = useState<any>(null);
-  const [searchString, setSearchString] = useState<any>(null);
 
   const [selectedRowKeys, setSelectedRowKeys] = useState<(string | number)[]>([0, 1]);
   const [visible, setVisible] = useState(false);
@@ -86,7 +85,7 @@ export const selectPage: React.FC = () => {
           start_ts: Date.parse(rangeSelected[0]) / 1000,
           end_ts: Date.parse(rangeSelected[1]) / 1000,
         },
-        affiliate_name: searchString,
+        affiliate_id:6
       });
     } else {
       let p;
@@ -120,7 +119,7 @@ export const selectPage: React.FC = () => {
           base_ts: ts,
           period: p,
         },
-        affiliate_name: searchString,
+        affiliate_id:6
       });
     }
     fetch('http://127.0.0.1:8888/api/v1/referral/list', {
@@ -131,9 +130,9 @@ export const selectPage: React.FC = () => {
     })
       .then((response) => response.json())
       .then((result) => {
-        if (result.referral_list === undefined) {
+        if(result.referral_list === undefined){
           setData([]);
-        } else {
+        }else{
           setData(result.referral_list);
         }
         setStartTime(result.start_time);
@@ -149,7 +148,7 @@ export const selectPage: React.FC = () => {
 
   useEffect(() => {
     GetAffiliateList();
-  }, [timeSelected, rangeSelected, searchString]);
+  }, [timeSelected, rangeSelected]);
 
   useEffect(() => {
     if (timeSlot === '5' || timeSlot === '6') {
@@ -171,16 +170,11 @@ export const selectPage: React.FC = () => {
     setRangeSelected(pos);
   };
 
-  const handleStringCallBack = (pos: any) => {
-    console.log('handleStringCallBack', pos);
-    setSearchString(pos);
-  };
-
   return (
     <div>
       <Row>
         <Col span={3}>
-          <h1>Referrals</h1>
+          <h1>Affiliate&apos;s Referrals</h1>
         </Col>
         <Col span={9}>
           <CustomDatePicker
@@ -195,11 +189,10 @@ export const selectPage: React.FC = () => {
       <div className={classnames(CommonStyle.pageWithPadding, CommonStyle.pageWithColor)}>
         <Row justify='start' style={{ marginBottom: '20px' }}>
           <SearchForm
-            onSubmit={async (value: any) => {
+            onSubmit={async (value) => {
               console.log(value);
             }}
             onCancel={() => {}}
-            handleStringCallBack={handleStringCallBack}
           />
         </Row>
         <Table
@@ -221,15 +214,6 @@ export const selectPage: React.FC = () => {
               sorter: (a: any, b: any) => a.referral_id - b.referral_id,
             },
             {
-              title: 'Affiliate',
-              width: '150',
-              fixed: 'left',
-              align: 'left',
-              ellipsis: true,
-              colKey: 'affiliate_name',
-              sortType: 'all',
-            },
-            {
               title: 'Status',
               width: '100',
               fixed: 'left',
@@ -245,7 +229,6 @@ export const selectPage: React.FC = () => {
               title: 'Click Time',
               width: '200',
               align: 'center',
-              fixed: 'left',
               ellipsis: true,
               colKey: 'referral_click_time',
               sortType: 'all',
@@ -257,22 +240,6 @@ export const selectPage: React.FC = () => {
               sorter: (a: any, b: any) => a.referral_click_time - b.referral_click_time,
             },
             {
-              title: 'Booking',
-              width: '100',
-              align: 'center',
-              ellipsis: true,
-              colKey: 'booking_ref_id',
-              sortType: 'all',
-              cell({ row }) {
-                return row.booking_ref_id === undefined || row.booking_ref_id === 0 ? '-' : row.booking_ref_id;
-              },
-              sorter: (a, b) => {
-                a.booking_ref_id = a.booking_ref_id === undefined ? 0 : a.booking_ref_id;
-                b.booking_ref_id = b.booking_ref_id === undefined ? 0 : b.booking_ref_id;
-                return a.booking_ref_id - b.booking_ref_id;
-              },
-            },
-            {
               title: 'Commission',
               width: '150',
               align: 'center',
@@ -280,32 +247,12 @@ export const selectPage: React.FC = () => {
               colKey: 'referral_commission',
               sortType: 'all',
               cell({ row }) {
-                return row.referral_commission === undefined || row.referral_commission === 0
-                  ? '-'
-                  : `MYR ${(row.referral_commission / 100).toFixed(2)}`;
+                return row.referral_commission === undefined || row.referral_commission === 0? '-' : `MYR ${(row.referral_commission / 100).toFixed(2)}`;
               },
               sorter: (a, b) => {
                 a.referral_commission = a.referral_commission === undefined ? 0 : a.referral_commission;
                 b.referral_commission = b.referral_commission === undefined ? 0 : b.referral_commission;
                 return a.referral_commission - b.referral_commission;
-              },
-            },
-            {
-              title: 'Amount',
-              width: '150',
-              align: 'center',
-              ellipsis: true,
-              colKey: 'total_ticket_amount',
-              sortType: 'all',
-              cell({ row }) {
-                return row.total_ticket_amount === undefined || row.total_ticket_amount === 0
-                  ? '-'
-                  : `MYR ${(row.total_ticket_amount / 100).toFixed(2)}`;
-              },
-              sorter: (a, b) => {
-                a.total_ticket_amount = a.total_ticket_amount === undefined ? 0 : a.total_ticket_amount;
-                b.total_ticket_amount = b.total_ticket_amount === undefined ? 0 : b.total_ticket_amount;
-                return a.total_ticket_amount - b.total_ticket_amount;
               },
             },
             {
@@ -316,9 +263,7 @@ export const selectPage: React.FC = () => {
               colKey: 'total_ticket_count',
               sortType: 'all',
               cell({ row }) {
-                return row.total_ticket_count === undefined || row.total_ticket_count === 0
-                  ? '-'
-                  : row.total_ticket_count;
+                return row.total_ticket_count === undefined || row.total_ticket_count === 0? '-' : row.total_ticket_count;
               },
               sorter: (a, b) => {
                 a.total_ticket_count = a.total_ticket_count === undefined ? 0 : a.total_ticket_count;
