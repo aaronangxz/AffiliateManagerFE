@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Col, MessagePlugin, Radio, Row } from 'tdesign-react';
-import { CalendarIcon, DiscountFilledIcon, UsergroupIcon, WalletIcon } from 'tdesign-icons-react';
 import Board, { ETrend, IBoardProps } from 'components/Board';
 import Style from './TopPanel.module.less';
 import { DatePicker, DatePickerProps } from 'antd';
@@ -8,22 +7,18 @@ import moment from 'moment';
 import dayjs from 'dayjs';
 import ReactEcharts from 'echarts-for-react';
 import useDynamicChart from '../../../../hooks/useDynamicChart';
-import { RECENT_7_DAYS_STRING } from './MiddleChart';
 import * as echarts from 'echarts';
 import { EChartOption } from 'echarts';
 import { isInfinity } from 'tdesign-react/es/_common/js/input-number/large-number';
 import { RankList } from './RankList';
+import {TimeSelectorPeriod} from "../../../../components/CustomDatePicker";
 
-const { RangePicker } = DatePicker;
-enum TimeSelectorPeriod {
-  PERIOD_NONE = 0,
-  PERIOD_DAY = 1,
-  PERIOD_WEEK = 2,
-  PERIOD_MONTH = 3,
-  PERIOD_RANGE = 4,
-  PERIOD_LAST_7_DAYS = 5,
-  PERIOD_LAST_28_DAYS = 6,
-}
+const { RangePicker }: any = DatePicker;
+export const RECENT_7_DAYS_STRING: Array<string> = [
+  dayjs().subtract(7, 'day').format('YYYY-MM-DD').toString(),
+  dayjs().subtract(1, 'day').format('YYYY-MM-DD').toString(),
+];
+
 moment.locale('en-gb');
 
 export const calculateDiff = (curr: number | null, prev: number | null) => {
@@ -84,6 +79,7 @@ export const TopPanel = () => {
       subtitle: 'The grand total of all ticket sales made through affiliate referrals in the selected time period.',
       count: `${((coreStatsState.citizen_ticket_total + coreStatsState.tourist_ticket_total) / 100).toFixed(2)}`,
       trend:
+        // eslint-disable-next-line no-nested-ternary
         isInfinity(
           calculateDiff(
             coreStatsState.citizen_ticket_total + coreStatsState.tourist_ticket_total,
@@ -140,6 +136,7 @@ export const TopPanel = () => {
       subtitle: 'The grand total of affiliate earned commission in the selected time period.',
       count: `${(coreStatsState.total_commission / 100).toFixed(2)}`,
       trend:
+        // eslint-disable-next-line no-nested-ternary
         isInfinity(calculateDiff(coreStatsState.total_commission, coreStatsPrevState.total_commission)) ||
         Number.isNaN(calculateDiff(coreStatsState.total_commission, coreStatsPrevState.total_commission)) ||
         calculateDiff(coreStatsState.total_commission, coreStatsPrevState.total_commission) === 0
@@ -164,6 +161,7 @@ export const TopPanel = () => {
       subtitle: 'The total number of affiliates that has at least one referral in the selected time period.',
       count: `${coreStatsState.total_active_affiliates} Affiliates`,
       trend:
+        // eslint-disable-next-line no-nested-ternary
         isInfinity(calculateDiff(coreStatsState.total_active_affiliates, coreStatsPrevState.total_active_affiliates)) ||
         Number.isNaN(
           calculateDiff(coreStatsState.total_active_affiliates, coreStatsPrevState.total_active_affiliates),
@@ -195,6 +193,7 @@ export const TopPanel = () => {
       subtitle: 'The total number of bookings made through affiliates in the selected time period.',
       count: `${coreStatsState.total_affiliate_bookings} Bookings`,
       trend:
+        // eslint-disable-next-line no-nested-ternary
         isInfinity(
           calculateDiff(coreStatsState.total_affiliate_bookings, coreStatsPrevState.total_affiliate_bookings),
         ) ||
@@ -671,7 +670,7 @@ export const TopPanel = () => {
     getAffiliateTrend().then();
   }, [daySelected, weekSelected, monthSelected, rangeSelected, L7DSelected, L28DSelected]);
 
-  const onRangeChange: DatePickerProps['onChange'] = (date) => {
+  const onRangeChange: DatePickerProps['onChange'] = (date: any) => {
     setRangeSelected(date);
     setActiveTimeSlot('4');
   };
@@ -792,7 +791,7 @@ export const TopPanel = () => {
 
                 <Radio.Button value='4'>Custom</Radio.Button>
                 <RangePicker
-                  disabledDate={(current) =>
+                  disabledDate={(current: any) =>
                     moment().add(0, 'days') <= current || current < moment('2023-01-01', 'YYYY-MM-DD')
                   }
                   value={rangeSelected}
@@ -829,7 +828,6 @@ export const TopPanel = () => {
           <Card
             title='Trend'
             subtitle='Click on the legends to select metrics'
-            actions={onRangeChange}
             bordered={false}
             hoverShadow={true}
             style={{ borderRadius: '15px' }}

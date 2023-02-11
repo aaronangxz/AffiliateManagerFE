@@ -1,11 +1,12 @@
 import React, { memo, useEffect } from 'react';
-import { Drawer, Layout } from 'tdesign-react';
+import { ConfigProvider, Drawer, Layout, merge } from 'tdesign-react';
 import throttle from 'lodash/throttle';
 import { useAppSelector, useAppDispatch } from 'modules/store';
 import { selectGlobal, toggleSetting, toggleMenu, ELayout, switchTheme } from 'modules/global';
 import Setting from './components/Setting';
 import AppLayout from './components/AppLayout';
 import Style from './index.module.less';
+import enConfig from 'tdesign-react/es/locale/en_US';
 
 export default memo(() => {
   const globalState = useAppSelector(selectGlobal);
@@ -28,19 +29,30 @@ export default memo(() => {
     };
   }, []);
 
+  const globalConfig = merge(enConfig, {
+    // 可以在此处定义更多自定义配置，具体可配置内容参看 API 文档
+    calendar: {},
+    table: {},
+    pagination: {},
+    // 全局动画设置
+    animation: { exclude: [] },
+  });
+
   return (
-    <Layout className={Style.panel}>
-      <AppContainer />
-      <Drawer
-        destroyOnClose
-        visible={globalState.setting}
-        size='458px'
-        footer={false}
-        header='页面配置'
-        onClose={() => dispatch(toggleSetting())}
-      >
-        <Setting />
-      </Drawer>
-    </Layout>
+    <ConfigProvider globalConfig={globalConfig}>
+      <Layout className={Style.panel}>
+        <AppContainer />
+        <Drawer
+          destroyOnClose
+          visible={globalState.setting}
+          size='458px'
+          footer={false}
+          header='页面配置'
+          onClose={() => dispatch(toggleSetting())}
+        >
+          <Setting />
+        </Drawer>
+      </Layout>
+    </ConfigProvider>
   );
 });

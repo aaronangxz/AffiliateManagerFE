@@ -5,26 +5,19 @@ import Board, { ETrend, IBoardProps } from 'components/Board';
 import Style from './TopPanel.module.less';
 import { DatePicker, DatePickerProps } from 'antd';
 import moment from 'moment';
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import ReactEcharts from 'echarts-for-react';
 import useDynamicChart from '../../../../hooks/useDynamicChart';
 import { RECENT_7_DAYS_STRING } from './MiddleChart';
 import * as echarts from 'echarts';
 import { EChartOption } from 'echarts';
 import { isInfinity } from 'tdesign-react/es/_common/js/input-number/large-number';
-import { RankList } from './RankList';
+import { RecentList } from './RecentList';
+import {TimeSelectorPeriod} from "../../../../components/CustomDatePicker";
 
 const { RangePicker } = DatePicker;
 const DEFAULT_ID = 6;
-enum TimeSelectorPeriod {
-  PERIOD_NONE = 0,
-  PERIOD_DAY = 1,
-  PERIOD_WEEK = 2,
-  PERIOD_MONTH = 3,
-  PERIOD_RANGE = 4,
-  PERIOD_LAST_7_DAYS = 5,
-  PERIOD_LAST_28_DAYS = 6,
-}
+
 moment.locale('en-gb');
 
 export const calculateDiff = (curr: number | null, prev: number | null) => {
@@ -85,6 +78,7 @@ export const TopPanel = () => {
       subtitle: 'The grand total of all ticket sales made through referrals in the selected time period.',
       count: `${((coreStatsState.citizen_ticket_total + coreStatsState.tourist_ticket_total) / 100).toFixed(2)}`,
       trend:
+        // eslint-disable-next-line no-nested-ternary
         isInfinity(
           calculateDiff(
             coreStatsState.citizen_ticket_total + coreStatsState.tourist_ticket_total,
@@ -141,6 +135,7 @@ export const TopPanel = () => {
       subtitle: 'The grand total of commission earned in the selected time period.',
       count: `${(coreStatsState.total_commission / 100).toFixed(2)}`,
       trend:
+        // eslint-disable-next-line no-nested-ternary
         isInfinity(calculateDiff(coreStatsState.total_commission, coreStatsPrevState.total_commission)) ||
         Number.isNaN(calculateDiff(coreStatsState.total_commission, coreStatsPrevState.total_commission)) ||
         calculateDiff(coreStatsState.total_commission, coreStatsPrevState.total_commission) === 0
@@ -165,6 +160,7 @@ export const TopPanel = () => {
       subtitle: 'The total number of clicks (including unsuccessful referrals) in the selected time period.',
       count: `${coreStatsState.total_clicks}`,
       trend:
+        // eslint-disable-next-line no-nested-ternary
         isInfinity(calculateDiff(coreStatsState.total_clicks, coreStatsPrevState.total_clicks)) ||
         Number.isNaN(calculateDiff(coreStatsState.total_clicks, coreStatsPrevState.total_clicks)) ||
         calculateDiff(coreStatsState.total_clicks, coreStatsPrevState.total_clicks) === 0
@@ -189,6 +185,7 @@ export const TopPanel = () => {
       subtitle: 'The total number of bookings referred in the selected time period.',
       count: `${coreStatsState.total_bookings} Bookings`,
       trend:
+        // eslint-disable-next-line no-nested-ternary
         isInfinity(calculateDiff(coreStatsState.total_bookings, coreStatsPrevState.total_bookings)) ||
         Number.isNaN(calculateDiff(coreStatsState.total_bookings, coreStatsPrevState.total_bookings)) ||
         calculateDiff(coreStatsState.total_bookings, coreStatsPrevState.total_bookings) === 0
@@ -660,7 +657,7 @@ export const TopPanel = () => {
     getReferralTrend().then();
   }, [daySelected, weekSelected, monthSelected, rangeSelected, L7DSelected, L28DSelected]);
 
-  const onRangeChange: DatePickerProps['onChange'] = (date) => {
+  const onRangeChange: DatePickerProps['onChange'] = (date: any | Dayjs | null, datestring: string | any) => {
     setRangeSelected(date);
     setActiveTimeSlot('4');
   };
@@ -716,7 +713,6 @@ export const TopPanel = () => {
                 style={{
                   width: 'auto',
                   marginLeft: '10px',
-                  backgroundColor: 'rgba(217,217,217,0.62)',
                   borderRadius: '10px',
                 }}
               >
@@ -789,8 +785,9 @@ export const TopPanel = () => {
                   placement={'bottomLeft'}
                   disabled={timeSlot !== '4'}
                   style={{ height: 'auto', width: 'auto', marginLeft: '5px' }}
-                  // open={customPickerOpen}
                   onOpenChange={rangePickerStatus}
+                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                  // @ts-ignore
                   onChange={onRangeChange}
                 />
               </Radio.Group>
@@ -819,26 +816,22 @@ export const TopPanel = () => {
           <Card
             title='Trend'
             subtitle='Click on the legends to select metrics'
-            actions={onRangeChange}
             bordered={false}
             hoverShadow={true}
-            style={{ borderRadius: '15px', backgroundColor: '#ffffff' }}
+            style={{ borderRadius: '15px' }}
           >
             <ReactEcharts option={dynamicLineChartOption} notMerge={true} lazyUpdate={false} />
           </Card>
         </Col>
         <Col xs={12} xl={3}>
-          <Card
-            title='Ticket Sales Type'
-            bordered={false}
-            hoverShadow={true}
-            style={{ borderRadius: '15px', backgroundColor: '#ffffff' }}
-          >
+          <Card title='Ticket Sales Type' bordered={false} hoverShadow={true} style={{ borderRadius: '15px' }}>
             <ReactEcharts option={dynamicPieChartOption} notMerge={true} lazyUpdate={true} />
           </Card>
         </Col>
       </Row>
-      <RankList />
+      <Row style={{ paddingBottom: '5px' }}>
+        <RecentList />
+      </Row>
     </div>
   );
 };

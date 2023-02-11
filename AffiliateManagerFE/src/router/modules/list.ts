@@ -25,15 +25,20 @@ const result: IRouter[] = [
       //   },
       // },
       {
-        path: 'affiliate',
-        Component: lazy(() => import('pages/List/Select')),
-        meta: { title: 'Affiliate List' },
+        path: 'affiliates',
+        Component: lazy(() => import('pages/List/AffiliateList')),
+        meta: { title: 'Affiliates' },
       },
-      // {
-      //   path: 'tree',
-      //   Component: lazy(() => import('pages/List/Tree')),
-      //   meta: { title: '树状筛选列表页' },
-      // },
+      {
+        path: 'referrals',
+        Component: lazy(() => import('pages/List/ReferralList')),
+        meta: { title: 'Referrals' },
+      },
+      {
+        path: 'bookings',
+        Component: lazy(() => import('pages/List/BookingList')),
+        meta: { title: 'Bookings' },
+      },
     ],
   },
 ];
