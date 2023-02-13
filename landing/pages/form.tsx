@@ -1,12 +1,15 @@
 import React, {useState} from 'react';
 import {adultTix, childTix} from "./index";
 import {Card, Form, Input} from "antd";
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
 
 export let formValues = [];
 export let emptyValues = [];
 
 function InfoForm() {
     const [inputFields, setInputFields] = useState([])
+    const [value, setValue] = useState("")
 
     const handleFormChange = (index, event) => {
         console.log(event)
@@ -39,7 +42,9 @@ function InfoForm() {
         <div className="App">
             {inputFields.map((input, index) => {
                 return (
+
                     <Card key={index} title={`Visitor ${
+                        
                         // @ts-ignore
                         index + 1}`} bordered={true} style={{width: "auto", marginBottom: '10px'}}>
                         <Form.Item label="Name">
@@ -51,9 +56,19 @@ function InfoForm() {
                                    style={{fontSize: '17px'}}/>
                         </Form.Item>
                         <Form.Item label="Contact">
-                            <Input name='contact' onChange={event => handleFormChange(index, event)}
-                                   style={{fontSize: '17px'}}/>
+                            <PhoneInput
+                                country={'my'}
+                                value={value}
+                                onChange={setValue}
+                                inputStyle={{color:'black'}}
+                                preferredCountries={['my','sg']}
+                                countryCodeEditable={false}
+                                autoFormat={false}
+                            />
+                            {/*<Input name='contact' onChange={event => handleFormChange(index, event)}*/}
+                            {/*       style={{fontSize: '17px'}}/>*/}
                         </Form.Item>
+
                     </Card>
                 )
             })}
