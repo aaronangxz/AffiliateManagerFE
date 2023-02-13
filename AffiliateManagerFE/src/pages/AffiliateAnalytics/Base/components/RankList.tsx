@@ -41,12 +41,14 @@ export const RankList = () => {
           return;
         }
 
-        if (result.affiliate_ranking.top_affiliate_referral_list !== null) {
+        if (result.affiliate_ranking.top_affiliate_referral_list === undefined) {
+          setTopReferralListState([]);
+        } else {
           for (let i = 0; i < result.affiliate_ranking.top_affiliate_referral_list.length; i++) {
             refList.push(result.affiliate_ranking.top_affiliate_referral_list[i]);
           }
+          setTopReferralListState(refList);
         }
-        setTopReferralListState(refList);
 
         if (refList.length < 5) {
           const r = 5 - refList.length;
@@ -81,10 +83,13 @@ export const RankList = () => {
           return;
         }
 
-        if (result.affiliate_ranking.top_affiliate_commission_list !== null) {
+        if (result.affiliate_ranking.top_affiliate_commission_list === undefined) {
+          setTopCommissionListState([]);
+        } else {
           for (let i = 0; i < result.affiliate_ranking.top_affiliate_commission_list.length; i++) {
             commList.push(result.affiliate_ranking.top_affiliate_commission_list[i]);
           }
+          setTopCommissionListState(commList);
         }
 
         if (commList.length < 5) {
@@ -99,8 +104,6 @@ export const RankList = () => {
             });
           }
         }
-
-        setTopCommissionListState(commList);
         setCommissionStartTime(result.affiliate_ranking.start_time);
         setCommissionEndTime(result.affiliate_ranking.end_time);
       })
@@ -335,7 +338,7 @@ export const RankList = () => {
           actions={CommissionRadioGroup}
           bordered={false}
           hoverShadow={true}
-          style={{ borderRadius: '15px'}}
+          style={{ borderRadius: '15px' }}
         >
           <Table
             style={{ height: '350px' }}

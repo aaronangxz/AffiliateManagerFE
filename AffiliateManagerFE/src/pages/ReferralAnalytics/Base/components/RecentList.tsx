@@ -12,6 +12,7 @@ const statusNameListMap: any = {
   2: { label: 'Failed', theme: 'danger', icon: <CloseCircleFilledIcon /> },
   3: { label: 'Cancelled', theme: 'danger', icon: <CloseCircleFilledIcon /> },
 };
+const sleep = (ms: number | undefined) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const DEFAULT_ID = 6;
 export const RecentList = () => {
@@ -27,11 +28,11 @@ export const RecentList = () => {
   const [clicksLoading, setClicksLoading] = useState(false);
   const [earningsLoading, setEarningsLoading] = useState(false);
 
-  const getRecentClicksList = () => {
+  const getRecentClicksList = async () => {
     setClicksLoading(true);
     const myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
-
+    await sleep(500);
     const raw = JSON.stringify({
       affiliate_id: DEFAULT_ID,
     });
@@ -49,12 +50,15 @@ export const RecentList = () => {
           return;
         }
 
-        if (result.referral_recent.recent_clicks !== null) {
+        if (result.referral_recent.recent_clicks === undefined) {
+          setRecentClicksListState([]);
+        } else {
           for (let i = 0; i < result.referral_recent.recent_clicks.length; i++) {
             clickList.push(result.referral_recent.recent_clicks[i]);
           }
+          setRecentClicksListState(clickList);
         }
-        setRecentClicksListState(clickList);
+
         setClicksRefreshTime(moment());
         setClicksLoading(false);
       })
@@ -64,11 +68,11 @@ export const RecentList = () => {
       });
   };
 
-  const getRecentEarningsList = () => {
+  const getRecentEarningsList = async () => {
     setEarningsLoading(true);
     const myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
-
+    await sleep(500);
     const raw = JSON.stringify({
       affiliate_id: DEFAULT_ID,
     });
@@ -86,12 +90,14 @@ export const RecentList = () => {
           return;
         }
 
-        if (result.referral_recent.recent_earnings !== null) {
+        if (result.referral_recent.recent_earnings === undefined) {
+          setRecentEarningsListState([]);
+        } else {
           for (let i = 0; i < result.referral_recent.recent_earnings.length; i++) {
             earningList.push(result.referral_recent.recent_earnings[i]);
           }
+          setRecentEarningsListState(earningList);
         }
-        setRecentEarningsListState(earningList);
         setEarningsRefreshTime(moment());
         setEarningsLoading(false);
       })

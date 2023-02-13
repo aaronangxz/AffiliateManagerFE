@@ -171,7 +171,7 @@ export const selectPage: React.FC = () => {
     setRangeSelected(pos);
   };
 
-  const handleStringCallBack = (pos: any) => {
+  const handleStringCallBack:any = (pos: any) => {
     console.log('handleStringCallBack', pos);
     setSearchString(pos);
   };
@@ -195,10 +195,10 @@ export const selectPage: React.FC = () => {
       <div className={classnames(CommonStyle.pageWithPadding, CommonStyle.pageWithColor)}>
         <Row justify='start' style={{ marginBottom: '20px' }}>
           <SearchForm
-            onSubmit={async (value: any) => {
-              console.log(value);
-            }}
-            onCancel={() => {}}
+            // onSubmit={async (value: any) => {
+            //   console.log(value);
+            // }}
+            // onCancel={() => {}}
             handleStringCallBack={handleStringCallBack}
           />
         </Row>

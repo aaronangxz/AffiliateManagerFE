@@ -85,7 +85,7 @@ export const selectPage: React.FC = () => {
           start_ts: Date.parse(rangeSelected[0]) / 1000,
           end_ts: Date.parse(rangeSelected[1]) / 1000,
         },
-        affiliate_id:6
+        affiliate_id: 6,
       });
     } else {
       let p;
@@ -119,7 +119,7 @@ export const selectPage: React.FC = () => {
           base_ts: ts,
           period: p,
         },
-        affiliate_id:6
+        affiliate_id: 6,
       });
     }
     fetch('http://127.0.0.1:8888/api/v1/referral/list', {
@@ -130,9 +130,9 @@ export const selectPage: React.FC = () => {
     })
       .then((response) => response.json())
       .then((result) => {
-        if(result.referral_list === undefined){
+        if (result.referral_list === undefined) {
           setData([]);
-        }else{
+        } else {
           setData(result.referral_list);
         }
         setStartTime(result.start_time);
@@ -247,7 +247,9 @@ export const selectPage: React.FC = () => {
               colKey: 'referral_commission',
               sortType: 'all',
               cell({ row }) {
-                return row.referral_commission === undefined || row.referral_commission === 0? '-' : `MYR ${(row.referral_commission / 100).toFixed(2)}`;
+                return row.referral_commission === undefined || row.referral_commission === 0
+                  ? '-'
+                  : `MYR ${(row.referral_commission / 100).toFixed(2)}`;
               },
               sorter: (a, b) => {
                 a.referral_commission = a.referral_commission === undefined ? 0 : a.referral_commission;
@@ -263,7 +265,9 @@ export const selectPage: React.FC = () => {
               colKey: 'total_ticket_count',
               sortType: 'all',
               cell({ row }) {
-                return row.total_ticket_count === undefined || row.total_ticket_count === 0? '-' : row.total_ticket_count;
+                return row.total_ticket_count === undefined || row.total_ticket_count === 0
+                  ? '-'
+                  : row.total_ticket_count;
               },
               sorter: (a, b) => {
                 a.total_ticket_count = a.total_ticket_count === undefined ? 0 : a.total_ticket_count;

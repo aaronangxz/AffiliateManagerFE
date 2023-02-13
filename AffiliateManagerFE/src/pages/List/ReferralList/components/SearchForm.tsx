@@ -18,7 +18,7 @@ export type SearchFormProps = {
   onSubmit: (values: FormValueType) => Promise<void>;
 };
 
-const SearchForm = ({ handleStringCallBack }:any,props:any ) => {
+const SearchForm = ({ handleStringCallBack }: any, props: any) => {
   const [searchString, setSearchString] = useState('');
 
   const formRef = useRef<FormInstanceFunctions>();
