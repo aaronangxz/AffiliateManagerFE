@@ -1,0 +1,15 @@
+import React, { memo } from 'react';
+import Base from './components/Base';
+import ProgressComp from './components/Progress';
+import Product from './components/Product';
+import Detail from './components/Detail';
+
+export default memo(() => (
+  <div>
+    Affiliate Details
+    <Base />
+    {/*<ProgressComp />*/}
+    {/*<Product />*/}
+    <Detail />
+  </div>
+));

@@ -43,26 +43,31 @@ const SearchForm = ({ handleStringCallBack }: any, props: any) => {
     <div className='list-common-table-query'>
       <Form ref={formRef} onSubmit={onSubmit} onReset={onReset} labelWidth={80} colon>
         <Row>
-          <Col flex='1'>
+          <Col span={11}>
             <Row gutter={[16, 16]}>
-              <Col span={4} xs={12} sm={6} xl={4}>
+              <Col xs={12} sm={6} xl={4}>
                 <FormItem label='Affiliate' name='name'>
-                  <Input clearable={true} placeholder='Enter Affiliate Name' onChange={setSearchString} />
+                  <Input
+                    clearable={true}
+                    placeholder='Enter Affiliate Name'
+                    onChange={setSearchString}
+                    style={{ width: '200px' }}
+                  />
                 </FormItem>
               </Col>
-              <Col span={4} xs={12} sm={6} xl={4}>
+              <Col xs={12} sm={6} xl={4}>
                 <FormItem label='Booking' name='number'>
-                  <Input clearable={true} placeholder='Enter Booking ID' />
+                  <Input clearable={true} placeholder='Enter Booking ID' style={{ width: '200px' }} />
                 </FormItem>
               </Col>
-              <Col span={4} xs={12} sm={6} xl={4}>
+              <Col xs={12} sm={6} xl={4}>
                 <FormItem label='Status' name='type'>
-                  <Select options={CONTRACT_TYPE_OPTIONS} placeholder='Select Status' />
+                  <Select options={CONTRACT_TYPE_OPTIONS} placeholder='Select Status' style={{ width: '200px' }} />
                 </FormItem>
               </Col>
             </Row>
           </Col>
-          <Col flex='160px'>
+          <Col span={1}>
             <Button theme='primary' type='submit' style={{ margin: '0px 20px' }}>
               Filter
             </Button>

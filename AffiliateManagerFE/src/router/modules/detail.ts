@@ -6,21 +6,21 @@ const result: IRouter[] = [
   {
     path: '/detail',
     meta: {
-      title: '详情页',
+      title: 'hidden_details',
       Icon: LayersIcon,
     },
     children: [
       {
         path: 'base',
-        Component: lazy(() => import('pages/Detail/Base')),
+        Component: lazy(() => import('pages/ReferralDetails')),
         meta: {
-          title: '基础详情页',
+          title: 'Referral Details',
         },
       },
       {
-        path: 'advanced',
-        Component: lazy(() => import('pages/Detail/Advanced')),
-        meta: { title: '多卡片详情页' },
+        path: 'affiliate',
+        Component: lazy(() => import('pages/AffiliateDetails')),
+        meta: { title: 'Affiliate Details' },
       },
       // {
       //   path: 'deploy',

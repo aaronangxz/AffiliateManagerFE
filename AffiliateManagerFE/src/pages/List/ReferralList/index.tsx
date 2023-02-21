@@ -138,16 +138,17 @@ export const selectPage: React.FC = () => {
         }
         setStartTime(result.start_time);
         setEndTime(result.end_time);
-        console.log(result);
         setLoading(false);
       })
       .catch((error) => {
         setLoading(false);
-        console.log('error', error);
       });
   };
 
   useEffect(() => {
+    if (searchString === null) {
+      return;
+    }
     GetAffiliateList();
   }, [timeSelected, rangeSelected, searchString]);
 
@@ -158,21 +159,17 @@ export const selectPage: React.FC = () => {
   }, [timeSlot]);
 
   const handleSlotCallBack = (pos: string) => {
-    console.log('handleSlotCallBack', pos);
     setTimeSlot(pos);
   };
   const handleTimeCallBack = (pos: any) => {
-    console.log('handleTimeCallBack', pos);
     setTimeSelected(pos);
   };
 
   const handleRangeCallBack = (pos: any) => {
-    console.log('handleRangeCallBack', pos);
     setRangeSelected(pos);
   };
 
-  const handleStringCallBack:any = (pos: any) => {
-    console.log('handleStringCallBack', pos);
+  const handleStringCallBack: any = (pos: any) => {
     setSearchString(pos);
   };
 
