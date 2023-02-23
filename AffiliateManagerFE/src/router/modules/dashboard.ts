@@ -4,7 +4,7 @@ import { IRouter } from '../index';
 
 const dashboard: IRouter[] = [
   {
-    path: '/dashboard',
+    path: '/data',
     meta: {
       title: 'Data Compass',
       Icon: DashboardIcon,

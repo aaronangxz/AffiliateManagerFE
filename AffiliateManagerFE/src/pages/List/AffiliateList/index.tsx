@@ -29,7 +29,7 @@ export const selectPage: React.FC = () => {
 
   const [selectedRowKeys, setSelectedRowKeys] = useState<(string | number)[]>([0, 1]);
   const [visible, setVisible] = useState(false);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<any>(null);
 
   const [startTime, setStartTime] = useState<any>(moment().weekday(1).format('X'));
   const [endTime, setEndTime] = useState<any>(Math.round(Date.now() / 1000));

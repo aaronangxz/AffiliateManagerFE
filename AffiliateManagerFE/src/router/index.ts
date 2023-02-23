@@ -46,7 +46,7 @@ const routes: IRouter[] = [
   },
   {
     path: '/',
-    redirect: '/affiliate/stats',
+    redirect: '/data/affiliate/stats',
   },
 ];
 

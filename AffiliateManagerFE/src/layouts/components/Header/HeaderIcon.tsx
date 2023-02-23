@@ -67,7 +67,7 @@ export default memo(() => {
       <Dropdown trigger={'click'} onClick={clickHandler}>
         <Button variant='text' className={Style.dropdown}>
           <Icon name='user-circle' className={Style.icon} />
-          <span className={Style.text}>Tencent</span>
+          <span className={Style.text}>Admin</span>
           <Icon name='chevron-down' className={Style.icon} />
         </Button>
         <DropdownMenu>
