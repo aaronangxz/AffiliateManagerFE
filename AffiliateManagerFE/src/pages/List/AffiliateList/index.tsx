@@ -1,5 +1,5 @@
 import React, { useState, memo, useEffect } from 'react';
-import { Table, Dialog, Button, Row, Col, Tag } from 'tdesign-react';
+import {Table, Dialog, Button, Row, Col, Tag, MessagePlugin} from 'tdesign-react';
 import SearchForm from './components/SearchForm';
 import './index.module.less';
 import classnames from 'classnames';
@@ -29,7 +29,7 @@ export const selectPage: React.FC = () => {
 
   const [selectedRowKeys, setSelectedRowKeys] = useState<(string | number)[]>([0, 1]);
   const [visible, setVisible] = useState(false);
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<any>([]);
 
   const [startTime, setStartTime] = useState<any>(moment().weekday(1).format('X'));
   const [endTime, setEndTime] = useState<any>(Math.round(Date.now() / 1000));
@@ -119,15 +119,18 @@ export const selectPage: React.FC = () => {
     })
       .then((response) => response.json())
       .then((result) => {
-        setData(result.affiliate_list);
+        if (result.affiliate_list === undefined) {
+          setData([]);
+        } else {
+          setData(result.affiliate_list);
+        }
         setStartTime(result.start_time);
         setEndTime(result.end_time);
-        console.log(result);
         setLoading(false);
       })
       .catch((error) => {
         setLoading(false);
-        console.log('error', error);
+        MessagePlugin.error(error);
       });
   };
 

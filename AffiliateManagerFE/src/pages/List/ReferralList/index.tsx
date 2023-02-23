@@ -1,5 +1,5 @@
 import React, { useState, memo, useEffect } from 'react';
-import { Table, Dialog, Button, Row, Col, Tag } from 'tdesign-react';
+import {Table, Dialog, Button, Row, Col, Tag, MessagePlugin} from 'tdesign-react';
 import SearchForm from './components/SearchForm';
 import './index.module.less';
 import classnames from 'classnames';
@@ -143,6 +143,7 @@ export const selectPage: React.FC = () => {
       })
       .catch((error) => {
         setLoading(false);
+        MessagePlugin.error(error);
       });
   };
 
