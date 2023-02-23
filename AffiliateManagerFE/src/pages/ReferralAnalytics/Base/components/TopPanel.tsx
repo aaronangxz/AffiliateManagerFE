@@ -446,7 +446,7 @@ export const TopPanel = () => {
       });
     }
 
-    fetch('http://127.0.0.1:8888/api/v1/referral/trend', {
+    fetch(`${envVar.Env}/api/v1/referral/trend`, {
       method: 'POST',
       headers: myHeaders,
       body: raw,

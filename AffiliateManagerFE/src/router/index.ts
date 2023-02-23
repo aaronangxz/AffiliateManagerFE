@@ -46,11 +46,11 @@ const routes: IRouter[] = [
   },
   {
     path: '/',
-    redirect: '/dashboard/base',
+    redirect: '/affiliate/stats',
   },
 ];
 
 // const allRoutes = [...routes, ...dashboard, ...list, ...form, ...detail, ...result, ...user, ...login, ...otherRoutes];
-const allRoutes = [...routes, ...dashboard, ...list, ...detail, ...user,...login];
+const allRoutes = [...routes, ...dashboard, ...list, ...detail, ...user, ...login];
 
 export default allRoutes;

@@ -298,7 +298,7 @@ export const selectPage: React.FC = () => {
           hover
           onSelectChange={onSelectChange}
           pagination={{
-            total: data.length,
+            total: data===null?0: data.length,
             defaultCurrent: 1,
             defaultPageSize: 10,
             showJumper: true,
