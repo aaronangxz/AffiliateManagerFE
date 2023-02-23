@@ -6,6 +6,7 @@ import classnames from 'classnames';
 import CommonStyle from '../../../styles/common.module.less';
 import { CustomDatePicker, DEFAULT_DAY, TimeSelectorPeriod } from '../../../components/CustomDatePicker';
 import moment from 'moment/moment';
+import envVar from '../../../env_var';
 
 export const BookingStatusMap: {
   [key: number]: React.ReactElement;
@@ -155,7 +156,7 @@ export const selectPage: React.FC = () => {
         },
       });
     }
-    fetch('http://127.0.0.1:8888/api/v1/booking/list', {
+    fetch(`${envVar.Env}/api/v1/booking/list`, {
       method: 'POST',
       headers: myHeaders,
       body: raw,

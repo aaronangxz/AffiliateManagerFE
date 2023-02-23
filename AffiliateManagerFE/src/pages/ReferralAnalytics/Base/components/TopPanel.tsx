@@ -14,6 +14,7 @@ import { EChartOption } from 'echarts';
 import { isInfinity } from 'tdesign-react/es/_common/js/input-number/large-number';
 import { RecentList } from './RecentList';
 import {TimeSelectorPeriod} from "../../../../components/CustomDatePicker";
+import envVar from '../../../../env_var';
 
 const { RangePicker } = DatePicker;
 const DEFAULT_ID = 6;
@@ -269,7 +270,7 @@ export const TopPanel = () => {
       });
     }
 
-    fetch('http://127.0.0.1:8888/api/v1/referral/stats', {
+    fetch(`${envVar.Env}/api/v1/referral/stats`, {
       method: 'POST',
       headers: myHeaders,
       body: raw,

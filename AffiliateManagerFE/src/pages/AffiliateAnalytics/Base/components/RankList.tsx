@@ -8,6 +8,7 @@ import Style from './RankList.module.less';
 import moment from 'moment/moment';
 import { isInfinity } from 'tdesign-react/es/_common/js/input-number/large-number';
 import { calculateDiff } from './TopPanel';
+import envVar from '../../../../env_var';
 
 const affiliateTypeMap: {
   [key: number]: string;
@@ -30,7 +31,7 @@ export const RankList = () => {
   const [commissionPeriod, setCommissionPeriod] = useState('3');
 
   const getAffiliateRankingList = () => {
-    fetch(`http://127.0.0.1:8888/api/v1/affiliate/ranking/list?period=${affiliatePeriod}`, {
+    fetch(`${envVar.Env}/api/v1/affiliate/ranking/list?period=${affiliatePeriod}`, {
       method: 'GET',
       redirect: 'follow',
     })
@@ -72,7 +73,7 @@ export const RankList = () => {
   };
 
   const getCommissionRankingList = () => {
-    fetch(`http://127.0.0.1:8888/api/v1/affiliate/ranking/list?period=${commissionPeriod}`, {
+    fetch(`${envVar.Env}/api/v1/affiliate/ranking/list?period=${commissionPeriod}`, {
       method: 'GET',
       redirect: 'follow',
     })

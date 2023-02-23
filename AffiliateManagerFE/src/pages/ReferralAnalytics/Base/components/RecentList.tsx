@@ -3,6 +3,7 @@ import { Col, Row, Table, Button, Card, MessagePlugin, Tag } from 'tdesign-react
 import { TdPrimaryTableProps } from 'tdesign-react/es/table';
 import Style from './RecentList.module.less';
 import moment from 'moment/moment';
+import envVar from '../../../../env_var';
 
 import { CheckCircleFilledIcon, CloseCircleFilledIcon, HourglassIcon, RefreshIcon } from 'tdesign-icons-react';
 
@@ -36,7 +37,7 @@ export const RecentList = () => {
     const raw = JSON.stringify({
       affiliate_id: DEFAULT_ID,
     });
-    fetch(`http://127.0.0.1:8888/api/v1/referral/recent/list`, {
+    fetch(`${envVar.Env}/api/v1/referral/recent/list`, {
       method: 'POST',
       headers: myHeaders,
       body: raw,
@@ -76,7 +77,7 @@ export const RecentList = () => {
     const raw = JSON.stringify({
       affiliate_id: DEFAULT_ID,
     });
-    fetch(`http://127.0.0.1:8888/api/v1/referral/recent/list`, {
+    fetch(`${envVar.Env}/api/v1/referral/recent/list`, {
       method: 'POST',
       headers: myHeaders,
       body: raw,

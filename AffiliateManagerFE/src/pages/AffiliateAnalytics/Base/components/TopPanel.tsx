@@ -12,6 +12,7 @@ import { EChartOption } from 'echarts';
 import { isInfinity } from 'tdesign-react/es/_common/js/input-number/large-number';
 import { RankList } from './RankList';
 import { TimeSelectorPeriod } from '../../../../components/CustomDatePicker';
+import envVar from '../../../../env_var';
 
 const { RangePicker }: any = DatePicker;
 export const RECENT_7_DAYS_STRING: Array<string> = [
@@ -286,7 +287,7 @@ export const TopPanel = () => {
       });
     }
 
-    fetch('http://127.0.0.1:8888/api/v1/affiliate/stats', {
+    fetch(`${envVar.Env}/api/v1/affiliate/stats`, {
       method: 'POST',
       headers: myHeaders,
       body: raw,
