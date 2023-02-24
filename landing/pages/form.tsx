@@ -12,15 +12,20 @@ function InfoForm() {
     const [value, setValue] = useState("")
 
     const handleFormChange = (index, event) => {
-        console.log(event)
         let data = [...inputFields];
         data[index][event.target.name] = event.target.value;
         setInputFields(data);
         formValues = data
     }
 
+    const handleNumChange = (index, event) => {
+        let data = [...inputFields];
+        data[index]['contact'] = event;
+        setInputFields(data);
+        formValues = data
+    }
+
     const getForms = () => {
-        console.log(adultTix + childTix);
         if (emptyValues.length == adultTix + childTix) {
             return;
         }
@@ -42,9 +47,7 @@ function InfoForm() {
         <div className="App">
             {inputFields.map((input, index) => {
                 return (
-
                     <Card key={index} title={`Visitor ${
-                        
                         // @ts-ignore
                         index + 1}`} bordered={true} style={{width: "auto", marginBottom: '10px'}}>
                         <Form.Item label="Name">
@@ -58,15 +61,12 @@ function InfoForm() {
                         <Form.Item label="Contact">
                             <PhoneInput
                                 country={'my'}
-                                value={value}
-                                onChange={setValue}
+                                onChange={event => handleNumChange(index, event)}
                                 inputStyle={{color:'black'}}
                                 preferredCountries={['my','sg']}
                                 countryCodeEditable={false}
                                 autoFormat={false}
                             />
-                            {/*<Input name='contact' onChange={event => handleFormChange(index, event)}*/}
-                            {/*       style={{fontSize: '17px'}}/>*/}
                         </Form.Item>
 
                     </Card>
