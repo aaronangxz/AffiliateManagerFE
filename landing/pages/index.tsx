@@ -5,6 +5,7 @@ import type {DatePickerProps, RadioChangeEvent} from 'antd';
 import React, {useEffect} from 'react';
 import moment from "moment";
 import {useRouter} from 'next/router'
+import envVar from '../env_var';
 
 const {Title} = Typography;
 export let childTix = 0;
@@ -47,7 +48,7 @@ export default function Home() {
     const onDateChange: DatePickerProps['onChange'] = (date, dateString) => {
         console.log(dateString);
         selectDate = dateString
-        fetch(`http://192.168.86.228:8888/api/v1/booking/slots/available?date=${dateString}`, {
+        fetch(`${envVar.Env}/api/v1/booking/slots/available?date=${dateString}`, {
             method: 'GET',
             redirect: 'follow'
         })
