@@ -30,7 +30,7 @@ export default function Login() {
 
         MessagePlugin.success('登录成功');
 
-        navigate('/dashboard/base');
+        navigate('/');
       } catch (e) {
         console.log(e);
         MessagePlugin.error('登录失败');
@@ -53,15 +53,14 @@ export default function Login() {
       >
         {loginType === 'password' && (
           <>
-            <FormItem name='account' rules={[{ required: true, message: '账号必填', type: 'error' }]}>
-              <Input size='large' placeholder='请输入账号：admin' prefixIcon={<UserIcon />}></Input>
+            <FormItem name='account' rules={[{ required: true, message: 'Username is mandatory.', type: 'error' }]}>
+              <Input size='large' placeholder='Username：admin' prefixIcon={<UserIcon />}></Input>
             </FormItem>
-            <FormItem name='password' rules={[{ required: true, message: '密码必填', type: 'error' }]}>
+            <FormItem name='password' rules={[{ required: true, message: 'Password is mandatory.', type: 'error' }]}>
               <Input
                 size='large'
                 type={showPsw ? 'text' : 'password'}
-                clearable
-                placeholder='请输入登录密码：admin'
+                placeholder='Password：admin'
                 prefixIcon={<LockOnIcon />}
                 suffixIcon={
                   showPsw ? (
@@ -73,8 +72,8 @@ export default function Login() {
               />
             </FormItem>
             <div className={classnames(Style.checkContainer, Style.rememberPwd)}>
-              <Checkbox>记住账号</Checkbox>
-              <span className={Style.checkContainerTip}>忘记账号？</span>
+              {/*<Checkbox>Remember Me</Checkbox>*/}
+              <span className={Style.checkContainerTip}>Forgot your password？</span>
             </div>
           </>
         )}
@@ -113,27 +112,27 @@ export default function Login() {
         {loginType !== 'qrcode' && (
           <FormItem className={Style.btnContainer}>
             <Button block size='large' type='submit'>
-              登录
+              Login
             </Button>
           </FormItem>
         )}
-        <div className={Style.switchContainer}>
-          {loginType !== 'password' && (
-            <span className='tip' onClick={() => switchType('password')}>
-              使用账号密码登录
-            </span>
-          )}
-          {loginType !== 'qrcode' && (
-            <span className='tip' onClick={() => switchType('qrcode')}>
-              使用微信扫码登录
-            </span>
-          )}
-          {loginType !== 'phone' && (
-            <span className='tip' onClick={() => switchType('phone')}>
-              使用手机号登录
-            </span>
-          )}
-        </div>
+        {/*<div className={Style.switchContainer}>*/}
+        {/*  {loginType !== 'password' && (*/}
+        {/*    <span className='tip' onClick={() => switchType('password')}>*/}
+        {/*      使用账号密码登录*/}
+        {/*    </span>*/}
+        {/*  )}*/}
+        {/*  {loginType !== 'qrcode' && (*/}
+        {/*    <span className='tip' onClick={() => switchType('qrcode')}>*/}
+        {/*      使用微信扫码登录*/}
+        {/*    </span>*/}
+        {/*  )}*/}
+        {/*  {loginType !== 'phone' && (*/}
+        {/*    <span className='tip' onClick={() => switchType('phone')}>*/}
+        {/*      使用手机号登录*/}
+        {/*    </span>*/}
+        {/*  )}*/}
+        {/*</div>*/}
       </Form>
     </div>
   );

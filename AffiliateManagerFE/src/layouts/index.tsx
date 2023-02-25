@@ -47,7 +47,7 @@ export default memo(() => {
           visible={globalState.setting}
           size='458px'
           footer={false}
-          header='页面配置'
+          header='Settings'
           onClose={() => dispatch(toggleSetting())}
         >
           <Setting />

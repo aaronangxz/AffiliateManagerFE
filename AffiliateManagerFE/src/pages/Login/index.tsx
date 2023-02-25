@@ -22,21 +22,22 @@ export default memo(() => {
     >
       <LoginHeader />
       <div className={Style.loginContainer}>
+        <img src='/icons8-gas-96.png' alt={''} />
         <div className={Style.titleContainer}>
-          <h1 className={Style.title}>登录到</h1>
-          <h1 className={Style.title}>TDesign Starter</h1>
+          <h1 className={Style.title}>Welcome to</h1>
+          <h1 className={Style.title}>AffiliateManager</h1>
           <div className={Style.subTitle}>
             <p className={classNames(Style.tip, Style.registerTip)}>
-              {type === 'register' ? '已有账号?' : '没有账号吗?'}
+              {type === 'register' ? 'Has an account?' : 'First time here?'}
             </p>
             <p className={classNames(Style.tip, Style.loginTip)} onClick={handleSwitchLoginType}>
-              {type === 'register' ? '登录' : '注册新账号'}
+              {type === 'register' ? 'Login' : 'Register'}
             </p>
           </div>
         </div>
         {type === 'login' ? <Login /> : <Register />}
       </div>
-      <footer className={Style.copyright}>Copyright @ 2021-2022 Tencent. All Rights Reserved</footer>
+      {/*<footer className={Style.copyright}>Copyright @ 2023 @aaronangxz. All Rights Reserved</footer>*/}
     </div>
   );
 });

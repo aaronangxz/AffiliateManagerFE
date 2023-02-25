@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from 'tdesign-react';
+import { Button, Col, Row } from 'tdesign-react';
 import { LogoGithubIcon, HelpCircleIcon, SettingIcon } from 'tdesign-icons-react';
 import { useAppDispatch } from 'modules/store';
 import { toggleSetting } from 'modules/global';
@@ -25,36 +25,46 @@ export default function Header() {
   return (
     <div>
       <header className={Style.loginHeader}>
-        <LogoFullIcon className={Style.logo} />
-        <div className={Style.operationsContainer}>
-          <Button
-            className={Style.operationsButton}
-            theme='default'
-            shape='square'
-            variant='text'
-            onClick={navToGitHub}
-          >
-            <LogoGithubIcon className={Style.icon} />
-          </Button>
-          <Button
-            className={Style.operationsButton}
-            theme='default'
-            shape='square'
-            variant='text'
-            onClick={navToHelper}
-          >
-            <HelpCircleIcon className={Style.icon} />
-          </Button>
-          <Button
-            className={Style.operationsButton}
-            theme='default'
-            shape='square'
-            variant='text'
-            onClick={toggleSettingPanel}
-          >
-            <SettingIcon className={Style.icon} />
-          </Button>
-        </div>
+        {/*<div className={Style.logo} style={{ padding: '10px' }}>*/}
+        {/*  <Row>*/}
+        {/*    <Col span={6}>*/}
+        {/*      <img src='/icons8-gas-96.png' alt={''} />*/}
+        {/*    </Col>*/}
+        {/*    <Col span={1}>*/}
+        {/*      <h1>AffiliateManager</h1>*/}
+        {/*    </Col>*/}
+        {/*  </Row>*/}
+        {/*</div>*/}
+        {/* <LogoFullIcon className={Style.logo} /> */}
+        {/* <div className={Style.operationsContainer}> */}
+        {/*  <Button */}
+        {/*    className={Style.operationsButton} */}
+        {/*    theme='default' */}
+        {/*    shape='square' */}
+        {/*    variant='text' */}
+        {/*    onClick={navToGitHub} */}
+        {/*  > */}
+        {/*    <LogoGithubIcon className={Style.icon} /> */}
+        {/*  </Button> */}
+        {/*  <Button */}
+        {/*    className={Style.operationsButton} */}
+        {/*    theme='default' */}
+        {/*    shape='square' */}
+        {/*    variant='text' */}
+        {/*    onClick={navToHelper} */}
+        {/*  > */}
+        {/*    <HelpCircleIcon className={Style.icon} /> */}
+        {/*  </Button> */}
+        {/*  <Button */}
+        {/*    className={Style.operationsButton} */}
+        {/*    theme='default' */}
+        {/*    shape='square' */}
+        {/*    variant='text' */}
+        {/*    onClick={toggleSettingPanel} */}
+        {/*  > */}
+        {/*    <SettingIcon className={Style.icon} /> */}
+        {/*  </Button> */}
+        {/* </div> */}
       </header>
     </div>
   );
