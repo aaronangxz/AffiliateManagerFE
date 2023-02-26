@@ -806,8 +806,6 @@ export const TopPanel = () => {
               trendNum={item.trendNum}
               count={item.count}
               desc={activeTimeSlot === '4' ? '' : `${subText}`}
-              // Icon={item.Icon}
-              // loading={cardLoading}
             />
           </Col>
         ))}

@@ -35,7 +35,7 @@ export default memo((props: { showMenu?: boolean }) => {
           onClick={() => dispatch(toggleMenu(null))}
           icon={<ViewListIcon />}
         />
-        <Search />
+        {/*<Search />*/}
       </Space>
     );
   }
