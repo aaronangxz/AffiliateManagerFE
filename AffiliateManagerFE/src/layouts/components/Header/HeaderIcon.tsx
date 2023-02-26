@@ -14,6 +14,7 @@ import { useAppDispatch } from 'modules/store';
 import { toggleSetting } from 'modules/global';
 import { logout } from 'modules/user';
 import Style from './HeaderIcon.module.less';
+import getToken from "../../../auth_token";
 
 const { DropdownMenu, DropdownItem } = Dropdown;
 
@@ -30,12 +31,12 @@ export default memo(() => {
   };
 
   const clickHandler = (data: any) => {
-    if (data.value === 1) {
-      navigate('/user/index');
+    if (data.value === 0) {
+      navigate('/user/profile');
     }
   };
   const handleLogout = async () => {
-    await dispatch(logout());
+    localStorage.removeItem('auth');
     navigate('/login/index');
   };
 
@@ -67,11 +68,11 @@ export default memo(() => {
       <Dropdown trigger={'click'} onClick={clickHandler}>
         <Button variant='text' className={Style.dropdown}>
           <Icon name='user-circle' className={Style.icon} />
-          <span className={Style.text}>Admin</span>
+          <span className={Style.text}>{getToken()?.user_name}</span>
           <Icon name='chevron-down' className={Style.icon} />
         </Button>
         <DropdownMenu>
-          <DropdownItem value={1}>
+          <DropdownItem value={0}>
             <div className={Style.dropItem}>
               <UserCircleIcon />
               <span>Profile</span>

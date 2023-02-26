@@ -2,7 +2,7 @@ import { lazy } from 'react';
 import { ViewModuleIcon } from 'tdesign-icons-react';
 import { IRouter } from '../index';
 
-const result: IRouter[] = [
+const adminLists: IRouter[] = [
   {
     path: '/list',
     meta: {
@@ -21,11 +21,6 @@ const result: IRouter[] = [
         meta: { title: 'Referrals' },
       },
       {
-        path: 'affiliates/referrals',
-        Component: lazy(() => import('pages/List/AffiliateReferralList')),
-        meta: { title: "Affiliate's Referrals" },
-      },
-      {
         path: 'bookings',
         Component: lazy(() => import('pages/List/BookingList')),
         meta: { title: 'Bookings' },
@@ -34,4 +29,4 @@ const result: IRouter[] = [
   },
 ];
 
-export default result;
+export default adminLists;

@@ -1,7 +1,7 @@
-import React, { Suspense, memo } from 'react';
+import React, { Suspense, memo, useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Layout, Loading } from 'tdesign-react';
-import routers, { IRouter } from 'router';
+import routers, {affiliateRoutes, getRoutes, IRouter} from 'router';
 import { resolve } from 'utils/path';
 import Page from './Page';
 import Style from './AppRouter.module.less';
@@ -48,18 +48,23 @@ const renderRoutes: TRenderRoutes = (routes, parentPath = '', breadcrumb = []) =
     return children ? renderRoutes(children, currentPath, currentBreadcrumb) : null;
   });
 
-const AppRouter = () => (
-  <Content>
-    <Suspense
-      fallback={
-        <div className={Style.loading}>
-          <Loading />
-        </div>
-      }
-    >
-      <Routes>{renderRoutes(routers)}</Routes>
-    </Suspense>
-  </Content>
-);
+export const AppRouter = () => {
+  const [role, setRole] = useState<any>(
+    localStorage.getItem('auth') === null ? null : JSON.parse(localStorage.getItem('auth')).user_role,
+  );
+  return (
+    <Content>
+      <Suspense
+        fallback={
+          <div className={Style.loading}>
+            <Loading />
+          </div>
+        }
+      >
+        <Routes>{renderRoutes(getRoutes(role))}</Routes>
+      </Suspense>
+    </Content>
+  );
+};
 
 export default memo(AppRouter);

@@ -100,7 +100,7 @@ export const TrendIcon = ({ trend, trendNum }: { trend?: ETrend; trendNum?: stri
 const Board = ({ title, subtitle, count, desc, trend, trendNum, Icon, dark, border = false, loading }: IBoardProps) => (
   <Card
     hoverShadow={true}
-    style={{ borderRadius: '15px'}}
+    style={{ borderRadius: '15px' }}
     loading={loading}
     title={
       <span className={Style.boardTitle}>
@@ -126,11 +126,19 @@ const Board = ({ title, subtitle, count, desc, trend, trendNum, Icon, dark, bord
     }
   >
     <div className={Style.boardItem}>
-      {title === 'Total Affiliate Revenue' || title === 'Total Commission' ? (
+      {title === 'Total Affiliate Revenue' ||
+      title === 'Total Commission' ||
+      title === 'Lifetime Affiliate Revenue' ||
+      title === 'Lifetime Commission' ? (
         calculateFigures(count)
       ) : (
         <div className={Style.boardItemLeft}>
-          {title === 'Total Affiliate Revenue' || title === 'Total Commission' ? 'MYR ' : ''}
+          {title === 'Total Affiliate Revenue' ||
+          title === 'Total Commission' ||
+          title === 'Lifetime Affiliate Revenue' ||
+          title === 'Lifetime Commission'
+            ? 'MYR '
+            : ''}
           <CountUp start={0.0} end={parseInt(count, 10)} duration={0.8}></CountUp>
         </div>
       )}

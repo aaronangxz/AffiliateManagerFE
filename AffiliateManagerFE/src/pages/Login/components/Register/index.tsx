@@ -9,6 +9,8 @@ import {
   FormInstanceFunctions,
   SubmitContext,
   Select,
+  Row,
+  Col,
 } from 'tdesign-react';
 import {
   LockOnIcon,
@@ -64,6 +66,7 @@ export default function Register() {
         className={classnames(Style.itemContainer, `register-${registerType}`)}
         labelWidth={0}
         onSubmit={onSubmit}
+        style={{ paddingBottom: '50px' }}
       >
         <FormItem
           name='entityName'
@@ -114,7 +117,7 @@ export default function Register() {
           </FormItem>
         )}
         <FormItem name='phone' rules={[{ required: true, message: 'Contact Number is mandatory.', type: 'error' }]}>
-          <Input maxlength={15} size='large' placeholder='Contact Number' prefixIcon={<MobileIcon />} />
+          <Input maxlength={15} size='large' placeholder='Contact Number' prefixIcon={<MobileIcon />} type={'tel'} />
           {/* <PhoneInput */}
           {/*  country={'my'} */}
           {/*  onChange={(event) => handleNumChange(event)} */}

@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import Login from './components/Login';
 import Register from './components/Register';
@@ -7,6 +7,8 @@ import { useAppSelector } from 'modules/store';
 import { selectGlobal } from 'modules/global';
 
 import Style from './index.module.less';
+import { getToken } from '../../auth_token';
+import { useNavigate } from 'react-router-dom';
 
 export default memo(() => {
   const [type, setType] = useState('login');
@@ -15,6 +17,13 @@ export default memo(() => {
   const handleSwitchLoginType = () => {
     setType(type === 'register' ? 'login' : 'register');
   };
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (getToken() && getToken() !== null) {
+      navigate('/');
+    }
+  }, []);
 
   return (
     <div
@@ -37,7 +46,7 @@ export default memo(() => {
         </div>
         {type === 'login' ? <Login /> : <Register />}
       </div>
-      {/*<footer className={Style.copyright}>Copyright @ 2023 @aaronangxz. All Rights Reserved</footer>*/}
+      {/* <footer className={Style.copyright}>Copyright @ 2023 @aaronangxz. All Rights Reserved</footer> */}
     </div>
   );
 });
