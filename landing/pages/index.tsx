@@ -119,12 +119,12 @@ export default function Home() {
         return null;
     }
     const onAdultChange = (value: number) => {
-        setAdultAmount(value * 99)
+        setAdultAmount(value * 98)
         setAdultCount(value)
     };
 
     const onChildChange = (value: number) => {
-        setChildAmount(value * 50)
+        setChildAmount(value * 88)
         setChildCount(value)
     };
 
