@@ -20,7 +20,7 @@ import Link from "next/link";
 import {Elements
 } from "@stripe/react-stripe-js";
 import {loadStripe} from "@stripe/stripe-js";
-import CheckoutForm from "./checkout";
+import CheckoutForm from "../components/checkout";
 import {Appearance, StripeElementsOptions} from "@stripe/stripe-js/types/stripe-js/elements-group";
 const {Header} = Layout;
 
