@@ -22,8 +22,9 @@ import {Elements
 import {loadStripe} from "@stripe/stripe-js";
 import CheckoutForm from "../components/checkout";
 import {Appearance, StripeElementsOptions} from "@stripe/stripe-js/types/stripe-js/elements-group";
-const {Header} = Layout;
+import envVar from '../env_var';
 
+const {Header} = Layout;
 const {Title} = Typography;
 const slotMap: {
     [key: number]: string;
@@ -42,7 +43,7 @@ export default function Payment() {
 
     useEffect(() => {
         // Create PaymentIntent as soon as the page loads
-        fetch("http://127.0.0.1:8888/api/v1/payment/create-payment-intent", {
+        fetch(`${envVar.Env}/api/v1/payment/create-payment-intent`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ items: [{ id: "xl-tshirt" }] }),
