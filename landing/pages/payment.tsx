@@ -86,7 +86,7 @@ export default function Payment() {
                     <Col xl={12}>
                         <Link href='/'>
                             <Header>
-                                <Title level={2} style={{textAlign: 'center', margin: '0px', padding: '20px'}}>
+                                <Title level={2} style={{textAlign: 'center', margin: '0px', padding: '0px'}}>
                                     HOME by Tales Of Paws Admission Ticket
                                 </Title>
                             </Header>
