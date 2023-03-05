@@ -81,7 +81,11 @@ export const User: React.FC<BrowserRouterProps> = () => {
       navigate('/login/index');
       return;
     }
-    fetch(`${envVar.Env}/api/v1/affiliate/info?id=${token}`, {
+    const myHeaders = new Headers();
+    myHeaders.append('Content-Type', 'application/json');
+    myHeaders.append('Authorization', `Bearer ${getToken()?.tokens.access_token}`);
+    fetch(`${envVar.Env}/api/v1/user/info?id=${token}`, {
+      headers: myHeaders,
       method: 'GET',
       redirect: 'follow',
     })

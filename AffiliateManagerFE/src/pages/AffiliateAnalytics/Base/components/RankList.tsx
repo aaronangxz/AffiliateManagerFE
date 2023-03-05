@@ -9,6 +9,7 @@ import moment from 'moment/moment';
 import { isInfinity } from 'tdesign-react/es/_common/js/input-number/large-number';
 import { calculateDiff } from './TopPanel';
 import envVar from '../../../../env_var';
+import getToken from "../../../../auth_token";
 
 const affiliateTypeMap: {
   [key: number]: string;
@@ -31,7 +32,11 @@ export const RankList = () => {
   const [commissionPeriod, setCommissionPeriod] = useState('3');
 
   const getAffiliateRankingList = () => {
+    const myHeaders = new Headers();
+    myHeaders.append('Content-Type', 'application/json');
+    myHeaders.append('Authorization', `Bearer ${getToken()?.tokens.access_token}`);
     fetch(`${envVar.Env}/api/v1/affiliate/ranking/list?period=${affiliatePeriod}`, {
+      headers: myHeaders,
       method: 'GET',
       redirect: 'follow',
     })
@@ -73,7 +78,12 @@ export const RankList = () => {
   };
 
   const getCommissionRankingList = () => {
+    const myHeaders = new Headers();
+    myHeaders.append('Content-Type', 'application/json');
+    myHeaders.append('Authorization', `Bearer ${getToken()?.tokens.access_token}`);
+
     fetch(`${envVar.Env}/api/v1/affiliate/ranking/list?period=${commissionPeriod}`, {
+      headers: myHeaders,
       method: 'GET',
       redirect: 'follow',
     })

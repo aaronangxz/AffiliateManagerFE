@@ -7,6 +7,7 @@ import CommonStyle from '../../../styles/common.module.less';
 import { CustomDatePicker, DEFAULT_DAY, TimeSelectorPeriod } from '../../../components/CustomDatePicker';
 import moment from 'moment/moment';
 import envVar from '../../../env_var';
+import getToken from "../../../auth_token";
 
 export const ReferralStatusMap: {
   [key: number]: React.ReactElement;
@@ -78,6 +79,7 @@ export const selectPage: React.FC = () => {
     setLoading(true);
     const myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
+    myHeaders.append('Authorization', `Bearer ${getToken()?.tokens.access_token}`);
 
     let raw = '';
     if (timeSlot === '4') {

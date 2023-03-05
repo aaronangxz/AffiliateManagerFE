@@ -6,6 +6,7 @@ import moment from 'moment/moment';
 import envVar from '../../../../env_var';
 
 import { CheckCircleFilledIcon, CloseCircleFilledIcon, HourglassIcon, RefreshIcon } from 'tdesign-icons-react';
+import getToken from "../../../../auth_token";
 
 const statusNameListMap: any = {
   0: { label: 'Success', theme: 'success', icon: <CheckCircleFilledIcon /> },
@@ -33,6 +34,8 @@ export const RecentList = () => {
     setClicksLoading(true);
     const myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
+    myHeaders.append('Authorization', `Bearer ${getToken()?.tokens.access_token}`);
+
     await sleep(500);
     const raw = JSON.stringify({
       affiliate_id: DEFAULT_ID,
@@ -73,6 +76,8 @@ export const RecentList = () => {
     setEarningsLoading(true);
     const myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
+    myHeaders.append('Authorization', `Bearer ${getToken()?.tokens.access_token}`);
+
     await sleep(500);
     const raw = JSON.stringify({
       affiliate_id: DEFAULT_ID,

@@ -15,6 +15,7 @@ import { isInfinity } from 'tdesign-react/es/_common/js/input-number/large-numbe
 import { RecentList } from './RecentList';
 import {TimeSelectorPeriod} from "../../../../components/CustomDatePicker";
 import envVar from '../../../../env_var';
+import getToken from "../../../../auth_token";
 
 const { RangePicker } = DatePicker;
 const DEFAULT_ID = 6;
@@ -218,6 +219,8 @@ export const TopPanel = () => {
     setCardLoading(true);
     const myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
+    myHeaders.append('Authorization', `Bearer ${getToken()?.tokens.access_token}`);
+
     let raw = '';
     if (timeSlot === '4') {
       raw = JSON.stringify({
@@ -399,6 +402,7 @@ export const TopPanel = () => {
   const getReferralTrend = async () => {
     const myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
+    myHeaders.append('Authorization', `Bearer ${getToken()?.tokens.access_token}`);
 
     let raw = '';
     if (timeSlot === '4') {
