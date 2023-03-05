@@ -34,6 +34,7 @@ export default function Home() {
     const [hasMounted, setHasMounted] = React.useState(false);
     const [messageApi, contextHolder] = message.useMessage();
     const router = useRouter();
+    const [refId, setRefId] = React.useState(null);
 
     const disableTimeSlots = () => {
         setDisableSlot0(true)
@@ -46,7 +47,6 @@ export default function Home() {
         setSelectedSlot(null)
     }
     const onDateChange: DatePickerProps['onChange'] = (date, dateString) => {
-        console.log(dateString);
         selectDate = dateString
         fetch(`${envVar.Env}/api/v1/booking/slots/available?date=${dateString}`, {
             method: 'GET',
@@ -54,7 +54,6 @@ export default function Home() {
         })
             .then(response => response.json())
             .then(result => {
-                console.log(result)
                 if (result.response_meta.error_code != 0) {
                     messageApi.open({
                         type: 'error',
@@ -89,7 +88,6 @@ export default function Home() {
     const onTimeSlotChange = (e: RadioChangeEvent) => {
         setSelectedSlot(e.target.value)
         selectSlot = e.target.value
-        console.log(`radio checked:${e.target.value}`);
         if (slotData.length >= e.target.value) {
             setAdultDisable(slotData[e.target.value].adult_slot == 0)
             setAdultMax(slotData[e.target.value].adult_slot)
@@ -99,38 +97,58 @@ export default function Home() {
     };
 
     useEffect(() => {
+        let myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+        const ref = new URLSearchParams(window.location.search).get(
+            "ref"
+        );
+        console.log(ref);
+        fetch(`${envVar.Env}/api/v1/tracking/click?ref=${ref}`, {
+            method: 'POST',
+            headers: myHeaders,
+            redirect: 'follow'
+        })
+            .then(response => response.text())
+            .then(result => {
+                console.log(result)
+            })
+            .catch(error => {
+                console.log('error', error)
+            });
+    },[])
+
+    useEffect(() => {
         setHasMounted(true);
         if (adultDisable) {
             setAdultAmount(0)
         } else {
-            setAdultAmount(adultCount * 99)
+            setAdultAmount(adultCount * 98)
         }
 
         if (childDisable) {
             setChildAmount(0)
         } else {
-            setChildAmount(childCount * 50)
+            setChildAmount(childCount * 88)
         }
         setTotalAmount(adultAmount + childAmount)
-        console.log(totalAmount)
     }, [adultDisable, childDisable, adultAmount, childAmount, totalAmount, adultCount, childCount])
     //To fix Hydration issue
     if (!hasMounted) {
         return null;
     }
+
     const onAdultChange = (value: number) => {
-        setAdultAmount(value * 99)
+        setAdultAmount(value * 98)
         setAdultCount(value)
     };
 
     const onChildChange = (value: number) => {
-        setChildAmount(value * 50)
+        setChildAmount(value * 88)
         setChildCount(value)
     };
 
 
     const onFinish = (values: any) => {
-        console.log('Success:', values);
         childTix = childCount;
         adultTix = adultCount;
         totalAmt = totalAmount;

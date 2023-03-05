@@ -92,6 +92,7 @@ export default function Booking() {
     const onFinish = (values: any) => {
         console.log('Success:', values);
         console.log(formValues)
+        router.push(`/payment`)
     };
 
     return (
