@@ -9,7 +9,7 @@ import moment from 'moment/moment';
 import { isInfinity } from 'tdesign-react/es/_common/js/input-number/large-number';
 import { calculateDiff } from './TopPanel';
 import envVar from '../../../../env_var';
-import getToken from "../../../../auth_token";
+import getToken from '../../../../auth_token';
 
 const affiliateTypeMap: {
   [key: number]: string;
@@ -223,7 +223,7 @@ export const RankList = () => {
       width: 80,
       cell: ({ row }) =>
         row.user_id === undefined ? null : (
-          <Button variant='text' theme='primary' onClick={() => console.log(row)}>
+          <Button variant='text' theme='primary' disabled={true} onClick={() => console.log(row)}>
             View
           </Button>
         ),
@@ -306,7 +306,7 @@ export const RankList = () => {
       width: 80,
       cell: ({ row }) =>
         row.user_id === undefined ? null : (
-          <Button variant='text' theme='primary' onClick={() => console.log(row)}>
+          <Button variant='text' theme='primary' disabled={true} onClick={() => console.log(row)}>
             View
           </Button>
         ),

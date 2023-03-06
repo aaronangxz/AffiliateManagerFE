@@ -355,6 +355,7 @@ export const selectPage: React.FC = () => {
                 return (
                   <>
                     <Button
+                      disabled={true}
                       theme='primary'
                       variant='text'
                       onClick={() => {

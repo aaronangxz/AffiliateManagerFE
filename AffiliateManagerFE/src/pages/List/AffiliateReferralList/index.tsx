@@ -176,7 +176,7 @@ export const selectPage: React.FC = () => {
     <div>
       <Row>
         <Col span={3}>
-          <h1>Affiliate&apos;s Referrals</h1>
+          <h1>Referrals</h1>
         </Col>
         <Col span={9}>
           <CustomDatePicker
@@ -305,6 +305,7 @@ export const selectPage: React.FC = () => {
                 return (
                   <>
                     <Button
+                      disabled={true}
                       theme='primary'
                       variant='text'
                       onClick={() => {

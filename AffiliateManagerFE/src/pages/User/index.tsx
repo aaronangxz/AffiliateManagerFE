@@ -75,8 +75,6 @@ export const User: React.FC<BrowserRouterProps> = () => {
     },
   ];
   const getUserDetails = () => {
-    const id = 6;
-    const token = getToken()?.user_id;
     if (getToken() === undefined || getToken() === null) {
       navigate('/login/index');
       return;
@@ -84,7 +82,7 @@ export const User: React.FC<BrowserRouterProps> = () => {
     const myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
     myHeaders.append('Authorization', `Bearer ${getToken()?.tokens.access_token}`);
-    fetch(`${envVar.Env}/api/v1/user/info?id=${token}`, {
+    fetch(`${envVar.Env}/api/v1/user/info`, {
       headers: myHeaders,
       method: 'GET',
       redirect: 'follow',
@@ -112,7 +110,7 @@ export const User: React.FC<BrowserRouterProps> = () => {
     data: `https://affiliate-manager-booking.vercel.app?ref=${affiliateDetails.unique_referral_code}`,
     width: 300,
     height: 300,
-    image: '/icons8-gas-96.png',
+    image: '/icons8-corgi-100.png',
     dotsOptions: {
       color: '#6a1a4c',
       type: 'extra-rounded',
@@ -120,8 +118,8 @@ export const User: React.FC<BrowserRouterProps> = () => {
         type: 'radial',
         rotation: 0,
         colorStops: [
-          { offset: 0, color: '#ffb54d' },
-          { offset: 1, color: '#ffdf3d' },
+          { offset: 0, color: '#ffcd89' },
+          { offset: 1, color: '#ffdc95' },
         ],
       },
     },
@@ -135,7 +133,7 @@ export const User: React.FC<BrowserRouterProps> = () => {
     },
     cornersSquareOptions: {
       type: 'extra-rounded',
-      color: '#ffc547',
+      color: '#ffcf6c',
     },
   });
 
@@ -146,6 +144,7 @@ export const User: React.FC<BrowserRouterProps> = () => {
 
   const onDownloadClick = () => {
     qrCode.download({
+      name:`referral_qr_${affiliateDetails.unique_referral_code}`,
       extension: 'png',
     });
   };
@@ -161,7 +160,6 @@ export const User: React.FC<BrowserRouterProps> = () => {
           <Col>
             <h1 style={{ color: 'white' }}>Your Lifetime Stats</h1>
           </Col>
-          <Col></Col>
         </Row>
         <Row gutter={[16, 16]} style={{ width: '100%' }}>
           {PANE_LIST.map((item) => (

@@ -11,7 +11,7 @@ const result: IRouter[] = [
     },
     children: [
       {
-        path: 'base',
+        path: 'referral',
         Component: lazy(() => import('pages/ReferralDetails')),
         meta: {
           title: 'Referral Details',

@@ -13,7 +13,7 @@ const affiliateLists: IRouter[] = [
       {
         path: 'affiliates/referrals',
         Component: lazy(() => import('pages/List/AffiliateReferralList')),
-        meta: { title: "Affiliate's Referrals" },
+        meta: { title: "Referrals" },
       },
     ],
   },
