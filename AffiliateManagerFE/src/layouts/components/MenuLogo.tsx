@@ -17,7 +17,8 @@ export default memo((props: IProps) => {
 
   return (
     <div className={Style.menuLogo} onClick={handleClick}>
-      {props.collapsed ? <MiniLogo /> : <FullLogo />}
+      {props.collapsed ? <img src='/icons8-gas-40.png' alt={''}/> : <img src='/icons8-gas-40.png' alt={''} style={{paddingRight:'5px'}}/>}
+      {props.collapsed ? '' : <h3>AffiliateManager</h3>}
     </div>
   );
 });

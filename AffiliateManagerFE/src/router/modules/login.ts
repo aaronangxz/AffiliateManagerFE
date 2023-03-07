@@ -8,6 +8,7 @@ const result: IRouter[] = [
     meta: {
       title: '登录页',
       Icon: LogoutIcon,
+      hidden: true,
     },
     children: [
       {

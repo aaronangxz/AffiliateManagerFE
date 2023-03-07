@@ -7,6 +7,7 @@ import CommonStyle from '../../../styles/common.module.less';
 import { CustomDatePicker, DEFAULT_DAY, TimeSelectorPeriod } from '../../../components/CustomDatePicker';
 import moment from 'moment/moment';
 import envVar from '../../../env_var';
+import getToken from "../../../auth_token";
 
 export const AffiliateTypeMap: {
   [key: number]: React.ReactElement;
@@ -67,6 +68,7 @@ export const selectPage: React.FC = () => {
     setLoading(true);
     const myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
+    myHeaders.append('Authorization', `Bearer ${getToken()?.tokens.access_token}`);
 
     let raw = '';
     if (timeSlot === '4') {
@@ -175,14 +177,14 @@ export const selectPage: React.FC = () => {
         </Col>
       </Row>
       <div className={classnames(CommonStyle.pageWithPadding, CommonStyle.pageWithColor)}>
-        <Row justify='start' style={{ marginBottom: '20px' }}>
-          <SearchForm
-            onSubmit={async (value) => {
-              console.log(value);
-            }}
-            onCancel={() => {}}
-          />
-        </Row>
+        {/*<Row justify='start' style={{ marginBottom: '20px' }}>*/}
+        {/*  <SearchForm*/}
+        {/*    onSubmit={async (value) => {*/}
+        {/*      console.log(value);*/}
+        {/*    }}*/}
+        {/*    onCancel={() => {}}*/}
+        {/*  />*/}
+        {/*</Row>*/}
         <Table
           // sort={sortInfo}
           multipleSort={false}
@@ -283,6 +285,7 @@ export const selectPage: React.FC = () => {
                 return (
                   <>
                     <Button
+                      disabled={true}
                       theme='primary'
                       variant='text'
                       onClick={() => {

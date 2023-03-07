@@ -1,8 +1,31 @@
 import React, { useState, useRef } from 'react';
 import classnames from 'classnames';
-import { Form, MessagePlugin, Input, Checkbox, Button, FormInstanceFunctions, SubmitContext } from 'tdesign-react';
-import { LockOnIcon, UserIcon, MailIcon, BrowseOffIcon, BrowseIcon } from 'tdesign-icons-react';
+import {
+  Form,
+  MessagePlugin,
+  Input,
+  Checkbox,
+  Button,
+  FormInstanceFunctions,
+  SubmitContext,
+  Select,
+  Row,
+  Col,
+} from 'tdesign-react';
+import {
+  LockOnIcon,
+  UserIcon,
+  MailIcon,
+  BrowseOffIcon,
+  BrowseIcon,
+  HomeIcon,
+  FolderIcon,
+  MobileIcon,
+  FileIcon,
+} from 'tdesign-icons-react';
 import useCountdown from '../../hooks/useCountDown';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
 
 import Style from './index.module.less';
 
@@ -11,11 +34,15 @@ const { FormItem } = Form;
 export type ERegisterType = 'phone' | 'email';
 
 export default function Register() {
-  const [registerType, changeRegisterType] = useState('phone');
+  const [registerType, changeRegisterType] = useState('email');
   const [showPsw, toggleShowPsw] = useState(false);
   const { countdown, setupCountdown } = useCountdown(60);
   const formRef = useRef<FormInstanceFunctions>();
-
+  const [contact, setContact] = useState('');
+  const handleNumChange = (event: any) => {
+    console.log(event);
+    setContact(event);
+  };
   const onSubmit = (e: SubmitContext) => {
     if (e.validateResult === true) {
       const { checked } = formRef.current?.getFieldsValue?.(['checked']) as { checked: boolean };
@@ -39,31 +66,35 @@ export default function Register() {
         className={classnames(Style.itemContainer, `register-${registerType}`)}
         labelWidth={0}
         onSubmit={onSubmit}
+        style={{ paddingBottom: '50px' }}
       >
+        <FormItem
+          name='entityName'
+          rules={[{ required: true, message: 'Entity Name is mandatory.', type: 'error' }]}
+          help='Entity name is the name of your business.'
+        >
+          <Input type='text' size='large' placeholder='Entity Name' prefixIcon={<HomeIcon />} />
+        </FormItem>
+        <FormItem
+          name='entityId'
+          rules={[{ required: true, message: 'Entity Identifier is mandatory.', type: 'error' }]}
+          help='Entity identifier is the identification number of your business.'
+        >
+          <Input type='text' size='large' placeholder='Entity Identifier' prefixIcon={<FileIcon />} />
+        </FormItem>
         {registerType === 'phone' && (
           <FormItem name='phone' rules={[{ required: true, message: '手机号必填', type: 'error' }]}>
-            <Input maxlength={11} size='large' placeholder='请输入您的手机号' prefixIcon={<UserIcon />} />
+            <Input maxlength={11} size='large' placeholder='请输入您的手机号' prefixIcon={<MobileIcon />} />
           </FormItem>
         )}
-
-        {registerType === 'email' && (
-          <FormItem
-            name='email'
-            rules={[
-              { required: true, message: '邮箱必填', type: 'error' },
-              { email: true, message: '请输入正确的邮箱', type: 'warning' },
-            ]}
-          >
-            <Input type='text' size='large' placeholder='请输入您的邮箱' prefixIcon={<MailIcon />} />
-          </FormItem>
-        )}
-
-        <FormItem name='password' rules={[{ required: true, message: '密码必填', type: 'error' }]}>
+        <FormItem name='userName' rules={[{ required: true, message: 'Username is mandatory.', type: 'error' }]}>
+          <Input type='text' size='large' placeholder='Username' prefixIcon={<UserIcon />} />
+        </FormItem>
+        <FormItem name='password' rules={[{ required: true, message: 'Password is mandatory.', type: 'error' }]}>
           <Input
             size='large'
             type={showPsw ? 'text' : 'password'}
-            clearable
-            placeholder='请输入登录密码'
+            placeholder='Password'
             prefixIcon={<LockOnIcon />}
             suffixIcon={
               showPsw ? (
@@ -73,6 +104,39 @@ export default function Register() {
               )
             }
           />
+        </FormItem>
+        {registerType === 'email' && (
+          <FormItem
+            name='email'
+            rules={[
+              { required: true, message: 'Email is mandatory.', type: 'error' },
+              { email: true, message: 'Incorrect email format', type: 'warning' },
+            ]}
+          >
+            <Input type='text' size='large' placeholder='Email' prefixIcon={<MailIcon />} />
+          </FormItem>
+        )}
+        <FormItem name='phone' rules={[{ required: true, message: 'Contact Number is mandatory.', type: 'error' }]}>
+          <Input maxlength={15} size='large' placeholder='Contact Number' prefixIcon={<MobileIcon />} type={'tel'} />
+          {/* <PhoneInput */}
+          {/*  country={'my'} */}
+          {/*  onChange={(event) => handleNumChange(event)} */}
+          {/*  inputStyle={{ color: 'black' }} */}
+          {/*  preferredCountries={['my', 'sg']} */}
+          {/*  countryCodeEditable={false} */}
+          {/*  autoFormat={false} */}
+          {/* /> */}
+        </FormItem>
+        <FormItem name='entityName' help='You may specify a referral code that represents your business.'>
+          <Input type='text' size='large' placeholder='Preferred Referral Code' prefixIcon={<HomeIcon />} />
+        </FormItem>
+        <FormItem name='type' rules={[{ required: true, message: 'Business Type is mandatory.', type: 'error' }]}>
+          {
+            <Select clearable placeholder={'Business Type'} defaultValue={'A'}>
+              <Select.Option label={'Accommodation Provider'} key={'A'} value={0} />
+              <Select.Option label={'Ride Hailing Services'} key={'B'} value={1} />
+            </Select>
+          }
         </FormItem>
         {registerType === 'phone' && (
           <FormItem name='verifyCode' rules={[{ required: true, message: '验证码必填', type: 'error' }]}>
@@ -88,19 +152,18 @@ export default function Register() {
           </FormItem>
         )}
         <FormItem className={Style.checkContainer} name='checked' initialData={false}>
-          <Checkbox>我已阅读并同意 </Checkbox> <span className='tip'>TDesign服务协议</span> 和
-          <span className='tip'>TDesign 隐私声明</span>
+          <Checkbox>I agree to share my sales data with AffiliateManager.</Checkbox>
         </FormItem>
         <FormItem>
           <Button block size='large' type='submit'>
-            注册
+            Join
           </Button>
         </FormItem>
-        <div className={Style.switchContainer}>
-          <span className={Style.switchTip} onClick={() => switchType(registerType === 'phone' ? 'email' : 'phone')}>
-            {registerType === 'phone' ? '使用邮箱注册' : '使用手机号注册'}
-          </span>
-        </div>
+        {/* <div className={Style.switchContainer}> */}
+        {/*  <span className={Style.switchTip} onClick={() => switchType(registerType === 'phone' ? 'email' : 'phone')}> */}
+        {/*    {registerType === 'phone' ? '使用邮箱注册' : '使用手机号注册'} */}
+        {/*  </span> */}
+        {/* </div> */}
       </Form>
     </div>
   );

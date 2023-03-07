@@ -1,13 +1,16 @@
-import React, { lazy } from 'react';
+import React, { lazy, useEffect, useState } from 'react';
 import { BrowserRouterProps } from 'react-router-dom';
 import dashboard from './modules/dashboard';
 import list from './modules/list';
-import form from './modules/form';
 import detail from './modules/detail';
-import result from './modules/result';
 import user from './modules/user';
 import login from './modules/login';
+import affiliateDashboard from './modules/affiliate_dashboard';
+import adminDashboard from './modules/admin_dashboard';
+import affiliateLists from './modules/affiliate_list';
+import adminLists from './modules/admin_list';
 import otherRoutes from './modules/others';
+import getToken from "../auth_token";
 
 export interface IRouter {
   path: string;
@@ -35,22 +38,82 @@ export interface IRouter {
   children?: IRouter[];
 }
 
-const routes: IRouter[] = [
+const sharedRoutes: IRouter[] = [
   {
-    path: '/login',
+    path: '/login/index',
     Component: lazy(() => import('pages/Login')),
     isFullPage: true,
     meta: {
       hidden: true,
     },
   },
+];
+
+const adminGeneralRoutes: IRouter[] = [
   {
     path: '/',
-    redirect: '/data/affiliate/stats',
+    redirect: '/user/profile',
   },
 ];
 
-// const allRoutes = [...routes, ...dashboard, ...list, ...form, ...detail, ...result, ...user, ...login, ...otherRoutes];
-const allRoutes = [...routes, ...dashboard, ...list, ...detail, ...user, ...login];
+const affiliateGeneralRoutes: IRouter[] = [
+  {
+    path: '/',
+    redirect: '/user/profile',
+  },
+];
+export const allRoutes = [
+  ...sharedRoutes,
+  ...adminGeneralRoutes,
+  ...dashboard,
+  ...list,
+  ...user,
+  ...login,
+  ...detail,
+  ...otherRoutes,
+];
 
-export default allRoutes;
+export const affiliateRoutes = [
+  ...sharedRoutes,
+  ...affiliateGeneralRoutes,
+  ...affiliateDashboard,
+  ...affiliateLists,
+  ...user,
+  ...login,
+  ...otherRoutes,
+];
+
+export const adminRoutes = [
+  ...sharedRoutes,
+  ...adminGeneralRoutes,
+  ...adminDashboard,
+  ...adminLists,
+  ...user,
+  ...login,
+  ...otherRoutes,
+];
+
+export const getRoot = (userRole: any | null) => {
+  switch (userRole) {
+    case 0:
+      return '/data/referral/stats';
+    case 1:
+      return '/data/affiliate/stats';
+    default:
+      return '/data/affiliate/stats';
+  }
+};
+export const getRoutes = (userRole: any | null) => {
+  const [role, setRole] = useState<any>(
+    localStorage.getItem('auth') === null ? 2 : getToken()?.user_role,
+  );
+  switch (userRole === null ? role : userRole) {
+    case 0:
+      return affiliateRoutes;
+    case 1:
+      return adminRoutes;
+    default:
+      return allRoutes;
+  }
+};
+export default getRoutes;

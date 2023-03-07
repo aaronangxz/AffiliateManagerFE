@@ -6,6 +6,7 @@ import moment from 'moment/moment';
 import envVar from '../../../../env_var';
 
 import { CheckCircleFilledIcon, CloseCircleFilledIcon, HourglassIcon, RefreshIcon } from 'tdesign-icons-react';
+import getToken from "../../../../auth_token";
 
 const statusNameListMap: any = {
   0: { label: 'Success', theme: 'success', icon: <CheckCircleFilledIcon /> },
@@ -33,14 +34,12 @@ export const RecentList = () => {
     setClicksLoading(true);
     const myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
+    myHeaders.append('Authorization', `Bearer ${getToken()?.tokens.access_token}`);
+
     await sleep(500);
-    const raw = JSON.stringify({
-      affiliate_id: DEFAULT_ID,
-    });
     fetch(`${envVar.Env}/api/v1/referral/recent/list`, {
-      method: 'POST',
+      method: 'GET',
       headers: myHeaders,
-      body: raw,
       redirect: 'follow',
     })
       .then((response) => response.json())
@@ -73,14 +72,12 @@ export const RecentList = () => {
     setEarningsLoading(true);
     const myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
+    myHeaders.append('Authorization', `Bearer ${getToken()?.tokens.access_token}`);
+
     await sleep(500);
-    const raw = JSON.stringify({
-      affiliate_id: DEFAULT_ID,
-    });
     fetch(`${envVar.Env}/api/v1/referral/recent/list`, {
-      method: 'POST',
+      method: 'GET',
       headers: myHeaders,
-      body: raw,
       redirect: 'follow',
     })
       .then((response) => response.json())
@@ -177,7 +174,7 @@ export const RecentList = () => {
       width: '100px',
       cell: ({ row }) =>
         row.referral_id === undefined ? null : (
-          <Button variant='text' theme='primary' onClick={() => console.log(row)}>
+          <Button variant='text' theme='primary' disabled={true} onClick={() => console.log(row)}>
             View
           </Button>
         ),
@@ -223,7 +220,7 @@ export const RecentList = () => {
       width: '100px',
       cell: ({ row }) =>
         row.referral_id === undefined ? null : (
-          <Button variant='text' theme='primary' onClick={() => console.log(row)}>
+          <Button variant='text' theme='primary' disabled={true} onClick={() => console.log(row)}>
             View
           </Button>
         ),

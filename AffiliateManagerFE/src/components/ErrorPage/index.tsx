@@ -5,6 +5,7 @@ import Light403Icon from 'assets/svg/assets-result-403.svg?component';
 import Light404Icon from 'assets/svg/assets-result-404.svg?component';
 import Light500Icon from 'assets/svg/assets-result-500.svg?component';
 import style from './index.module.less';
+import { useNavigate } from 'react-router-dom';
 
 enum ECode {
   forbidden = 403,
@@ -21,29 +22,36 @@ interface IErrorPageProps {
 const errorInfo = {
   [ECode.forbidden]: {
     title: '403 Forbidden',
-    desc: '抱歉，您无权限访问此页面',
+    desc: 'Oops, you do not have permission to access this page!',
     icon: <Light403Icon />,
   },
   [ECode.notFount]: {
     title: '404 Not Found',
-    desc: '抱歉，您访问的页面不存在。',
+    desc: 'Oops, we cannot find the page that you are looking for.',
     icon: <Light404Icon />,
   },
   [ECode.error]: {
     title: '500 Internal Server Error',
-    desc: '抱歉，服务器出错啦！',
+    desc: 'Oops, something is wrong.',
     icon: <Light500Icon />,
   },
 };
 
 const ErrorPage: React.FC<IErrorPageProps> = (props) => {
+  const navigate = useNavigate();
   const info = errorInfo[props.code];
+
+  const onClick = () => {
+    navigate('/');
+  };
   return (
     <div className={style.errorBox}>
       {info?.icon}
       <div className={style.title}>{info?.title}</div>
       <div className={style.description}>{info?.desc}</div>
-      <Button theme='primary'>返回首页</Button>
+      <Button theme='primary' onClick={onClick}>
+        Back to home
+      </Button>
     </div>
   );
 };

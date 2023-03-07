@@ -6,15 +6,16 @@ const result: IRouter[] = [
   {
     path: '/user',
     meta: {
-      title: 'hidden_user',
+      title: 'User',
       Icon: UserCircleIcon,
+      hidden: true,
     },
     children: [
       {
-        path: 'index',
+        path: 'profile',
         Component: lazy(() => import('pages/User')),
         meta: {
-          title: 'My Account',
+          title: 'Profile',
         },
       },
     ],

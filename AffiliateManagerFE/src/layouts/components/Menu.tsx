@@ -1,12 +1,13 @@
 import React, { memo, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Menu, MenuValue } from 'tdesign-react';
-import router, { IRouter } from 'router';
+import router, {affiliateRoutes, getRoutes, IRouter} from 'router';
 import { resolve } from 'utils/path';
 import { useAppSelector } from 'modules/store';
 import { selectGlobal } from 'modules/global';
 import MenuLogo from './MenuLogo';
 import Style from './Menu.module.less';
+import allRoutes from "router";
 
 const { SubMenu, MenuItem, HeadMenu } = Menu;
 
@@ -74,6 +75,10 @@ export const HeaderMenu = memo(() => {
   const globalState = useAppSelector(selectGlobal);
   const location = useLocation();
   const [active, setActive] = useState<MenuValue>(location.pathname); // todo
+  const [role, setRole] = useState<any>(
+    localStorage.getItem('auth') === null ? null : JSON.parse(localStorage.getItem('auth')).user_role,
+  );
+  console.log('HeaderMenu',role)
 
   return (
     <HeadMenu
@@ -83,7 +88,7 @@ export const HeaderMenu = memo(() => {
       theme={globalState.theme}
       onChange={(v) => setActive(v)}
     >
-      {renderMenuItems(router)}
+      {renderMenuItems(getRoutes(role))}
     </HeadMenu>
   );
 });
@@ -94,10 +99,11 @@ export const HeaderMenu = memo(() => {
 export default memo((props: IMenuProps) => {
   const location = useLocation();
   const globalState = useAppSelector(selectGlobal);
-
+  const [role, setRole] = useState<any>(
+    localStorage.getItem('auth') === null ? null : JSON.parse(localStorage.getItem('auth')).user_role,
+  );
   const { version } = globalState;
   const bottomText = globalState.collapsed ? version : `Affiliate Manager ${version}`;
-
   return (
     <Menu
       width='232px'
@@ -109,7 +115,7 @@ export default memo((props: IMenuProps) => {
       operations={props.showOperation ? <div className={Style.menuTip}>{bottomText}</div> : undefined}
       logo={props.showLogo ? <MenuLogo collapsed={globalState.collapsed} /> : undefined}
     >
-      {renderMenuItems(router)}
+      {renderMenuItems(getRoutes(role))}
     </Menu>
   );
 });

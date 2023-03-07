@@ -7,14 +7,19 @@ import Setting from './components/Setting';
 import AppLayout from './components/AppLayout';
 import Style from './index.module.less';
 import enConfig from 'tdesign-react/es/locale/en_US';
+import { useNavigate } from 'react-router-dom';
 
 export default memo(() => {
   const globalState = useAppSelector(selectGlobal);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const AppContainer = AppLayout[globalState.isFullPage ? ELayout.fullPage : globalState.layout];
 
   useEffect(() => {
+    if (localStorage.getItem('auth') === null) {
+      navigate('/login/index');
+    }
     dispatch(switchTheme(globalState.theme));
     const handleResize = throttle(() => {
       if (window.innerWidth < 900) {
@@ -47,7 +52,7 @@ export default memo(() => {
           visible={globalState.setting}
           size='458px'
           footer={false}
-          header='页面配置'
+          header='Settings'
           onClose={() => dispatch(toggleSetting())}
         >
           <Setting />
