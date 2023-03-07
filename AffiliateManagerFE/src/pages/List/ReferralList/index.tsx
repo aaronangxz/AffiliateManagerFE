@@ -1,5 +1,5 @@
 import React, { useState, memo, useEffect } from 'react';
-import { Table, Dialog, Button, Row, Col, Tag, MessagePlugin } from 'tdesign-react';
+import {Table, Dialog, Button, Row, Col, Tag, MessagePlugin} from 'tdesign-react';
 import SearchForm from './components/SearchForm';
 import './index.module.less';
 import classnames from 'classnames';
@@ -7,7 +7,7 @@ import CommonStyle from '../../../styles/common.module.less';
 import { CustomDatePicker, DEFAULT_DAY, TimeSelectorPeriod } from '../../../components/CustomDatePicker';
 import moment from 'moment/moment';
 import envVar from '../../../env_var';
-import {getToken} from '../../../auth_token';
+import getToken from "../../../auth_token";
 
 export const ReferralStatusMap: {
   [key: number]: React.ReactElement;
@@ -225,13 +225,10 @@ export const selectPage: React.FC = () => {
               title: 'Affiliate',
               width: '150',
               fixed: 'left',
-              align: 'center',
+              align: 'left',
               ellipsis: true,
               colKey: 'affiliate_name',
               sortType: 'all',
-              cell({ row }) {
-                return row.affiliate_name === undefined ? '-' : row.affiliate_name;
-              },
             },
             {
               title: 'Status',

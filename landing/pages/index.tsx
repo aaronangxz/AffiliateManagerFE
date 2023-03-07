@@ -8,18 +8,17 @@ import {useRouter} from 'next/router'
 import envVar from '../env_var';
 
 const {Title} = Typography;
-export let touristTix = 0;
-export let citizenTix = 0;
+export let childTix = 0;
+export let adultTix = 0;
 export let totalAmt = 0;
 export let selectDate = '';
 export let selectSlot = 0;
-export let referralId = null;
 
 export default function Home() {
-    const [touristAmount, setTouristAmount] = React.useState(0);
-    const [touristCount, setTouristCount] = React.useState(0);
-    const [citizenAmount, setCitizenAmount] = React.useState(0);
-    const [citizenCount, setCitizenCount] = React.useState(0);
+    const [childAmount, setChildAmount] = React.useState(0);
+    const [childCount, setChildCount] = React.useState(0);
+    const [adultAmount, setAdultAmount] = React.useState(0);
+    const [adultCount, setAdultCount] = React.useState(0);
     const [totalAmount, setTotalAmount] = React.useState(0);
     const [disableSlot0, setDisableSlot0] = React.useState(true);
     const [disableSlot1, setDisableSlot1] = React.useState(true);
@@ -104,15 +103,14 @@ export default function Home() {
             "ref"
         );
         console.log(ref);
-        fetch(`${envVar.Env}/api/v1/welcome/click?ref=${ref}`, {
+        fetch(`${envVar.Env}/api/v1/tracking/click?ref=${ref}`, {
             method: 'POST',
             headers: myHeaders,
             redirect: 'follow'
         })
-            .then(response => response.json())
+            .then(response => response.text())
             .then(result => {
-                setRefId(result.referral_id);
-                referralId = result.referral_id
+                console.log(result)
             })
             .catch(error => {
                 console.log('error', error)
@@ -122,37 +120,37 @@ export default function Home() {
     useEffect(() => {
         setHasMounted(true);
         if (adultDisable) {
-            setCitizenAmount(0)
+            setAdultAmount(0)
         } else {
-            setCitizenAmount(citizenCount * 98)
+            setAdultAmount(adultCount * 98)
         }
 
         if (childDisable) {
-            setTouristAmount(0)
+            setChildAmount(0)
         } else {
-            setTouristAmount(touristCount * 88)
+            setChildAmount(childCount * 88)
         }
-        setTotalAmount(citizenAmount + touristAmount)
-    }, [adultDisable, childDisable, citizenAmount, touristAmount, totalAmount, citizenCount, touristCount])
+        setTotalAmount(adultAmount + childAmount)
+    }, [adultDisable, childDisable, adultAmount, childAmount, totalAmount, adultCount, childCount])
     //To fix Hydration issue
     if (!hasMounted) {
         return null;
     }
 
     const onAdultChange = (value: number) => {
-        setCitizenAmount(value * 98)
-        setCitizenCount(value)
+        setAdultAmount(value * 98)
+        setAdultCount(value)
     };
 
     const onChildChange = (value: number) => {
-        setTouristAmount(value * 88)
-        setTouristCount(value)
+        setChildAmount(value * 88)
+        setChildCount(value)
     };
 
 
     const onFinish = (values: any) => {
-        touristTix = touristCount;
-        citizenTix = citizenCount;
+        childTix = childCount;
+        adultTix = adultCount;
         totalAmt = totalAmount;
         router.push(`/booking`)
     };
