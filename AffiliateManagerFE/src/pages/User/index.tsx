@@ -144,7 +144,7 @@ export const User: React.FC<BrowserRouterProps> = () => {
 
   const onDownloadClick = () => {
     qrCode.download({
-      name:`referral_qr_${affiliateDetails.unique_referral_code}`,
+      name: `referral_qr_${affiliateDetails.unique_referral_code}`,
       extension: 'png',
     });
   };

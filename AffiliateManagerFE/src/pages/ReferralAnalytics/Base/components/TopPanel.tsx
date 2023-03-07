@@ -229,7 +229,6 @@ export const TopPanel = () => {
           start_ts: Date.parse(rangeSelected[0]) / 1000,
           end_ts: Date.parse(rangeSelected[1]) / 1000,
         },
-        affiliate_id: DEFAULT_ID,
       });
       setSubText('');
     } else {
@@ -269,7 +268,6 @@ export const TopPanel = () => {
           base_ts: ts,
           period: p,
         },
-        affiliate_id: DEFAULT_ID,
       });
     }
 
@@ -412,7 +410,6 @@ export const TopPanel = () => {
           start_ts: Date.parse(rangeSelected[0]) / 1000,
           end_ts: Date.parse(rangeSelected[1]) / 1000,
         },
-        affiliate_id: DEFAULT_ID,
       });
     } else {
       let p;
@@ -446,7 +443,6 @@ export const TopPanel = () => {
           base_ts: ts,
           period: p,
         },
-        affiliate_id: DEFAULT_ID,
       });
     }
 
