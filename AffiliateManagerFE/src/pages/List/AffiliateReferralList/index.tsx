@@ -1,5 +1,5 @@
 import React, { useState, memo, useEffect } from 'react';
-import {Table, Dialog, Button, Row, Col, Tag, MessagePlugin} from 'tdesign-react';
+import { Table, Dialog, Button, Row, Col, Tag, MessagePlugin } from 'tdesign-react';
 import SearchForm from './components/SearchForm';
 import './index.module.less';
 import classnames from 'classnames';
@@ -7,6 +7,7 @@ import CommonStyle from '../../../styles/common.module.less';
 import { CustomDatePicker, DEFAULT_DAY, TimeSelectorPeriod } from '../../../components/CustomDatePicker';
 import moment from 'moment/moment';
 import envVar from '../../../env_var';
+import { getToken } from '../../../auth_token';
 
 export const ReferralStatusMap: {
   [key: number]: React.ReactElement;
@@ -77,6 +78,7 @@ export const selectPage: React.FC = () => {
     setLoading(true);
     const myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
+    myHeaders.append('Authorization', `Bearer ${getToken()?.tokens.access_token}`);
 
     let raw = '';
     if (timeSlot === '4') {
@@ -86,7 +88,6 @@ export const selectPage: React.FC = () => {
           start_ts: Date.parse(rangeSelected[0]) / 1000,
           end_ts: Date.parse(rangeSelected[1]) / 1000,
         },
-        affiliate_id: 6,
       });
     } else {
       let p;
@@ -120,7 +121,6 @@ export const selectPage: React.FC = () => {
           base_ts: ts,
           period: p,
         },
-        affiliate_id: 6,
       });
     }
     fetch(`${envVar.Env}/api/v1/referral/list`, {
@@ -174,7 +174,7 @@ export const selectPage: React.FC = () => {
     <div>
       <Row>
         <Col span={3}>
-          <h1>Affiliate&apos;s Referrals</h1>
+          <h1>Referrals</h1>
         </Col>
         <Col span={9}>
           <CustomDatePicker
@@ -187,14 +187,14 @@ export const selectPage: React.FC = () => {
         </Col>
       </Row>
       <div className={classnames(CommonStyle.pageWithPadding, CommonStyle.pageWithColor)}>
-        <Row justify='start' style={{ marginBottom: '20px' }}>
-          <SearchForm
-            onSubmit={async (value) => {
-              console.log(value);
-            }}
-            onCancel={() => {}}
-          />
-        </Row>
+        {/*<Row justify='start' style={{ marginBottom: '20px' }}>*/}
+        {/*  <SearchForm*/}
+        {/*    onSubmit={async (value) => {*/}
+        {/*      console.log(value);*/}
+        {/*    }}*/}
+        {/*    onCancel={() => {}}*/}
+        {/*  />*/}
+        {/*</Row>*/}
         <Table
           // sort={sortInfo}
           multipleSort={false}
@@ -303,6 +303,7 @@ export const selectPage: React.FC = () => {
                 return (
                   <>
                     <Button
+                      disabled={true}
                       theme='primary'
                       variant='text'
                       onClick={() => {

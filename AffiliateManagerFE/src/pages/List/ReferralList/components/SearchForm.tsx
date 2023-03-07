@@ -45,7 +45,7 @@ const SearchForm = ({ handleStringCallBack }: any, props: any) => {
         <Row>
           <Col span={11}>
             <Row gutter={[16, 16]}>
-              <Col xs={12} sm={6} xl={4}>
+              <Col xs={12} sm={12} xl={12}>
                 <FormItem label='Affiliate' name='name'>
                   <Input
                     clearable={true}
@@ -55,23 +55,23 @@ const SearchForm = ({ handleStringCallBack }: any, props: any) => {
                   />
                 </FormItem>
               </Col>
-              <Col xs={12} sm={6} xl={4}>
-                <FormItem label='Booking' name='number'>
-                  <Input clearable={true} placeholder='Enter Booking ID' style={{ width: '200px' }} />
-                </FormItem>
-              </Col>
-              <Col xs={12} sm={6} xl={4}>
-                <FormItem label='Status' name='type'>
-                  <Select options={CONTRACT_TYPE_OPTIONS} placeholder='Select Status' style={{ width: '200px' }} />
-                </FormItem>
-              </Col>
+              {/*<Col xs={12} sm={6} xl={4}>*/}
+              {/*  <FormItem label='Booking' name='number'>*/}
+              {/*    <Input clearable={true} placeholder='Enter Booking ID' style={{ width: '200px' }} />*/}
+              {/*  </FormItem>*/}
+              {/*</Col>*/}
+              {/*<Col xs={12} sm={6} xl={4}>*/}
+              {/*  <FormItem label='Status' name='type'>*/}
+              {/*    <Select options={CONTRACT_TYPE_OPTIONS} placeholder='Select Status' style={{ width: '200px' }} />*/}
+              {/*  </FormItem>*/}
+              {/*</Col>*/}
             </Row>
           </Col>
-          <Col span={1}>
-            <Button theme='primary' type='submit' style={{ margin: '0px 20px' }}>
-              Filter
-            </Button>
-          </Col>
+          {/*<Col span={1}>*/}
+          {/*  <Button theme='primary' type='submit' style={{ margin: '0px 20px' }}>*/}
+          {/*    Filter*/}
+          {/*  </Button>*/}
+          {/*</Col>*/}
         </Row>
       </Form>
     </div>

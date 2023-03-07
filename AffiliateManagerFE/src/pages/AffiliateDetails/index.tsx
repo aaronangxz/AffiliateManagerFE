@@ -6,7 +6,6 @@ import Detail from './components/Detail';
 
 export default memo(() => (
   <div>
-    Affiliate Details
     <Base />
     {/*<ProgressComp />*/}
     {/*<Product />*/}

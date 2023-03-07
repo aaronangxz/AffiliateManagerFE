@@ -10,6 +10,7 @@ import adminDashboard from './modules/admin_dashboard';
 import affiliateLists from './modules/affiliate_list';
 import adminLists from './modules/admin_list';
 import otherRoutes from './modules/others';
+import getToken from "../auth_token";
 
 export interface IRouter {
   path: string;
@@ -66,9 +67,9 @@ export const allRoutes = [
   ...adminGeneralRoutes,
   ...dashboard,
   ...list,
-  ...detail,
   ...user,
   ...login,
+  ...detail,
   ...otherRoutes,
 ];
 
@@ -77,7 +78,6 @@ export const affiliateRoutes = [
   ...affiliateGeneralRoutes,
   ...affiliateDashboard,
   ...affiliateLists,
-  ...detail,
   ...user,
   ...login,
   ...otherRoutes,
@@ -88,7 +88,6 @@ export const adminRoutes = [
   ...adminGeneralRoutes,
   ...adminDashboard,
   ...adminLists,
-  ...detail,
   ...user,
   ...login,
   ...otherRoutes,
@@ -106,7 +105,7 @@ export const getRoot = (userRole: any | null) => {
 };
 export const getRoutes = (userRole: any | null) => {
   const [role, setRole] = useState<any>(
-    localStorage.getItem('auth') === null ? 2 : JSON.parse(localStorage.getItem('auth')).user_role,
+    localStorage.getItem('auth') === null ? 2 : getToken()?.user_role,
   );
   switch (userRole === null ? role : userRole) {
     case 0:

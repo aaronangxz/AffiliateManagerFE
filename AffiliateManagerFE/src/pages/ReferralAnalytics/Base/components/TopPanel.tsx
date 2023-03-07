@@ -15,6 +15,7 @@ import { isInfinity } from 'tdesign-react/es/_common/js/input-number/large-numbe
 import { RecentList } from './RecentList';
 import {TimeSelectorPeriod} from "../../../../components/CustomDatePicker";
 import envVar from '../../../../env_var';
+import getToken from "../../../../auth_token";
 
 const { RangePicker } = DatePicker;
 const DEFAULT_ID = 6;
@@ -218,6 +219,8 @@ export const TopPanel = () => {
     setCardLoading(true);
     const myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
+    myHeaders.append('Authorization', `Bearer ${getToken()?.tokens.access_token}`);
+
     let raw = '';
     if (timeSlot === '4') {
       raw = JSON.stringify({
@@ -226,7 +229,6 @@ export const TopPanel = () => {
           start_ts: Date.parse(rangeSelected[0]) / 1000,
           end_ts: Date.parse(rangeSelected[1]) / 1000,
         },
-        affiliate_id: DEFAULT_ID,
       });
       setSubText('');
     } else {
@@ -266,7 +268,6 @@ export const TopPanel = () => {
           base_ts: ts,
           period: p,
         },
-        affiliate_id: DEFAULT_ID,
       });
     }
 
@@ -399,6 +400,7 @@ export const TopPanel = () => {
   const getReferralTrend = async () => {
     const myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
+    myHeaders.append('Authorization', `Bearer ${getToken()?.tokens.access_token}`);
 
     let raw = '';
     if (timeSlot === '4') {
@@ -408,7 +410,6 @@ export const TopPanel = () => {
           start_ts: Date.parse(rangeSelected[0]) / 1000,
           end_ts: Date.parse(rangeSelected[1]) / 1000,
         },
-        affiliate_id: DEFAULT_ID,
       });
     } else {
       let p;
@@ -442,7 +443,6 @@ export const TopPanel = () => {
           base_ts: ts,
           period: p,
         },
-        affiliate_id: DEFAULT_ID,
       });
     }
 
