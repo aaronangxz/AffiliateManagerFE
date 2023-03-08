@@ -7,7 +7,7 @@ import {
 } from "@stripe/react-stripe-js";
 import {StripePaymentElementOptions} from "@stripe/stripe-js";
 import {citizenTix, referralId, selectDate, selectSlot, totalAmt, touristTix} from "../pages";
-import {Divider, message} from "antd";
+import {Col, Divider, message, Row} from "antd";
 import {contactFormValues} from "../pages/form";
 import envVar from "../env_var";
 import {useRouter} from "next/router";
@@ -125,7 +125,7 @@ export default function CheckoutForm() {
 
     return (
         <form className='stripe-form' id="payment-form" onSubmit={handleSubmit}>
-            <h2>Total: MYR {totalAmt}</h2>
+            <h2>Total: MYR {totalAmt}.00</h2>
             <Divider/>
             <LinkAuthenticationElement
                 id="link-authentication-element"
