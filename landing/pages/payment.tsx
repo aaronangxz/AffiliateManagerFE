@@ -23,6 +23,8 @@ import {loadStripe} from "@stripe/stripe-js";
 import CheckoutForm from "../components/checkout";
 import {Appearance, StripeElementsOptions} from "@stripe/stripe-js/types/stripe-js/elements-group";
 import envVar from '../env_var';
+import {totalAmt} from "./index";
+import {useRouter} from "next/router";
 
 const {Header} = Layout;
 const {Title} = Typography;
@@ -38,10 +40,13 @@ const slotMap: {
 export default function Payment() {
     const [hasMounted, setHasMounted] = React.useState(false);
     const [clientSecret, setClientSecret] = useState("");
-
     const stripePromise = loadStripe("pk_test_GvF3BSyx8RSXMK5yAFhqEd3H");
+    const router = useRouter();
 
     useEffect(() => {
+        if (totalAmt == 0){
+            router.push(`/`)
+        }
         // Create PaymentIntent as soon as the page loads
         fetch(`${envVar.Env}/api/v1/payment/create-payment-intent`, {
             method: "POST",
@@ -80,19 +85,25 @@ export default function Payment() {
                 <meta name="viewport" content="width=device-width, initial-scale=1"/>
                 <link rel="icon" href="/favicon.ico"/>
             </Head>
+
             <main className={styles.main}>
                 <Row>
-                    <Col xl={6}></Col>
-                    <Col xl={12}>
+                    <Col xl={24}>
                         <Link href='/'>
                             <Header>
-                                <Title level={2} style={{textAlign: 'center', margin: '0px', padding: '0px'}}>
+                                <Title level={2} style={{textAlign: 'center'}}>
                                     HOME by Tales Of Paws Admission Ticket
                                 </Title>
                             </Header>
                         </Link>
                     </Col>
-                    <Col xl={6}></Col>
+                </Row>
+                <Row>
+                    <Col xs={12} xl={24}>
+                        <Image alt={'banner'} style={{borderRadius: '25px',marginLeft:'auto',marginRight:'auto',width:'50%',display:'block',paddingBottom:'50px'}}
+                               src="banner.jpg" preview={false}
+                        />
+                    </Col>
                 </Row>
                <Row>
                    <Col>

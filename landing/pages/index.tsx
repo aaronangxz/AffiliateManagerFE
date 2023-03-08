@@ -8,17 +8,18 @@ import {useRouter} from 'next/router'
 import envVar from '../env_var';
 
 const {Title} = Typography;
-export let childTix = 0;
-export let adultTix = 0;
+export let touristTix = 0;
+export let citizenTix = 0;
 export let totalAmt = 0;
 export let selectDate = '';
 export let selectSlot = 0;
+export let referralId = null;
 
 export default function Home() {
-    const [childAmount, setChildAmount] = React.useState(0);
-    const [childCount, setChildCount] = React.useState(0);
-    const [adultAmount, setAdultAmount] = React.useState(0);
-    const [adultCount, setAdultCount] = React.useState(0);
+    const [touristAmount, setTouristAmount] = React.useState(0);
+    const [touristCount, setTouristCount] = React.useState(0);
+    const [citizenAmount, setCitizenAmount] = React.useState(0);
+    const [citizenCount, setCitizenCount] = React.useState(0);
     const [totalAmount, setTotalAmount] = React.useState(0);
     const [disableSlot0, setDisableSlot0] = React.useState(true);
     const [disableSlot1, setDisableSlot1] = React.useState(true);
@@ -108,9 +109,10 @@ export default function Home() {
             headers: myHeaders,
             redirect: 'follow'
         })
-            .then(response => response.text())
+            .then(response => response.json())
             .then(result => {
-                console.log(result)
+                setRefId(result.referral_id);
+                referralId = result.referral_id
             })
             .catch(error => {
                 console.log('error', error)
@@ -120,37 +122,37 @@ export default function Home() {
     useEffect(() => {
         setHasMounted(true);
         if (adultDisable) {
-            setAdultAmount(0)
+            setCitizenAmount(0)
         } else {
-            setAdultAmount(adultCount * 98)
+            setCitizenAmount(citizenCount * 98)
         }
 
         if (childDisable) {
-            setChildAmount(0)
+            setTouristAmount(0)
         } else {
-            setChildAmount(childCount * 88)
+            setTouristAmount(touristCount * 88)
         }
-        setTotalAmount(adultAmount + childAmount)
-    }, [adultDisable, childDisable, adultAmount, childAmount, totalAmount, adultCount, childCount])
+        setTotalAmount(citizenAmount + touristAmount)
+    }, [adultDisable, childDisable, citizenAmount, touristAmount, totalAmount, citizenCount, touristCount])
     //To fix Hydration issue
     if (!hasMounted) {
         return null;
     }
 
     const onAdultChange = (value: number) => {
-        setAdultAmount(value * 98)
-        setAdultCount(value)
+        setCitizenAmount(value * 98)
+        setCitizenCount(value)
     };
 
     const onChildChange = (value: number) => {
-        setChildAmount(value * 88)
-        setChildCount(value)
+        setTouristAmount(value * 88)
+        setTouristCount(value)
     };
 
 
     const onFinish = (values: any) => {
-        childTix = childCount;
-        adultTix = adultCount;
+        touristTix = touristCount;
+        citizenTix = citizenCount;
         totalAmt = totalAmount;
         router.push(`/booking`)
     };

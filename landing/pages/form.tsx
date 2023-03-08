@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
-import {adultTix, childTix} from "./index";
+import {citizenTix, touristTix} from "./index";
 import {Card, Form, Input} from "antd";
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 
-export let formValues = [];
+export let contactFormValues = [];
 export let emptyValues = [];
 
 function InfoForm() {
@@ -15,23 +15,22 @@ function InfoForm() {
         let data = [...inputFields];
         data[index][event.target.name] = event.target.value;
         setInputFields(data);
-        formValues = data
+        contactFormValues = data
     }
 
     const handleNumChange = (index, event) => {
         let data = [...inputFields];
-        data[index]['contact'] = event;
+        data[index]['customer_mobile'] = event;
         setInputFields(data);
-        formValues = data
+        contactFormValues = data
     }
 
     const getForms = () => {
-        if (emptyValues.length == adultTix + childTix) {
+        if (emptyValues.length == citizenTix + touristTix) {
             return;
         }
-        for (let i = 0; i < adultTix + childTix; i++) {
-            let newField = {name: '', email: '', contact: ''};
-            // setInputFields([...inputFields, newField]);
+        for (let i = 0; i < citizenTix + touristTix; i++) {
+            let newField = {customer_name: '', customer_email: '', customer_mobile: ''};
             emptyValues.push(newField)
             setInputFields(emptyValues);
         }
@@ -51,11 +50,11 @@ function InfoForm() {
                         // @ts-ignore
                         index + 1}`} bordered={true} style={{width: "auto", marginBottom: '10px'}}>
                         <Form.Item label="Name">
-                            <Input name='name' onChange={event => handleFormChange(index, event)}
+                            <Input name='customer_name' onChange={event => handleFormChange(index, event)}
                                    style={{fontSize: '17px'}}/>
                         </Form.Item>
                         <Form.Item label="Email">
-                            <Input name='email' onChange={event => handleFormChange(index, event)}
+                            <Input name='customer_email' onChange={event => handleFormChange(index, event)}
                                    style={{fontSize: '17px'}}/>
                         </Form.Item>
                         <Form.Item label="Contact">
