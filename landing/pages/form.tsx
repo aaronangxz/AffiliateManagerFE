@@ -2,7 +2,8 @@ import React, {useState} from 'react';
 import {citizenTix, touristTix} from "./index";
 import {Card, Form, Input} from "antd";
 import PhoneInput from 'react-phone-input-2'
-import 'react-phone-input-2/lib/high-res.css'
+import 'react-phone-input-2/lib/style.css'
+
 export let contactFormValues = [];
 export let emptyValues = [];
 
@@ -60,7 +61,7 @@ function InfoForm() {
                             <PhoneInput
                                 country={'my'}
                                 onChange={event => handleNumChange(index, event)}
-                                inputStyle={{color:'black',width:'100%',fontSize:'16px'}}
+                                inputStyle={{color:'black'}}
                                 preferredCountries={['my','sg']}
                                 countryCodeEditable={false}
                                 autoFormat={false}

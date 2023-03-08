@@ -7,7 +7,7 @@ import {
 } from "@stripe/react-stripe-js";
 import {StripePaymentElementOptions} from "@stripe/stripe-js";
 import {citizenTix, referralId, selectDate, selectSlot, totalAmt, touristTix} from "../pages";
-import {Col, Divider, message, Row} from "antd";
+import {Divider, message} from "antd";
 import {contactFormValues} from "../pages/form";
 import envVar from "../env_var";
 import {useRouter} from "next/router";
@@ -66,6 +66,10 @@ export default function CheckoutForm() {
 
         const { error } = await stripe.confirmPayment({
             elements,
+            confirmParams: {
+                // Make sure to change this to your payment completion page
+                return_url: "http://localhost:3000/confirmation",
+            },
             // confirmParams: {
             //     // Make sure to change this to your payment completion page
             //     return_url: "http://localhost:3000/confirmation",
@@ -86,7 +90,7 @@ export default function CheckoutForm() {
                 "customer_info": contactFormValues
             });
 
-            fetch(`${envVar.Env}/api/v1/welcome/checkout`, {
+            fetch(`${envVar.Env}/api/v1/tracking/checkout`, {
                 method: 'POST',
                 headers: myHeaders,
                 body: raw,
@@ -125,7 +129,7 @@ export default function CheckoutForm() {
 
     return (
         <form className='stripe-form' id="payment-form" onSubmit={handleSubmit}>
-            <h2>Total: MYR {totalAmt}.00</h2>
+            <h2>Total: MYR {totalAmt}</h2>
             <Divider/>
             <LinkAuthenticationElement
                 id="link-authentication-element"
