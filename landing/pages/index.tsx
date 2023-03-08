@@ -104,7 +104,7 @@ export default function Home() {
             "ref"
         );
         console.log(ref);
-        fetch(`${envVar.Env}/api/v1/tracking/click?ref=${ref}`, {
+        fetch(`${envVar.Env}/api/v1/welcome/click?ref=${ref}`, {
             method: 'POST',
             headers: myHeaders,
             redirect: 'follow'

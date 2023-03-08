@@ -66,10 +66,6 @@ export default function CheckoutForm() {
 
         const { error } = await stripe.confirmPayment({
             elements,
-            confirmParams: {
-                // Make sure to change this to your payment completion page
-                return_url: "http://localhost:3000/confirmation",
-            },
             // confirmParams: {
             //     // Make sure to change this to your payment completion page
             //     return_url: "http://localhost:3000/confirmation",
@@ -90,7 +86,7 @@ export default function CheckoutForm() {
                 "customer_info": contactFormValues
             });
 
-            fetch(`${envVar.Env}/api/v1/tracking/checkout`, {
+            fetch(`${envVar.Env}/api/v1/welcome/checkout`, {
                 method: 'POST',
                 headers: myHeaders,
                 body: raw,
