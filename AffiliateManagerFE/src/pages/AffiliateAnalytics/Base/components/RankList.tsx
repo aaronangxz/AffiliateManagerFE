@@ -269,7 +269,7 @@ export const RankList = () => {
       align: 'center',
       colKey: 'increase',
       width: 100,
-      title: 'Increase',
+      title: '% Change',
       cell: ({ row }) => (
         <TrendIcon
           trend={
