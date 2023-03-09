@@ -13,7 +13,7 @@ import { isInfinity } from 'tdesign-react/es/_common/js/input-number/large-numbe
 import { RankList } from './RankList';
 import { TimeSelectorPeriod } from '../../../../components/CustomDatePicker';
 import envVar from '../../../../env_var';
-import getToken from "../../../../auth_token";
+import getToken from '../../../../auth_token';
 
 const { RangePicker }: any = DatePicker;
 export const RECENT_7_DAYS_STRING: Array<string> = [
