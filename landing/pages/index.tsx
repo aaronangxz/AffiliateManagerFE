@@ -98,7 +98,7 @@ export default function Home() {
     };
 
     useEffect(() => {
-        let myHeaders = new Headers();
+        const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         const ref = new URLSearchParams(window.location.search).get(
             "ref"
@@ -150,7 +150,7 @@ export default function Home() {
     };
 
 
-    const onFinish = (values: any) => {
+    const onFinish = () => {
         touristTix = touristCount;
         citizenTix = citizenCount;
         totalAmt = totalAmount;

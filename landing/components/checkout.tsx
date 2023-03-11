@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import {
     PaymentElement,
     LinkAuthenticationElement,
@@ -7,7 +7,7 @@ import {
 } from "@stripe/react-stripe-js";
 import {StripePaymentElementOptions} from "@stripe/stripe-js";
 import {citizenTix, referralId, selectDate, selectSlot, totalAmt, touristTix} from "../pages";
-import {Col, Divider, message, Row} from "antd";
+import {Divider} from "antd";
 import {contactFormValues} from "../pages/form";
 import envVar from "../env_var";
 import {useRouter} from "next/router";
@@ -35,7 +35,7 @@ export default function CheckoutForm() {
             return;
         }
 
-        stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
+        stripe.retrievePaymentIntent(clientSecret).then(({paymentIntent}) => {
             switch (paymentIntent.status) {
                 case "succeeded":
                     setMessage("Payment succeeded!");
@@ -64,23 +64,23 @@ export default function CheckoutForm() {
 
         setIsLoading(true);
 
-        const { error } = await stripe.confirmPayment({
+        const {error} = await stripe.confirmPayment({
             elements,
             // confirmParams: {
             //     // Make sure to change this to your payment completion page
             //     return_url: "http://localhost:3000/confirmation",
             // },
-            redirect:'if_required'
+            redirect: 'if_required'
         });
 
-        if (error === undefined){
-            let myHeaders = new Headers();
+        if (error === undefined) {
+            const myHeaders = new Headers();
             myHeaders.append("Content-Type", "application/json");
 
-            let raw = JSON.stringify({
+            const raw = JSON.stringify({
                 "referral_id": referralId,
                 "booking_day": selectDate,
-                "booking_slot": parseInt(String(selectSlot),10) ,
+                "booking_slot": parseInt(String(selectSlot), 10),
                 "citizen_ticket_count": citizenTix,
                 "tourist_ticket_count": touristTix,
                 "customer_info": contactFormValues
@@ -95,7 +95,7 @@ export default function CheckoutForm() {
                 .then(response => response.json())
                 .then(result => {
                     console.log(result)
-                    if (result.response_meta.error_code !== 0){
+                    if (result.response_meta.error_code !== 0) {
                         console.log(result)
                     }
                     bookingId = result.booking_details.booking_id;
@@ -104,7 +104,7 @@ export default function CheckoutForm() {
                 .catch(error => {
                     console.log('error', error)
                 });
-        }else{
+        } else {
             // This point will only be reached if there is an immediate error when
             // confirming the payment. Otherwise, your customer will be redirected to
             // your `return_url`. For some payment methods like iDEAL, your customer will
@@ -119,7 +119,7 @@ export default function CheckoutForm() {
         setIsLoading(false);
     };
 
-    const paymentElementOptions:StripePaymentElementOptions = {
+    const paymentElementOptions: StripePaymentElementOptions = {
         layout: "auto"
     }
 
@@ -129,9 +129,9 @@ export default function CheckoutForm() {
             <Divider/>
             <LinkAuthenticationElement
                 id="link-authentication-element"
-                onChange={(e:any) => setEmail(e.target.value)}
+                onChange={(e: any) => setEmail(e.target.value)}
             />
-            <PaymentElement className='payment-element' id="payment-element" options={paymentElementOptions} />
+            <PaymentElement className='payment-element' id="payment-element" options={paymentElementOptions}/>
             <button className='stripe-button' disabled={isLoading || !stripe || !elements} id="submit">
         <span id="button-text">
           {isLoading ? <div className="spinner" id="spinner"></div> : "Pay now"}

@@ -8,17 +8,16 @@ export let emptyValues = [];
 
 function InfoForm() {
     const [inputFields, setInputFields] = useState([])
-    const [value, setValue] = useState("")
 
     const handleFormChange = (index, event) => {
-        let data = [...inputFields];
+        const data = [...inputFields];
         data[index][event.target.name] = event.target.value;
         setInputFields(data);
         contactFormValues = data
     }
 
     const handleNumChange = (index, event) => {
-        let data = [...inputFields];
+        const data = [...inputFields];
         data[index]['customer_mobile'] = event;
         setInputFields(data);
         contactFormValues = data
@@ -29,7 +28,7 @@ function InfoForm() {
             return;
         }
         for (let i = 0; i < citizenTix + touristTix; i++) {
-            let newField = {customer_name: '', customer_email: '', customer_mobile: ''};
+            const newField = {customer_name: '', customer_email: '', customer_mobile: ''};
             emptyValues.push(newField)
             setInputFields(emptyValues);
         }
@@ -46,6 +45,7 @@ function InfoForm() {
             {inputFields.map((input, index) => {
                 return (
                     <Card key={index} title={`Visitor ${
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                         // @ts-ignore
                         index + 1}`} bordered={true} style={{width: "auto", marginBottom: '10px'}}>
                         <Form.Item label="Name">
