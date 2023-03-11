@@ -2,19 +2,14 @@ import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import {
     Typography,
-    Select,
     Divider,
-    Button,
     Col,
     Row,
-    Form,
-    Input,
     Layout,
-    Checkbox,
     Card, Image, Progress, Space
 } from 'antd';
 
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 
 import Link from "next/link";
 import {citizenTix, selectDate, selectSlot, totalAmt, touristTix} from "./index";
@@ -54,19 +49,22 @@ export default function Payment() {
                     </Col>
                 </Row>
                 <Row>
-                    <Space direction="horizontal" style={{width: '100%', justifyContent: 'center',marginTop:'50px'}}>
-                    <Progress type="circle" percent={100} size={"small"} />
+                    <Space direction="horizontal" style={{width: '100%', justifyContent: 'center', marginTop: '50px'}}>
+                        <Progress type="circle" percent={100} size={"small"}/>
                     </Space>
-                    <Space direction="horizontal" style={{width: '100%', justifyContent: 'center',marginTop:'10px'}}><h1>You&apos;re all set!</h1></Space>
-                    <Space direction="horizontal" style={{width: '100%', justifyContent: 'center',marginTop:'10px'}}>A confirmation has been sent to you.</Space>
-                    <Space direction="horizontal" style={{width: '100%', justifyContent: 'center',marginTop:'10px'}}><h3>Booking Id: {bookingId}</h3></Space>
+                    <Space direction="horizontal" style={{width: '100%', justifyContent: 'center', marginTop: '10px'}}>
+                        <h1>You&apos;re all set!</h1></Space>
+                    <Space direction="horizontal" style={{width: '100%', justifyContent: 'center', marginTop: '10px'}}>A
+                        confirmation has been sent to you.</Space>
+                    <Space direction="horizontal" style={{width: '100%', justifyContent: 'center', marginTop: '10px'}}>
+                        <h3>Booking Id: {bookingId}</h3></Space>
                 </Row>
                 <Row>
                     <Col xl={9}></Col>
                     <Col xs={24} xl={6}>
-                        <Card title="Your Booking" bordered={false} style={{width: "auto", marginTop:'50px'}}>
+                        <Card title="Your Booking" bordered={false} style={{width: "auto", marginTop: '50px'}}>
                             <Row>
-                                <Image alt={'banner'} style={{borderRadius: '10px',marginBottom:'15px'}}
+                                <Image alt={'banner'} style={{borderRadius: '10px', marginBottom: '15px'}}
                                        src="banner.jpg" preview={false}
                                 />
                             </Row>
@@ -82,7 +80,7 @@ export default function Payment() {
                             </Row>
                             <Row>
                                 <Col span={24}>
-                                    <h4>Quantity: {citizenTix == 0 ? '' : ` ${citizenTix} x Citizen `}{citizenTix==0 || touristTix == 0?'':','}{touristTix == 0 ? '' : ` ${touristTix} x Tourist`}</h4>
+                                    <h4>Quantity: {citizenTix == 0 ? '' : ` ${citizenTix} x Citizen `}{citizenTix == 0 || touristTix == 0 ? '' : ','}{touristTix == 0 ? '' : ` ${touristTix} x Tourist`}</h4>
                                 </Col>
                             </Row>
                             <Divider/>
@@ -98,10 +96,10 @@ export default function Payment() {
                     </Col>
                     <Col xl={9}></Col>
                 </Row>
-               <Row>
-                   <Col>
-                   </Col>
-               </Row>
+                <Row>
+                    <Col>
+                    </Col>
+                </Row>
             </main>
         </>
     )

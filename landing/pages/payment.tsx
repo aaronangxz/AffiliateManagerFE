@@ -2,56 +2,41 @@ import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import {
     Typography,
-    Select,
-    Divider,
-    Button,
     Col,
     Row,
-    Form,
-    Input,
-    Layout,
-    Checkbox,
-    Card, Image
+    Layout
 } from 'antd';
 
 import React, {useEffect, useState} from 'react';
 
 import Link from "next/link";
-import {Elements
+import {
+    Elements
 } from "@stripe/react-stripe-js";
 import {loadStripe} from "@stripe/stripe-js";
 import CheckoutForm from "../components/checkout";
 import {Appearance, StripeElementsOptions} from "@stripe/stripe-js/types/stripe-js/elements-group";
 import envVar from '../env_var';
-import {totalAmt} from "./index";
+import {citizenTix, totalAmt, touristTix} from "./index";
 import {useRouter} from "next/router";
 
 const {Header} = Layout;
 const {Title} = Typography;
-const slotMap: {
-    [key: number]: string;
-} = {
-    0: 'Corgi - 10.30am to 12:00pm',
-    1: 'Corgi - 12.30pm to 02:00pm',
-    2: 'Dogs - 02.30pm to 04:00pm',
-    3: 'Dogs - 05.00pm to 06.30pm',
-};
 
 export default function Payment() {
-    const [hasMounted, setHasMounted] = React.useState(false);
     const [clientSecret, setClientSecret] = useState("");
-    const stripePromise = loadStripe("pk_test_GvF3BSyx8RSXMK5yAFhqEd3H");
+    const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
     const router = useRouter();
 
     useEffect(() => {
-        if (totalAmt == 0){
+        if (totalAmt == 0) {
             router.push(`/`)
         }
         // Create PaymentIntent as soon as the page loads
         fetch(`${envVar.Env}/api/v1/payment/create-payment-intent`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ items: [{ id: "xl-tshirt" }] }),
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({tickets: {citizen_ticket_count: citizenTix, tourist_ticket_count: touristTix}}),
         })
             .then((res) =>
                 res.json()
@@ -62,10 +47,10 @@ export default function Payment() {
             });
     }, []);
 
-    const appearance:Appearance = {
+    const appearance: Appearance = {
         theme: 'stripe',
     };
-    const options:StripeElementsOptions = {
+    const options: StripeElementsOptions = {
         clientSecret,
         appearance,
     };
@@ -105,13 +90,13 @@ export default function Payment() {
                 {/*        />*/}
                 {/*    </Col>*/}
                 {/*</Row>*/}
-                       <div className="stripe-body">
-                           {clientSecret && (
-                               <Elements options={options} stripe={stripePromise}>
-                                   <CheckoutForm />
-                               </Elements>
-                           )}
-                       </div>
+                <div className="stripe-body">
+                    {clientSecret && (
+                        <Elements options={options} stripe={stripePromise}>
+                            <CheckoutForm/>
+                        </Elements>
+                    )}
+                </div>
             </main>
         </>
     )

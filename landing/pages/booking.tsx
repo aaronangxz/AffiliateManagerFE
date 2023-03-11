@@ -36,6 +36,7 @@ class BoxComponent extends React.Component {
     render() {
         return (
             <Card title={`Visitor ${
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 this.props.keyProp}`} bordered={true} style={{width: "auto"}}>
                 <Form.Item name='name' label="Name">
@@ -84,14 +85,6 @@ export default function Booking() {
     if (!hasMounted) {
         return null;
     }
-    const getForms = () => {
-        let rows = [];
-        for (let i = 0; i < citizenTix + touristTix; i++) {
-            // rows.push(<BoxComponent key={i + 1}// @ts-ignore
-            //                         keyProp={i + 1}/>);
-        }
-    }
-
 
     const onFinish = (values: any) => {
         console.log('Success:', values);
