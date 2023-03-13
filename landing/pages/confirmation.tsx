@@ -13,7 +13,7 @@ import React from 'react';
 
 import Link from "next/link";
 import {citizenTix, selectDate, selectSlot, totalAmt, touristTix} from "./index";
-import {bookingId} from "../components/checkout";
+import {bookingId} from "./payment";
 
 const {Header} = Layout;
 const {Title} = Typography;
