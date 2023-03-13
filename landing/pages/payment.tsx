@@ -17,16 +17,48 @@ import {loadStripe} from "@stripe/stripe-js";
 import CheckoutForm from "../components/checkout";
 import {Appearance, StripeElementsOptions} from "@stripe/stripe-js/types/stripe-js/elements-group";
 import envVar from '../env_var';
-import {citizenTix, totalAmt, touristTix} from "./index";
+import {citizenTix, referralId, selectDate, selectSlot, totalAmt, touristTix} from "./index";
 import {useRouter} from "next/router";
+import {contactFormValues} from "./form";
 
 const {Header} = Layout;
 const {Title} = Typography;
+
+export let bookingId;
 
 export default function Payment() {
     const [clientSecret, setClientSecret] = useState("");
     const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
     const router = useRouter();
+
+    const trackPayment = () =>{
+        const myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        const raw = JSON.stringify({
+            "referral_id": referralId,
+            "booking_day": selectDate,
+            "booking_slot": parseInt(String(selectSlot), 10),
+            "citizen_ticket_count": citizenTix,
+            "tourist_ticket_count": touristTix,
+            "customer_info": contactFormValues
+        });
+
+        fetch(`${envVar.Env}/api/v1/welcome/payment`, {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+        })
+            .then(response => response.json())
+            .then(result => {
+                console.log(result)
+                bookingId = result.booking_id;
+            })
+            .catch(error => {
+                console.log('error', error)
+            });
+    }
 
     useEffect(() => {
         if (totalAmt == 0) {
@@ -38,11 +70,12 @@ export default function Payment() {
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({tickets: {citizen_ticket_count: citizenTix, tourist_ticket_count: touristTix}}),
         })
-            .then((res) =>
-                res.json()
-            )
+            .then((res) => res.json())
             .then((data) => {
                 console.log(data)
+                if (data.response_meta.error_code == 0){
+                    trackPayment();
+                }
                 setClientSecret(data.client_secret)
             });
     }, []);

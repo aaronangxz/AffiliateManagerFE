@@ -11,8 +11,7 @@ import {Divider} from "antd";
 import {contactFormValues} from "../pages/form";
 import envVar from "../env_var";
 import {useRouter} from "next/router";
-
-export let bookingId = 0;
+import {bookingId} from "../pages/payment";
 export default function CheckoutForm() {
     const stripe = useStripe();
     const elements = useElements();
@@ -79,11 +78,9 @@ export default function CheckoutForm() {
 
             const raw = JSON.stringify({
                 "referral_id": referralId,
-                "booking_day": selectDate,
-                "booking_slot": parseInt(String(selectSlot), 10),
+                "booking_id": bookingId,
                 "citizen_ticket_count": citizenTix,
                 "tourist_ticket_count": touristTix,
-                "customer_info": contactFormValues
             });
 
             fetch(`${envVar.Env}/api/v1/welcome/checkout`, {
@@ -98,7 +95,6 @@ export default function CheckoutForm() {
                     if (result.response_meta.error_code !== 0) {
                         console.log(result)
                     }
-                    bookingId = result.booking_details.booking_id;
                     router.push(`/confirmation`)
                 })
                 .catch(error => {
